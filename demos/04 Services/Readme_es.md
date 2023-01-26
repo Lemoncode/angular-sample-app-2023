@@ -20,7 +20,7 @@ npm install
 - Creamos un nuevo servicio, para ello ejecutamos el siguiente comando:
 
 ```bash
-ng generate service services/member
+ng generate service services/game-api
 ```
 
 Este comando:
@@ -28,42 +28,96 @@ Este comando:
 - Me va a generar los ficheros necesarios para crear un servicio.
 - Me va a registrar el servicio en el módulo principal de la aplicación.
 
-- Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos, en este caso los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de aquí:
+- Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos, en este caso los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de
+  aquí:
 
-```ts
-import { Injectable } from "@angular/core";
-import { MemberEntity } from "../model/member";
+```diff
+import { Injectable } from '@angular/core';
++ import { Game } from "../model/game.model";
 
-@Injectable()
-export class MemberService {
-  getAll(): MemberEntity[] {
-    return [
-      {
-        id: 1457912,
-        login: "brauliodiez",
-        avatar_url: "https://avatars.githubusercontent.com/u/1457912?v=3",
-      },
-      {
-        id: 4374977,
-        login: "Nasdan",
-        avatar_url: "https://avatars.githubusercontent.com/u/4374977?v=3",
-      },
-    ];
-  }
+@Injectable({
+  providedIn: 'root'
+})
+export class GameApiService {
+
+  constructor() { }
+
++  getAll(): Game[] {
++    return [
++      new Game(
++        'Super Mario Bros',
++        '13 September 1985',
++        'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp',
++        [
++          {
++            id: 1,
++            name: 'Old shop',
++            price: 95,
++            amount: 2,
++            isAvailable: true,
++          },
++          {
++            id: 2,
++            name: 'New shop',
++            price: 115,
++            amount: 1,
++            isAvailable: true,
++          },
++          {
++            id: 3,
++            name: 'Regular shop',
++            price: 135,
++            amount: 0,
++            isAvailable: false,
++          },
++        ]
++      ),
++      new Game(
++        'Legend of Zelda',
++        '21 February 1986',
++        'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/legend-zelda.webp',
++        [
++          {
++            id: 3,
++            name: 'Old shop',
++            price: 125,
++            amount: 0,
++            isAvailable: false,
++          },
++          {
++            id: 4,
++            name: 'New shop',
++            price: 145,
++            amount: 1,
++            isAvailable: true,
++          },
++        ]
++      ),
++      new Game(
++        'Sonic',
++        '26 June 1981',
++        'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/sonic-frontiers.webp',
++        []
++      ),
++    ];
++  }
 }
 ```
 
 - Pero lo ideal es poner una firma de método que nos permita obtener datos de forma asíncrona, en Angular es muy normal utilizar observables y RxJs, pero de momento nos vamos a quedar con promesas (después migraremos el ejemplo y veremos que ventajas nos aporta RxJs), así que nuestro método quedaría así:
 
+_./src/app/services/game-api.service.ts_
+
 ```diff
 import { Injectable } from '@angular/core';
-import { MemberEntity } from '../model/member';
+import { Game } from '../model/game';
 
 @Injectable()
-export class MemberService {
--  getAll(): MemberEntity[] {
-+  getAll(): Promise<MemberEntity[]> {
-    return Promise.resolve([
+export class GameApiService {
+-  getAll(): Game[] {
++  getAll(): Promise<Game[]> {
+-    return [
++    return Promise.resolve([
       {
         id: 1457912,
         login: 'brauliodiez',
@@ -88,10 +142,12 @@ export class MemberService {
 
 > Aquí angular usa Inyección de dependencias: es un patrón de diseño que consiste en que un objeto no crea sus dependencias, sino que las recibe de fuera. En Angular, esto se consigue a través de los servicios, que son clases que se inyectan en los componentes.
 
+_./src/app/app.component.ts_
+
 ```diff
 import { Component } from '@angular/core';
 import { MemberEntity } from './model/member';
-+ import { MemberService } from './services/member';
++ import { GameApiService } from './services/game-api';
 
 import { Component } from '@angular/core';
 import { Game } from './model/game.model';
@@ -101,16 +157,30 @@ import { Seller } from './model/seller.model';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-+  providers: [MemberService],
 })
 export class AppComponent {
   title = 'game-catalog';
   games: Game[];
   showSellerList: boolean;
   sellers: Seller[];
+
+-  constructor() {
++  constructor(private gameApiService: GameApiService) {
 ```
 
-> Un tema importante es que por defecto sólo se crear una instancia por cada servicio para toda la aplicación.
+- Un tema importante es que por defecto sólo se crear una instancia por cada servicio para toda la aplicación, si quieres que se cree una instancia por cada componente, debes indicarlo en el decorador @Component, en la entrada _providers_.
+
+** NO PEGAR ESTE CODIGO **
+```diff
+@Component({
+selector: 'app-root',
+templateUrl: './app.component.html',
+styleUrls: ['./app.component.css'],
+
++ providers: [GameApiService],
+  })
+```
+
 
 Y sustituimos el código mock por la llamada al servicio (esta vez sabiendo que el metodo me devuelve una promesa):
 
@@ -184,13 +254,24 @@ _./src/app.component.ts_
 -  }
 
   ngOnInit(): void {
-+   this.members = await this.memberService.getAll();
++   this.games = await this.gameServiceApi.getAll();
   }
 
   onShowSellerList(sellers: Seller[]) {
     this.sellers = sellers;
     this.showSellerList = true;
   }
+````
+
+Fijate que _games_ sale en rojo, esto es porque aunque lo inicializemos en el init, para TypeScript esto es un problema tenemos que iniciarlizala a un valor seguro en el constructor.
+
+_./src/app.component.ts_
+
+```diff
+  constructor() {
+    this.showSellerList = false;
+    this.sellers = [];
++   this.games = [];
 ```
 
 Como hemos tocado muchos conceptos nuevos vamos a hacer un pequeño resumen:
