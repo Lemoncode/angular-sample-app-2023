@@ -40,7 +40,6 @@ import { SellerListComponent } from './seller-list/seller-list.component';
 
 +const appRoutes: Routes = [
 +  { path: '', component: CardGameComponent },
-+  { path: 'edit', component: SellerListComponent },
 + ];
 
 @NgModule({
@@ -203,8 +202,6 @@ import { GameEditComponent } from './pages/game-edit/game-edit.component';
 const appRoutes: Routes = [
 -  { path: '', component: CardGameComponent },
 +  { path: '', component: GameListComponent },
-
-  { path: 'edit', component: SellerListComponent },
 ];
 ```
 
@@ -225,13 +222,39 @@ _./src/app/app.component.html_
 ng-serve
 ```
 
+Antes de seguir, vamos a hacer un pequeño refactor para que todo lo que hay dentro de la página de _game-list_ quede dentro de esa carpeta:
+
+Vamos a crear una subcarpeta components y dentro de ella metemos game_card:
+
+![movemos game-edit a esa carpeta](./content/folder-game-list-page.png)
+
+Si todo va bien, VSCode habrá hecho las actualizaciones de imports pertinentes, si no hay que arreglar los imports.
+
+Más adelante podríamos plantear una refactorización de más calado:
+
+- Podríamos mover los modelos y servicios locales a esa página a su carpeta.
+- Podríamos plantear crear un módulo por página.
+
+Vamos ahora a definir una página para editar y crear un juego.
+
+- Debajo de pages vamos a crear una página de edición de juegos, vamos a crearlo
+
+bash
+
+```
+ng c pages/game-edit
+```
+
 - Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
 
 _./src/app/app.component.html_
 
 ```diff
-<h1>My application</h1>
-<h2>{{ title + "(" + title.length + ")" }})</h2>
+-<h1>My application</h1>
+- <h2>{{ title + "(" + title.length + ")" }})</h2>
++ <header>
++  <a routerLink=>
++ </header>
 <router-outlet></router-outlet>
 ```
 
