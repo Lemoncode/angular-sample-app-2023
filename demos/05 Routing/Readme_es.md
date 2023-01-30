@@ -416,6 +416,4 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
 
-```
 
-```
