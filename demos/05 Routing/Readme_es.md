@@ -39,7 +39,7 @@ import { CardGameComponent } from './card-game/card-game.component';
 import { SellerListComponent } from './seller-list/seller-list.component';
 
 +const appRoutes: Routes = [
-+  { path: '/', component: CardGameComponent },
++  { path: '', component: CardGameComponent },
 +  { path: 'edit', component: SellerListComponent },
 + ];
 
@@ -63,9 +63,48 @@ Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usar
 
 Antes de hacer esto tenemos que pasar todo el contenido de _app_ a _game-list_.
 
-_./src/app/pages/game-list/game-list.component.html_
+> Fijate que aquí ya empieza a ser una lata trabajar con imports relativos (../../) en el proximo ejemplo vamos a ver como utilizar alias para evitar esto.
+
+_./src/app/pages/game-list/game-list.component.ts_
 
 ```diff
+import { Component } from '@angular/core';
++ import { Game } from '../../model/game.model';
++ import { Seller } from '../../model/seller.model';
++ import { GameApiService } from '../../services/game-api.service';
+
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
+})
+export class GameListComponent {
++  games: Game[];
++  showSellerList: boolean;
++  sellers: Seller[];
++
++  constructor(private gameApiService: GameApiService) {
++    this.showSellerList = false;
++    this.sellers = [];
++    this.games = [];
++  }
++
++  loadGames = async () => {
++    this.games = await this.gameApiService.getAll();
++  };
++  ngOnInit(): void {
++    this.loadGames();
++  }
++
++  onShowSellerList(sellers: Seller[]) {
++    this.sellers = sellers;
++    this.showSellerList = true;
++  }
++
++  onCloseSellerList() {
++    this.showSellerList = false;
++  }
+}
 ```
 
 _./src/app/app.component.ts_
@@ -113,8 +152,88 @@ export class AppComponent {
 }
 ```
 
+Y hacemos lo mismo con el HTML
 
+_./src/app/pages/game-list/game-list.component.ts_
 
+```diff
++ <div *ngFor="let game of games">
++  <app-card-game
++    [game]="game"
++    (showSellerList)="onShowSellerList($event)"
++  ></app-card-game>
++ </div>
++
++ <app-seller-list
++  *ngIf="showSellerList"
++  (close)="onCloseSellerList()"
++  [sellers]="sellers"
++ ></app-seller-list>
+```
+
+_./src/app/app.component.html_
+
+```diff
+<h1>My application</h1>
+<h2>{{ title + "(" + title.length + ")" }})</h2>
+
+- <div *ngFor="let game of games">
+-  <app-card-game
+-    [game]="game"
+-    (showSellerList)="onShowSellerList($event)"
+-  ></app-card-game>
+- </div>
+-
+- <app-seller-list
+-  *ngIf="showSellerList"
+-  (close)="onCloseSellerList()"
+-  [sellers]="sellers"
+- ></app-seller-list>
+```
+
+- Vamos a actualizar el router para que apunte a nuestra página:
+
+_./src/app/app-routing.module.ts_
+
+```diff
+import { SellerListComponent } from './seller-list/seller-list.component';
+import { GameListComponent } from './pages/game-list/game-list.component';
+import { GameEditComponent } from './pages/game-edit/game-edit.component';
+
+const appRoutes: Routes = [
+-  { path: '', component: CardGameComponent },
++  { path: '', component: GameListComponent },
+
+  { path: 'edit', component: SellerListComponent },
+];
+```
+
+- Ahora que tenemos el app limpio, vamos a añadir el router-outlet:
+
+_./src/app/app.component.html_
+
+```diff
+<h1>My application</h1>
+<h2>{{ title + "(" + title.length + ")" }})</h2>
+
++ <router-outlet></router-outlet>
+```
+
+- Vamos a comprobar si sigue viendo la página:
+
+```bash
+ng-serve
+```
+
+- Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
+
+_./src/app/app.component.html_
+
+```diff
+<h1>My application</h1>
+<h2>{{ title + "(" + title.length + ")" }})</h2>
+<router-outlet></router-outlet>
+```
 
 # ¿Te apuntas a nuestro máster?
 
