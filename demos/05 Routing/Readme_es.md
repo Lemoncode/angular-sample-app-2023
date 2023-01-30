@@ -18,10 +18,6 @@ npm install
 ng generate component pages/game-list
 ```
 
-```bash
-ng generate component pages/game-edit
-```
-
 - Vamos ahora a indicarle a la aplicación:
   - Que vamos a utilizar el modulo _@angular/router_
   - Definir las rutas de nuestra aplicación.
@@ -239,13 +235,30 @@ Vamos ahora a definir una página para editar y crear un juego.
 
 - Debajo de pages vamos a crear una página de edición de juegos, vamos a crearlo
 
-bash
+```bash
+ng g c pages/game-edit
+```
 
+- Vamos a añadirlo a la sección de rutas
+
+_./src/app/app.module.ts_
+
+```diff
+import { GameListComponent } from './pages/game-list/game-list.component';
++ import { GameEditComponent } from './pages/game-edit/game-edit.component';
+
+const appRoutes: Routes = [
+  { path: '', component: GameListComponent },
++  { path: 'edit', component: GameEditComponent },
+];
 ```
-ng c pages/game-edit
-```
+
+Para ver que todo funciona, vamos a probar a navegar a la página de edición, ruta:
+\_http://localhost:4200/edit
 
 - Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
+
+En este header metemos dos enlace (a la página de list y a la de crear juego), fijate que al _anchor_ de html le informamos con una directiva para que haga la navegación Angular (navegación SPA) a la página de edit.
 
 _./src/app/app.component.html_
 
@@ -253,10 +266,43 @@ _./src/app/app.component.html_
 -<h1>My application</h1>
 - <h2>{{ title + "(" + title.length + ")" }})</h2>
 + <header>
-+  <a routerLink=>
++   <nav>
++   <a routerLink="/">Game List</a>
++   <a routerLink="/edit">Create new game</a>
++   </nav>
 + </header>
 <router-outlet></router-outlet>
 ```
+
+Vamos a darle un poco de estilo al navbar:
+
+_./src/app/app.component.scss_
+
+```diff
+label {
+  font-weight: bold;
+}
+
++ nav {
++  display: flex;
++  justify-content: flex-start;
++  column-gap: 15px;
++  padding: 10px;
++  background-color: #fcfaea;
++  border-bottom: 1px solid #e5e5e5;
+}
+```
+
+Aquí le estamos indicando:
+
+- Que nav va a ser un contenedor flex.
+- Que alineamos los elementos a la izquierda.
+- Que dejamos un espacio de 15px entre elementos.
+- Le indicamos un color de fondo, y una línea en la parte de abajo del rectángulo.
+
+Si te fijas podemos navegar entre una página y otra.
+
+
 
 # ¿Te apuntas a nuestro máster?
 

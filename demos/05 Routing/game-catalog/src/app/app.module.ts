@@ -10,7 +10,7 @@ import { GameEditComponent } from './pages/game-edit/game-edit.component';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
-  { path: 'edit', component: SellerListComponent },
+  { path: 'edit', component: GameEditComponent },
 ];
 
 @NgModule({
