@@ -20,11 +20,29 @@ npm install
       "ES2022",
       "dom"
 -    ],
-+    "baseUrl": "src",
+     "baseUrl": "./",
 +    "paths": {
-+      "@/app/*": ["*"]
-+    }
++      "@/*": ["./src/app/*"]
++    },
   },
+```
+
+Con esto le estamos diciendo a TypeScript que cuando vea un import que empiece por _@_ lo que tiene que hacer es buscar en la carpeta _src/app_ y concatene lo que este contenido en el caracter asterisco.
+
+Ahora podemos cambiar los path relativos por _@/_, por ejemplo:
+
+_./src/app/pages/game-list/card-game/card-game.component.ts_
+
+```diff
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
+- import { Game } from '../../../model/game.model';
+- import { Seller } from '../../../model/seller.model';
++ import { Game } from '@/model/game.model';
++ import { Seller } from '@/model/seller.model';
+
+
+@Component({
 ```
 
 # ¿Te apuntas a nuestro máster?
