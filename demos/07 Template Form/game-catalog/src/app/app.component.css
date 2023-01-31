@@ -1,0 +1,12 @@
+label {
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-start;
+  column-gap: 15px;
+  padding: 10px;
+  background-color: #fcfaea;
+  border-bottom: 1px solid #e5e5e5;
+}
