@@ -332,6 +332,23 @@ Nombre: Streets of rage 4
 Url imagen: https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/streetsofrage4.jpeg
 Fecha de lanzamiento: 02/02/2021
 
+- Si volvemos a la página de listado, veremos que se ha añadido el juego, PEEEEROOOOO,
+  fijate que el título no se ve esto es porque el campo fecha se ha grabado como texto, aquí nos encontramos con un caso que se nos complica, ¿Qué podríamos hacer?
+
+- Usar un control de angular material y que directamente trabajemos con fechas.
+- Hacer un mapeador de fechas, que nos permita convertir el texto a fecha y viceversa, y usarlo
+  manualmente antes de guardar.
+- Arreglarlo a más bajo nivel utilizando creando un directiva que haga el cambio
+
+https://coryrylan.com/blog/using-html5-date-input-with-date-objects-and-angular
+
+Esto lo dejaremos para cuando cubramos las directivas.
+
+- Vamos a continuar completando la parte estándar de nuestro formulario.
+  - Completamos el formulario añadiendo validación.
+  - Añadimos algo de diseño.
+  - Crearemos un component custom que gestione el ngModel.
+
 # ¿Te apuntas a nuestro máster?
 
 Si te ha gustado este ejemplo y tienes ganas de aprender Front End
