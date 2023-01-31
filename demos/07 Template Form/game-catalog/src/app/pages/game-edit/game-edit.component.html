@@ -1,2 +1,23 @@
-<p>game-edit works!</p>
-<p>Id: {{ id }}</p>
+<div>
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" [(ngModel)]="game.name" />
+</div>
+<div>
+  <label for="imageurl">Picture Url</label>
+  <input
+    type="text"
+    id="imageurl"
+    name="imageurl"
+    [(ngModel)]="game.imageUrl"
+  />
+</div>
+<div>
+  <label for="daterelease">Release Date</label>
+  <input
+    type="date"
+    id="daterelease"
+    name="daterelease"
+    [(ngModel)]="game.dateRelease"
+  />
+</div>
+<button (click)="handleSaveClick()">Save</button>

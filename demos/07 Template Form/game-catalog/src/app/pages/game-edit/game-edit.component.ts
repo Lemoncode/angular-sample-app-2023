@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Game } from '@/model/game.model';
+import { GameApiService } from '@/services/game-api.service';
 
 @Component({
   selector: 'app-game-edit',
@@ -8,10 +10,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameEditComponent {
   id: string;
-  constructor(private route: ActivatedRoute) {
+  game: Game;
+
+  constructor(private route: ActivatedRoute, private gameApi: GameApiService) {
     this.id = '';
+    this.game = new Game('');
     this.route.params.subscribe((params) => {
       this.id = params['id'];
     });
+  }
+
+  handleSaveClick() {
+    this.gameApi.Insert(this.game);
   }
 }

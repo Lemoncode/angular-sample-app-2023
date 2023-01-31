@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { CardGameComponent } from './pages/game-list/card-game/card-game.component';
@@ -22,7 +23,7 @@ const appRoutes: Routes = [
     GameListComponent,
     GameEditComponent,
   ],
-  imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
+  imports: [BrowserModule, RouterModule.forRoot(appRoutes), FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
