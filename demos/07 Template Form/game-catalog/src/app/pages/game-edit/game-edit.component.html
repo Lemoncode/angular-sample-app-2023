@@ -1,6 +1,16 @@
 <div>
   <label for="name">Name</label>
-  <input type="text" id="name" name="name" [(ngModel)]="game.name" />
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
+  <div *ngIf="name.invalid && (name.dirty || name.touched)">
+    <div *ngIf="name.errors?.['required']">Name is required</div>
+  </div>
 </div>
 <div>
   <label for="imageurl">Picture Url</label>
@@ -9,7 +19,14 @@
     id="imageurl"
     name="imageurl"
     [(ngModel)]="game.imageUrl"
+    required
+    pattern="https?://.+"
+    #imageurl="ngModel"
   />
+  <div *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)">
+    <div *ngIf="imageurl.errors?.['required']">Image URL is required</div>
+    <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
+  </div>
 </div>
 <div>
   <label for="daterelease">Release Date</label>

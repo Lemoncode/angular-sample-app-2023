@@ -346,8 +346,84 @@ Esto lo dejaremos para cuando cubramos las directivas.
 
 - Vamos a continuar completando la parte estándar de nuestro formulario.
   - Completamos el formulario añadiendo validación.
+  - Vemos la forma de simplificar la validación.
   - Añadimos algo de diseño.
   - Crearemos un component custom que gestione el ngModel.
+
+Vamos a partir por añadir las siguientes validaciones a nuestro formulario:
+
+- El campo nombre es obligatorio.
+- El campo Picture URL es obligatorio y debe ser una URL válida.
+
+Para ello podemos usar la directiva _required_ y _pattern_.
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
+<div>
+  <label for="name">Name</label>
+-  <input type="text" id="name" name="name" [(ngModel)]="game.name" />
++ <input type="text" id="name" name="name" [(ngModel)]="game.name" required #name="ngModel"/>
++  <div *ngIf="name.invalid && (name.dirty || name.touched)">
++    <div *ngIf="name.errors?.['required']">Name is required</div>
++  </div>
+</div>
+```
+
+¿Qué estamos haciendo aquí?
+
+- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, esta es estandar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, y también podemos crear nuestras propias validaciones, además de esto tenemos que crear una variable global (fijate el _#name_) que referencia al _ngModel_ .
+
+- Segundo comprobamos si el campo tiene errors, y si el usuario ha pasado por el o si ha modificado algo (dirty o touched), es decir mientras no haya pasado por el campo o no
+  hay pulsado en el botón de guardar no mostramos el mensaje de error, así evitamos el patrón
+  odioso de mostrar errores cuando todavía no he podido ni rellenar el formulario, ojo para esto usamos la variable que hemos creado previamente en el tag input que se llame _#name_
+
+- Tercero, comprobamos si el campo tiene el error _required_ y mostramos el mensaje de error en
+  ese caso.
+
+Veámoslo en funcionamiento:
+
+```bash
+ng serve
+```
+
+Vamos ahora a por el campo de la URL, para ello vamos a usar la directiva _pattern_.
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
+  <label for="imageurl">Picture Url</label>
+  <input
+    type="text"
+    id="imageurl"
+    name="imageurl"
+    [(ngModel)]="game.imageUrl"
++   required
++   pattern="https?://.+"
++   #imageurl="ngModel"
+  />
++  <div *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)">
++    <div *ngIf="imageurl.errors?.['required']">Image URL is required</div>
++    <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
++  </div>
+</div>
+```
+
+Vamos darle un poco de estilado a esto para que sea vea el mensaje de error en rojo.
+
+_./pages/game-edit/game-edit.component.css_
+
+```css
+.errors > div {
+  color: red;
+}
+```
+
+Vamos a actualizar los div que muestran los errores.
+
+https://angular.io/guide/form-validation
+
+https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1
 
 # ¿Te apuntas a nuestro máster?
 
