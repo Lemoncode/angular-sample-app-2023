@@ -416,10 +416,33 @@ _./pages/game-edit/game-edit.component.css_
 ```css
 .errors > div {
   color: red;
+  font-size: 80%;
 }
 ```
 
 Vamos a actualizar los div que muestran los errores.
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+    #name="ngModel"
+  />
+-  <div *ngIf="name.invalid && (name.dirty || name.touched)">
++ <div *ngIf="name.invalid && (name.dirty || name.touched)" class="errors">
+    <div *ngIf="name.errors?.['required']">Name is required</div>
+  </div>
+</div>
+```
+
+```diff
+    #imageurl="ngModel"
+  />
+-   <div *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)">
++   <div *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)" class="errors">
+    <div *ngIf="imageurl.errors?.['required']">Image URL is required</div>
+    <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
+  </div>
+```
 
 https://angular.io/guide/form-validation
 
