@@ -8,9 +8,7 @@
     required
     #name="ngModel"
   />
-  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="errors">
-    <div *ngIf="name.errors?.['required']">Name is required</div>
-  </div>
+  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
 </div>
 <div>
   <label for="imageurl">Picture Url</label>
@@ -23,13 +21,7 @@
     pattern="https?://.+"
     #imageurl="ngModel"
   />
-  <div
-    *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)"
-    class="errors"
-  >
-    <div *ngIf="imageurl.errors?.['required']">Image URL is required</div>
-    <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
-  </div>
+  <app-field-error-display [fieldNgModel]="imageurl"></app-field-error-display>
 </div>
 <div>
   <label for="daterelease">Release Date</label>

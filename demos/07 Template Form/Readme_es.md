@@ -444,6 +444,142 @@ _./pages/game-edit/game-edit.component.html_
   </div>
 ```
 
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
+
+Creamos una carpeta common y creamos nuestro widget para mostrar errores:
+
+```bash
+ng g c common/field-error-display
+```
+
+Vamos a aceptar como parametro de entrada el NgModel, de momento jugamos sólo con la propiedad _invalid_.
+
+_./common/field-error-display/field-error-display.component.ts_
+
+```ts
+import { Component, Input } from "@angular/core";
+import { AbstractControlDirective } from "@angular/forms";
+
+@Component({
+  selector: "app-field-error-display",
+  templateUrl: "./field-error-display.component.html",
+  styleUrls: ["./field-error-display.component.css"],
+})
+export class FieldErrorDisplayComponent {
+  @Input() fieldNgModel: AbstractControlDirective | null;
+
+  constructor() {
+    this.fieldNgModel = null;
+  }
+}
+```
+
+Aquí aceptamos el ngModel como parametro.
+
+_./common/field-error-display/field-error-display.component.html_
+
+```diff
+<p>field-error-display works!</p>
+<span>{{ fieldNgModel?.invalid }}</span>
+```
+
+Vamos a instanciarlo:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
+  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+```
+
+Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
+
+Así que vamos a implementar el resto de comportamiento.
+
+_./common/field-error-display/field-error-display.component.css_
+
+```css
+.errors > div {
+  color: red;
+  font-size: 80%;
+}
+```
+
+_./common/field-error-display/field-error-display.component.html_
+
+```diff
+-  <p>field-error-display works!</p>
+-  <span>{{ fieldNgModel?.invalid }}</span>
+
++  <div
++    *ngIf="fieldNgModel?.invalid && (fieldNgModel?.dirty || fieldNgModel?.touched)"
++    class="errors"
++  >
++    <div *ngIf="fieldNgModel?.errors?.['required']">Field is required</div>
++    <div *ngIf="fieldNgModel?.errors?.['pattern']">Format not valid</div>
++  </div>
+```
+
+Vamos a sustituir esto en el código:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+<div>
+  <label for="name">Name</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
++  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+-  <div *ngIf="name.invalid && (name.dirty || name.touched)" class="errors">
+-    <div *ngIf="name.errors?.['required']">Name is required</div>
+-  </div>
+</div>
+<div>
+  <label for="imageurl">Picture Url</label>
+  <input
+    type="text"
+    id="imageurl"
+    name="imageurl"
+    [(ngModel)]="game.imageUrl"
+    required
+    pattern="https?://.+"
+    #imageurl="ngModel"
+  />
++  <app-field-error-display [fieldNgModel]="imageurl"></app-field-error-display>
+-  <div
+-    *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)"
+-    class="errors"
+-  >
+-    <div *ngIf="imageurl.errors?.['required']">Image URL is required</div>
+-    <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
+-  </div>
+</div>
+
+```
+
+Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuviera en produccíon tendríamos que tener en cuenta casuistica que nos haría complicado sacar un componente genérico:
+
+- Primero, tenemos que meter todos lo validadores en ese componente o un array (no te olvides de añadirlos...) si no, no se mostraría el mensaje de error, otra opción es informar esas validaciones en un array, pero entonces tendríamos que definirlas dos veces, en el componente y en la validación.
+
+- Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que is un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información).
+
+- Tercero para las validaciones de tipo patrón, no vale con decir Patrón no valido, si no "NIF no valido", o "Email no valido"
+
+Más información acerca de validadores y como hacer un implementar un widget para mostrar errores:
+
 https://angular.io/guide/form-validation
 
 https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1

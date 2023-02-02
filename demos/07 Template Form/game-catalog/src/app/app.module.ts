@@ -8,6 +8,7 @@ import { CardGameComponent } from './pages/game-list/card-game/card-game.compone
 import { SellerListComponent } from './seller-list/seller-list.component';
 import { GameListComponent } from './pages/game-list/game-list.component';
 import { GameEditComponent } from './pages/game-edit/game-edit.component';
+import { FieldErrorDisplayComponent } from './common/field-error-display/field-error-display.component';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
     SellerListComponent,
     GameListComponent,
     GameEditComponent,
+    FieldErrorDisplayComponent,
   ],
   imports: [BrowserModule, RouterModule.forRoot(appRoutes), FormsModule],
   providers: [],
