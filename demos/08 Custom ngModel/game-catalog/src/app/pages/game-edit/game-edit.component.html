@@ -1,0 +1,39 @@
+<form #gameForm="ngForm">
+  <div>
+    <label for="name">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="game.name"
+      required
+      #name="ngModel"
+    />
+    <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+  </div>
+  <div>
+    <label for="imageurl">Picture Url</label>
+    <input
+      type="text"
+      id="imageurl"
+      name="imageurl"
+      [(ngModel)]="game.imageUrl"
+      required
+      pattern="https?://.+"
+      #imageurl="ngModel"
+    />
+    <app-field-error-display
+      [fieldNgModel]="imageurl"
+    ></app-field-error-display>
+  </div>
+  <div>
+    <label for="daterelease">Release Date</label>
+    <input
+      type="date"
+      id="daterelease"
+      name="daterelease"
+      [(ngModel)]="game.dateRelease"
+    />
+  </div>
+  <button (click)="handleSaveClick(gameForm)">Save</button>
+</form>
