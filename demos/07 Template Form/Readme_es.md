@@ -627,7 +627,39 @@ _./pages/game-edit/game-edit.component.html_
 
 ¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
 
-Esto parece está muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
+Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
+
+Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+  <button
+-    (click)="handleSaveClick()"
++    (click)="handleSaveClick(gameForm)"
+-    [disabled]="gameForm?.invalid"
+    >
+```
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
+-  handleSaveClick() {
++  handleSaveClick(form: NgForm) {
++    if (form.valid) {
+      this.gameApi.Insert(this.game);
++    } else {
++      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
++      alert(
++        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
++      );
++    }
+  }
+```
+
+También puedes crear validadores custom:
+
+https://www.tektutorialshub.com/angular/custom-validator-in-template-driven-forms-in-angular/
 
 # ¿Te apuntas a nuestro máster?
 

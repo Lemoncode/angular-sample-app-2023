@@ -35,7 +35,5 @@
       [(ngModel)]="game.dateRelease"
     />
   </div>
-  <button (click)="handleSaveClick()" [disabled]="gameForm?.invalid">
-    Save
-  </button>
+  <button (click)="handleSaveClick(gameForm)">Save</button>
 </form>
