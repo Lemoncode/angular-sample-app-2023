@@ -574,7 +574,7 @@ Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuvier
 
 - Primero, tenemos que meter todos lo validadores en ese componente o un array (no te olvides de añadirlos...) si no, no se mostraría el mensaje de error, otra opción es informar esas validaciones en un array, pero entonces tendríamos que definirlas dos veces, en el componente y en la validación.
 
-- Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que is un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información).
+- Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que is un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información), otra opción sería iterar por las propiedades de _errors_ (como si fuera un array), pero aquí el orden de validación no lo conocemos.
 
 - Tercero para las validaciones de tipo patrón, no vale con decir Patrón no valido, si no "NIF no valido", o "Email no valido"
 
