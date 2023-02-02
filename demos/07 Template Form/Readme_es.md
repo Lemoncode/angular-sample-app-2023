@@ -584,6 +584,51 @@ https://angular.io/guide/form-validation
 
 https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1
 
+Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
+
+- Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
+
+- Para obtener la información global del formulario vamos a añadir un atributo al formulario:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
++ <form #gameForm="ngForm">
+<div>
+  <label for="name">Name</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
+  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+</div>
+// (...)
+  <button (click)="handleSaveClick()">Save</button>
++ </form>
+```
+
+- Vamos a añadir un atributo al botón de grabar:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+- <button (click)="handleSaveClick()">Save</button>
++ <button
++   (click)="handleSaveClick()"
++   [disabled]="gameForm?.invalid"
++ >
++   Save
++ </button>
+```
+
+¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
+
+Esto parece está muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
+
 # ¿Te apuntas a nuestro máster?
 
 Si te ha gustado este ejemplo y tienes ganas de aprender Front End
@@ -596,6 +641,10 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
+
+```
+
+```
 
 ```
 
