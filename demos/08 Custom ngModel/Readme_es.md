@@ -377,10 +377,100 @@ Ya tenemos el input wrapper con validación, hemos sudado tinta, ahora vamos a r
 _./src/app/pages/game-edit/game-edit.component.html_
 
 ```diff
+<form #gameForm="ngForm">
+  <app-input-wrapper
+    id="name"
+    name="name"
+    label="Name"
+    [(ngModel)]="game.name"
++   required
+  ></app-input-wrapper>
+-  <div>
+-    <label for="name">Name</label>
+-    <input
+-      type="text"
+-      id="name"
+-      name="name"
+-      [(ngModel)]="game.name"
+-      required
+-      #name="ngModel"
+-    />
+-    <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+-  </div>
++  <app-input-wrapper
++    id="imageurl"
++    name="imageurl"
++    label="Picture Url"
++    [(ngModel)]="game.imageUrl"
++      required
++      pattern="https?://.+"
++  ></app-input-wrapper>
 
+-  <div>
+-    <label for="imageurl">Picture Url</label>
+-    <input
+-      type="text"
+-      id="imageurl"
+-      name="imageurl"
+-      [(ngModel)]="game.imageUrl"
+-      required
+-      pattern="https?://.+"
+-      #imageurl="ngModel"
+-    />
+-    <app-field-error-display
+-      [fieldNgModel]="imageurl"
+-    ></app-field-error-display>
+-  </div>
++  <app-input-wrapper
++    id="daterelease"
++    name="daterelease"
++    label="Release Date"
++    [(ngModel)]="game.dateRelease"
++  ></app-input-wrapper>
+-  <div>
+-    <label for="daterelease">Release Date</label>
+-    <input
+-      type="date"
+-      id="daterelease"
+-      name="daterelease"
+-      [(ngModel)]="game.dateRelease"
+-    />
+-  </div>
+
+  <button (click)="handleSaveClick(gameForm)">Save</button>
+</form>
 ```
 
+- Para el tipo fecha tendríamos que pasar una propiedad más (type) al componente input-wrapper, para añadirlo.
+
 Y ya que estamos vamos a meter esto en un contenedor flex para que se vea mejor:
+
+_./src/app/pages/game-edit/game-edit.component.css_
+
+```css
+container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+form {
+  max-width: 500px;
+}
+```
+
+_./src/app/pages/game-edit/game-edit.component.ts_
+
+```diff
++ <div class="container">
+   <form #gameForm="ngForm">
+// (...)
++   </form>
++ </div>
+```
+
+Y ahora tenemos un formulario con validación, un componente input-wrapper que podemos reutilizar en otros sitios, y un aspecto más cuidado.
 
 # Referencias
 
@@ -404,3 +494,7 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
+
+```
+
+```

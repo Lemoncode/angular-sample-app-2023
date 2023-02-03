@@ -1,4 +1,10 @@
-.errors > div {
-  color: red;
-  font-size: 80%;
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+form {
+  max-width: 500px;
 }

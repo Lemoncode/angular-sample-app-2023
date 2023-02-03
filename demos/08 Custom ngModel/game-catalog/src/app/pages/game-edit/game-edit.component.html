@@ -1,47 +1,29 @@
-<form #gameForm="ngForm">
-  <app-input-wrapper
-    id="name"
-    name="name"
-    label="Name"
-    [(ngModel)]="game.name"
-  ></app-input-wrapper>
-  <div>
-    <label for="name">Name</label>
-    <input
-      type="text"
+<div class="container">
+  <form #gameForm="ngForm" class="form">
+    <app-input-wrapper
       id="name"
       name="name"
+      label="Name"
       [(ngModel)]="game.name"
       required
-      #name="ngModel"
-    />
-    <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
-  </div>
+    ></app-input-wrapper>
 
-  <div>
-    <label for="imageurl">Picture Url</label>
-    <input
-      type="text"
+    <app-input-wrapper
       id="imageurl"
       name="imageurl"
+      label="Picture Url"
       [(ngModel)]="game.imageUrl"
       required
       pattern="https?://.+"
-      #imageurl="ngModel"
-    />
-    <app-field-error-display
-      [fieldNgModel]="imageurl"
-    ></app-field-error-display>
-  </div>
-  <div>
-    <label for="daterelease">Release Date</label>
-    <input
-      type="date"
+    ></app-input-wrapper>
+
+    <app-input-wrapper
       id="daterelease"
       name="daterelease"
+      label="Release Date"
       [(ngModel)]="game.dateRelease"
-    />
-  </div>
+    ></app-input-wrapper>
 
-  <button (click)="handleSaveClick(gameForm)">Save</button>
-</form>
+    <button (click)="handleSaveClick(gameForm)">Save</button>
+  </form>
+</div>
