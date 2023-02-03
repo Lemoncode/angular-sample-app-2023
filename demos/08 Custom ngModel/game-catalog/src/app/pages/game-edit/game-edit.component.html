@@ -1,4 +1,10 @@
 <form #gameForm="ngForm">
+  <app-input-wrapper
+    id="name"
+    name="name"
+    label="Name"
+    [(ngModel)]="game.name"
+  ></app-input-wrapper>
   <div>
     <label for="name">Name</label>
     <input
@@ -11,6 +17,7 @@
     />
     <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
   </div>
+
   <div>
     <label for="imageurl">Picture Url</label>
     <input
@@ -35,5 +42,6 @@
       [(ngModel)]="game.dateRelease"
     />
   </div>
+
   <button (click)="handleSaveClick(gameForm)">Save</button>
 </form>

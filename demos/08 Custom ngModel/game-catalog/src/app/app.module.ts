@@ -9,6 +9,7 @@ import { SellerListComponent } from './seller-list/seller-list.component';
 import { GameListComponent } from './pages/game-list/game-list.component';
 import { GameEditComponent } from './pages/game-edit/game-edit.component';
 import { FieldErrorDisplayComponent } from './common/field-error-display/field-error-display.component';
+import { InputWrapperComponent } from './common/input-wrapper/input-wrapper.component';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
     GameListComponent,
     GameEditComponent,
     FieldErrorDisplayComponent,
+    InputWrapperComponent,
   ],
   imports: [BrowserModule, RouterModule.forRoot(appRoutes), FormsModule],
   providers: [],

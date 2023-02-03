@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControlDirective } from '@angular/forms';
+import { AbstractControl, AbstractControlDirective } from '@angular/forms';
 
 @Component({
   selector: 'app-field-error-display',
@@ -7,7 +7,10 @@ import { AbstractControlDirective } from '@angular/forms';
   styleUrls: ['./field-error-display.component.css'],
 })
 export class FieldErrorDisplayComponent {
-  @Input() fieldNgModel: AbstractControlDirective | null;
+  @Input() fieldNgModel:
+    | AbstractControlDirective
+    | AbstractControl<any, any>
+    | null;
 
   constructor() {
     this.fieldNgModel = null;
