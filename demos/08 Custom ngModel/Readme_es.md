@@ -1,5 +1,17 @@
 # ngModel Custom Component
 
+---
+
+NOTA PARA EL PROFESOR O SI ERES AUTODIDACTA:
+
+- Este ejemplo sólo sirve para ver que _NgModel_ es algo muy límitado y que en cuanto nos metemos a hacer algo más complejo nos metemos en un jardín considerable.
+- Si vas mal de tiempo, puedes enseñar el código y no hacer el ejemplo.
+- Si tienes algo más de tiempo te puedes quedar en el input sin validacíon, y se ve lo del _ControlValueAccessor_ y el _NgModel_ (que tiene miga...)
+- Y si tienes más tiempo te puedes poner con el tema de integrar las validaciones con los hacks de tipado que hay que meter para que funcione (ejemplos de Angular 4 que rompen en versiones más recientes...).
+- Esta parte última de añadir el error de validación igual la podríamos haber resuelto implementando una directiva (sería curioso implementarlo y ver si hay que montar tanto lío o simplificamos algo).
+
+---
+
 Ya tenemos nuestro formulario montado, pero tiene una pinta un poco cutre, vamos a darle un poco de estilo y vamos a intentar no repetir código y mantener un estilado coherente.
 
 Para ello en un primer paso:
