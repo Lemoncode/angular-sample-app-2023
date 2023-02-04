@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Game } from '@/model/game.model';
 import { GameApiService } from '@/services/game-api.service';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-game-edit',
@@ -11,19 +11,29 @@ import { NgForm } from '@angular/forms';
 })
 export class GameEditComponent {
   id: string;
-  game: Game;
+  gameForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private gameApi: GameApiService) {
+  constructor(
+    private route: ActivatedRoute,
+    private gameApi: GameApiService,
+    private formBuilder: FormBuilder
+  ) {
     this.id = '';
-    this.game = new Game('');
     this.route.params.subscribe((params) => {
       this.id = params['id'];
     });
+
+    // Sólo vamos a cubrir la creación
+    this.gameForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      imageUrl: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      dateRelease: [new Date(), Validators.required],
+    });
   }
 
-  handleSaveClick(form: NgForm) {
-    if (form.valid) {
-      this.gameApi.Insert(this.game);
+  handleSaveClick() {
+    if (this.gameForm.valid) {
+      console.log(this.gameForm.value);
     } else {
       // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
       alert(

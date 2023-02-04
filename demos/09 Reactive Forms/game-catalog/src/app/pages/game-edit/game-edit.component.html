@@ -1,18 +1,17 @@
 <div class="container">
-  <form #gameForm="ngForm" class="form">
+  <form [formGroup]="gameForm" class="form">
     <app-input-wrapper
       id="name"
       name="name"
       label="Name"
-      [(ngModel)]="game.name"
-      required
+      formControlName="name"
     ></app-input-wrapper>
 
     <app-input-wrapper
       id="imageurl"
       name="imageurl"
       label="Picture Url"
-      [(ngModel)]="game.imageUrl"
+      formControlName="imageUrl"
       required
       pattern="https?://.+"
     ></app-input-wrapper>
@@ -21,9 +20,9 @@
       id="daterelease"
       name="daterelease"
       label="Release Date"
-      [(ngModel)]="game.dateRelease"
+      formControlName="dateRelease"
     ></app-input-wrapper>
 
-    <button (click)="handleSaveClick(gameForm)">Save</button>
+    <button (click)="handleSaveClick()">Save</button>
   </form>
 </div>

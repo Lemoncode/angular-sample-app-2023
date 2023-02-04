@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { CardGameComponent } from './pages/game-list/card-game/card-game.component';
@@ -27,7 +28,12 @@ const appRoutes: Routes = [
     FieldErrorDisplayComponent,
     InputWrapperComponent,
   ],
-  imports: [BrowserModule, RouterModule.forRoot(appRoutes), FormsModule],
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
