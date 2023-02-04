@@ -236,8 +236,97 @@ _./src/app/games/components/game-edit/game-edit.component.html_
 Si ejecutamos podemos ver que tenemos ahora el control de fecha (no es muy bonito pero es funcional), mi consejo aquí es usar una librería como Angular Material.
 
 Si probamos a ejecutar, podemos ver que si rellenamos todos los campos y ponemos una fecha al grabar aparece por consola la fecha, peeerooo:
-  - El valor inicial estaba en blanco.
-  - El valor que se muestra por consola es un texto, no es un date.
+
+- El valor inicial estaba en blanco.
+- El valor que se muestra por consola es un texto, no es un date.
+
+Vamos ahora a por el modelo de la vista y los mappers.
+
+- Creamos el modelo de la vista:
+
+_./src/app/games/game-edit/game.vm.ts_
+
+```ts
+export interface GameVm {
+  name: string;
+  imageUrl: string;
+  dateRelease: string;
+}
+```
+
+- Vamos a crear un mapper en ambos sentidos (en este caso, como no tiene estado, vamos usar vanilla JavaSript, otra opción sería crearlo como un servicio y registrarlo en el módulo):
+
+_./src/app/games/game-edit/game.mapper.ts_
+
+```ts
+import { Game } from "@/model/game.model";
+import { GameVm } from "./game.vm";
+
+export const mapGameToVm = (game: Game): GameVm => ({
+  name: game.name,
+  imageUrl: game.imageUrl ?? "",
+  dateRelease: game.dateRelease.toISOString().substring(0, 10),
+});
+
+export const mapVmToGame = (gameVm: GameVm): Game =>
+  new Game(gameVm.name, gameVm.dateRelease, gameVm.imageUrl);
+```
+
+Y ahora vamos a usarlos en el componente:
+
+_./src/app/games/components/game-edit/game-edit.component.ts_
+
+```diff
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Game } from '@/model/game.model';
+import { GameApiService } from '@/services/game-api.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
++ import { mapGameToVm, mapVmToGame } from './game.mapper';
+```
+
+```diff
+  constructor(
+    private route: ActivatedRoute,
+    private gameApi: GameApiService,
+    private formBuilder: FormBuilder
+  ) {
+    this.id = '';
+    this.route.params.subscribe((params) => {
+      this.id = params['id'];
+    });
+
++    // De este mapper podríamos haber pasado pero así nos valdría también para editar un juego
++    const gameVm = mapGameToVm(new Game('', new Date().toISOString().substring(0, 10), ''));
+
+    // Sólo vamos a cubrir la creación
+    this.gameForm = this.formBuilder.group({
+-      name: ['', Validators.required],
+-      imageUrl: ['', [Validators.required, Validators.pattern('https?://.+')]],
+-      dateRelease: [new Date(), Validators.required],
++      name: [gameVm.name, Validators.required],
++      imageUrl: [gameVm.imageUrl , [Validators.required, Validators.pattern('https?://.+')]],
++      dateRelease: [gameVm.dateRelease, Validators.required],
+    });
+  }
+```
+
+```diff
+  handleSaveClick() {
+    if (this.gameForm.valid) {
+      console.log(this.gameForm.value);
++     const game = mapVmToGame(this.gameForm.value);
++     this.gameApi.Insert(game);
+    } else {
+      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
+      alert(
+        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
+      );
+    }
+  }
+```
+
+- Ahora podemos insertar un juego y ver que aparece en la lista (incluida la fecha !!)
 
 # Referencias
 
