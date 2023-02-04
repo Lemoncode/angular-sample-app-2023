@@ -26,7 +26,7 @@ export class GameEditComponent {
 
     // De este mapper podríamos haber pasado pero así nos valdría también para editar un juego
     const gameVm = mapGameToVm(
-      new Game('', new Date().toISOString().substring(0, 10), '')
+      new Game('test23', new Date().toISOString().substring(0, 10), '')
     );
 
     // Sólo vamos a cubrir la creación

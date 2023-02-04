@@ -326,6 +326,37 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   }
 ```
 
+- Y en el input-wrapper, vamos a meter un pequeño cambio para que acepte los valores iniciales:
+
+_./src/app/shared/components/input-wrapper/input-wrapper.component.ts_
+
+```diff
+  ngAfterViewInit(): void {
+    const ngControl: NgControl | null = this.injector.get(NgControl, null);
+    if (ngControl) {
++      this.fieldValue = ngControl.value;
+      setTimeout(() => {
+        this._formControl = ngControl.control as FormControl;
+      });
+    }
+  }
+```
+
+Y en el HTML:
+
+_./src/app/shared/components/input-wrapper/input-wrapper.component.html_
+
+```diff
+  <input
+    name="label"
+    [type]="type"
+-    [ngModel]="fieldValue"
++    [ngModel]="fieldValue"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouch()"
+  />
+```
+
 - Ahora podemos insertar un juego y ver que aparece en la lista (incluida la fecha !!)
 
 # Referencias
