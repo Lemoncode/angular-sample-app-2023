@@ -2,7 +2,7 @@
   <label>{{ label }}</label>
   <input
     name="label"
-    type="text"
+    [type]="type"
     [ngModel]="value"
     (ngModelChange)="onChange($event)"
     (blur)="onTouch()"

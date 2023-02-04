@@ -27,12 +27,14 @@ import {
 })
 export class InputWrapperComponent implements ControlValueAccessor {
   @Input() label: string;
+  @Input() type: string;
   name: string;
   fieldValue: string;
   _formControl!: FormControl;
 
   constructor(@Inject(INJECTOR) private injector: Injector) {
     this.label = '';
+    this.type = 'text';
     this.fieldValue = '';
     this.name = '';
   }

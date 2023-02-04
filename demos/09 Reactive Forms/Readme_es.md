@@ -177,6 +177,68 @@ ng serve
 
 - Fíjate que todo funciona correctamente pero... ¡ estamos usando un custom component ¿Cómo puede ser eso? ¿Como entiende el _formControlName_? Porque anteriormente implementamos la interfaz _ControlValueAccessor_ y esto también aplica a los Reactive forms.
 
+Vamos ahora a arreglar el problema que teníamos con el _dateRelease_, si te acuerdas teníamos un campo de tipo date y el input espera un texto, que vamos a hacer:
+
+- Primero hacer que nuestro custom input acepte al atributo _type_.
+- Segundo vamos a definir un modelo de la vista (un ViewModel) aquí lo que hacemos es crear una entidad que cumpla exactamente con lo que espera la vista.
+- Vamos a crear un mapper, esta función se encarga de convertir de un modelo a otro, en este caso de un modelo de api a un modelo de vista.
+- A la hora de grabar convertiremos de modelo de vista a modelo de api.
+
+- Primero vamos a por el _type_, que por defecto es _text_, pero vamos a permitir que se pueda cambiar.:
+
+_./src/app/games/input-wrapper/input-wrapper.component.ts_
+
+```diff
+export class InputWrapperComponent implements ControlValueAccessor {
+  @Input() label: string;
++ @Input() type: string;
+  name: string;
+  fieldValue: string;
+  _formControl!: FormControl;
+
+  constructor(@Inject(INJECTOR) private injector: Injector) {
+    this.label = '';
++   this.type = 'text';
+    this.fieldValue = '';
+    this.name = '';
+  }
+```
+
+Y en el html:
+
+_./src/app/games/input-wrapper/input-wrapper.component.html_
+
+```diff
+  <input
+    name="label"
+-    type="text"
++   [type]="type"
+    [ngModel]="value"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouch()"
+  />
+```
+
+- Volvemos al formulario y ponemos ese campo como date:
+
+_./src/app/games/components/game-edit/game-edit.component.html_
+
+```diff
+    <app-input-wrapper
+      id="daterelease"
+      name="daterelease"
+      label="Release Date"
++     type="date"
+      formControlName="dateRelease"
+    ></app-input-wrapper>
+```
+
+Si ejecutamos podemos ver que tenemos ahora el control de fecha (no es muy bonito pero es funcional), mi consejo aquí es usar una librería como Angular Material.
+
+Si probamos a ejecutar, podemos ver que si rellenamos todos los campos y ponemos una fecha al grabar aparece por consola la fecha, peeerooo:
+  - El valor inicial estaba en blanco.
+  - El valor que se muestra por consola es un texto, no es un date.
+
 # Referencias
 
 Tutorial Reactive Forms
