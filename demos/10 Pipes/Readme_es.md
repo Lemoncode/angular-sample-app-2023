@@ -105,9 +105,74 @@ export const gameMockCollection = [
     'Super Mario Bros',
 -    '13 September 1985',
 +    '13 September 2023',
-
     'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp',
     [
+```
+
+- Para terminar vamos a tratar un tema importante con los pipes, y es que por defecto son funciones puras, ¿Qué quiere decir esto? Que si el valor de entrada no cambia (es decir el putenro del parámetro) la salid no cambia, es decir recuerda el valor de la última vez que se ejecutó, y nos ahorramos ciclos de CPU, si no tenemos esto en cuenta nos podemos encontrar con problemas tales como que nos da la impresión que no se actualiza el pipe.
+
+Veámoslo con un ejemplo, vamos a hacer un pipe que una lista de nombres que hay a en un array, y vamos a crear un pipe que itere sobre y los concatene en un array.
+
+```bash
+ng g pipe pages/game-list/card-game/game-names
+```
+
+_./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
+
+```diff
+import { Pipe, PipeTransform } from "@angular/core";
+
+@Pipe({
+  name: "gameNames",
+})
+export class GameNames implements PipeTransform {
+-  transform(value: unknown, ...args: unknown[]): unknown {
+-    return null;
++  transform(value: string[]): string {
++    return value.join(", ");
+  }
+}
+```
+
+Vamos ahora a crear esta lista de nombres en nuestro componente, y añadir un botón para añdir un elemento
+
+_./src/app/pages/game-list/game-list.component.ts_
+
+```diff
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css'],
+})
+export class GameListComponent {
+  games: Game[];
+  showSellerList: boolean;
+  sellers: Seller[];
++ names: string[];
+
+  constructor(private gameApiService: GameApiService) {
+    this.showSellerList = false;
+    this.sellers = [];
+    this.games = [];
++   this.names = ['pepe', 'juan', 'maria'];
+  }
+
++  handleAddManolo() {
++   this.names.push('manolo');
++  }
+```
+
+Vamos a añadir el pipe a nuestro componente y comparar con el filtro _json_
+
+_./src/app/pages/game-list/game-list.component.html_
+
+```diff
+- {{ games | json }}
++ {{ names | json }}
++ {{ names | gameNames }}
++
++ <button (click)="handleAddManolo">Add Manolo</button>
+<div *ngFor="let game of games">
 ```
 
 -> pipes add
