@@ -12,6 +12,7 @@ import { GameEditComponent } from './pages/game-edit/game-edit.component';
 import { FieldErrorDisplayComponent } from './common/field-error-display/field-error-display.component';
 import { InputWrapperComponent } from './common/input-wrapper/input-wrapper.component';
 import { GameOffer } from './pages/game-list/card-game/game-offer.pipe';
+import { GameNamesPipe } from './pages/game-list/game-names.pipe';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
@@ -29,6 +30,7 @@ const appRoutes: Routes = [
     FieldErrorDisplayComponent,
     InputWrapperComponent,
     GameOffer,
+    GameNamesPipe,
   ],
   imports: [
     BrowserModule,

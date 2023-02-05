@@ -114,7 +114,7 @@ export const gameMockCollection = [
 Veámoslo con un ejemplo, vamos a hacer un pipe que una lista de nombres que hay a en un array, y vamos a crear un pipe que itere sobre y los concatene en un array.
 
 ```bash
-ng g pipe pages/game-list/card-game/game-names
+ng g pipe pages/game-list/game-names
 ```
 
 _./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
@@ -171,11 +171,54 @@ _./src/app/pages/game-list/game-list.component.html_
 + {{ names | json }}
 + {{ names | gameNames }}
 +
-+ <button (click)="handleAddManolo">Add Manolo</button>
++ <button (click)="handleAddManolo()">Add Manolo</button>
 <div *ngFor="let game of games">
 ```
 
--> pipes add
+Fijate que no se muestra nada, ¿Qué está pasando? Que al usar _push_ en el array que pasamos por parametro no se crea uno nuevo y la pipe no se ejecuta, se queda con el valor de la última vez que se ejecutó para ese array en concreto.
+
+Aquí tenemos dos soluciones: una es decirle que no es una función pura, y que se ejecute cada vez que se ejecute el componente, para ello añadimos el decorador _pure: false_ en el pipe.
+
+_./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
+
+```diff
+import { Pipe, PipeTransform } from "@angular/core";
+
+@Pipe({
+  name: "gameNames",
++ pure: false,
+})
+export class GameNames implements PipeTransform {
+  transform(value: string[]): string {
++   console.log('gameNames pipe se esta ejecutando');
+    return value.join(", ");
+  }
+}
+```
+
+Esto parece que funciona, pero... fíjate que pasa si abrimos la consola... se empieza a llamar un montón de veces con cualquier interacción, en un escenario simple no pasa nada, pero en una aplicación más compleja cosas como esta pueden hacer que nuestra aplicación se vuelva lenta.
+
+Es mejor solución utilizar inmutabilidad, por ejemplo, en vez de un push utilizar el spread operator para crear un nuevo array en cada push
+
+_./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
+
+```diff
+import { Pipe, PipeTransform } from "@angular/core";
+
+@Pipe({
+  name: "gameNames",
+- pure: false,
+})
+```
+
+_./src/app/pages/game-list/game-list.component.ts_
+
+```diff
+  handleAddManolo() {
+-    this.names.push('manolo');
++    this.names = [...this.names, 'manolo'];
+  }
+```
 
 # ¿Te apuntas a nuestro máster?
 
@@ -189,3 +232,7 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
+
+```
+
+```

@@ -12,11 +12,17 @@ export class GameListComponent {
   games: Game[];
   showSellerList: boolean;
   sellers: Seller[];
+  names: string[];
 
   constructor(private gameApiService: GameApiService) {
     this.showSellerList = false;
     this.sellers = [];
     this.games = [];
+    this.names = ['pepe', 'juan', 'maria'];
+  }
+
+  handleAddManolo() {
+    this.names = [...this.names, 'manolo'];
   }
 
   loadGames = async () => {
