@@ -1,0 +1,14 @@
+{{ games | json }}
+
+<div *ngFor="let game of games">
+  <app-card-game
+    [game]="game"
+    (showSellerList)="onShowSellerList($event)"
+  ></app-card-game>
+</div>
+
+<app-seller-list
+  *ngIf="showSellerList"
+  (close)="onCloseSellerList()"
+  [sellers]="sellers"
+></app-seller-list>

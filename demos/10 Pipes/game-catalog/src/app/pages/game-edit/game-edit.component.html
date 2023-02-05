@@ -1,0 +1,29 @@
+<div class="container">
+  <form [formGroup]="gameForm" class="form">
+    <app-input-wrapper
+      id="name"
+      name="name"
+      label="Name"
+      formControlName="name"
+    ></app-input-wrapper>
+
+    <app-input-wrapper
+      id="imageurl"
+      name="imageurl"
+      label="Picture Url"
+      formControlName="imageUrl"
+      required
+      pattern="https?://.+"
+    ></app-input-wrapper>
+
+    <app-input-wrapper
+      id="daterelease"
+      name="daterelease"
+      label="Release Date"
+      type="date"
+      formControlName="dateRelease"
+    ></app-input-wrapper>
+
+    <button (click)="handleSaveClick()">Save</button>
+  </form>
+</div>
