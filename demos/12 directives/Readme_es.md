@@ -17,24 +17,26 @@ npm install
 - Vamos a creare una directiva de atributo que nos permita cambiar el color del texto de un elemento
 
 ```bash
-ng g d ./common/highlight
+ng g d ./common/directives/highlight
 ```
 
 - Vamos a modificar el fichero `highlight.directive.ts` para que tenga el siguiente contenido:
 
 ```diff
-import { Directive, ElementRef, Input } from '@angular/core';
+- import { Directive } from '@angular/core';
++ import { Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
   selector: '[appHighlight]'
 })
 export class HighlightDirective {
 
-  constructor(private el: ElementRef) { }
+- constructor() { }
++  constructor(private el: ElementRef) { }
 
-  @Input() set appHighlight(color: string) {
-    this.el.nativeElement.style.color = color;
-  }
++  @Input() set appHighlight(color: string) {
++    this.el.nativeElement.style.color = color;
++  }
 }
 ```
 
@@ -55,12 +57,50 @@ _./src/app/pages/game-list/game-card/game-card.component.html_
     <img [src]="game.imageUrl" (click)="handleImageClick()" />
   </div>
 -  <div class="card_title title-white" (click)="onTitleClick()">
-+  <div class="card_title title-white" (click)="onTitleClick()" highlight="red">
++  <div class="card_title title-white" (click)="onTitleClick()" appHighlight="red">
 
     {{ game.name }} ({{ game.dateRelease | date : "yyyy" | gameOffer  }})
   </div>
 </div>
 ```
+
+- Vale, si ejecutamos vemos que todos los títulos aparecen en rojo, es algo muy tonto, ¿Y si sólo queremos que se ponga en rojo cuando el ratón está encima? Vamos a modificar la directive y escuchar a los eventos del ratón, para ello vamos utilizar el decorador `@HostListener` que nos permite escuchar a eventos del elemento HTML que hace uso de la directiva.
+
+```diff
+- import { Directive, ElementRef, Input } from '@angular/core';
++ import { Directive, ElementRef, Input, HostListener } from '@angular/core';
+
+
+@Directive({
+  selector: '[appHighlight]',
+})
+export class HighlightDirective {
++ originalColor!: string;
++ color : string;
+
+  constructor(private el: ElementRef) {    
++    this.color = 'yellow';
+  }
+
+  @Input() set appHighlight(color: string) {
+-    this.el.nativeElement.style.color = color;
++   this.originalColor = this.el.nativeElement.style.color;
++   if(color) {
++    this.color = color;
++   }
+  }
+
++  @HostListener('mouseenter') onMouseEnter() {
++    this.el.nativeElement.style.color = this.color;
++  }
+
++  @HostListener('mouseleave') onMouseLeave() {
++    this.el.nativeElement.style.color = this.originalColor;
++  }
+}
+```
+
+Fijate que la directiva la podemos utilizar en cualquier elemento del DOM, podríamos irnos al botón y añadirsela.
 
 # ¿Te apuntas a nuestro máster?
 

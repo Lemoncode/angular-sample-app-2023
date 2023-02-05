@@ -13,6 +13,7 @@ import { FieldErrorDisplayComponent } from './common/field-error-display/field-e
 import { InputWrapperComponent } from './common/input-wrapper/input-wrapper.component';
 import { GameOffer } from './pages/game-list/card-game/game-offer.pipe';
 import { GameNamesPipe } from './pages/game-list/game-names.pipe';
+import { HighlightDirective } from './common/directives/highlight.directive';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
     InputWrapperComponent,
     GameOffer,
     GameNamesPipe,
+    HighlightDirective,
   ],
   imports: [
     BrowserModule,

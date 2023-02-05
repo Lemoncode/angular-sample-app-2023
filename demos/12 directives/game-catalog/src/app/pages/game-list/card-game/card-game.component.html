@@ -2,7 +2,11 @@
   <div class="card_image">
     <img [src]="game.imageUrl" (click)="handleImageClick()" />
   </div>
-  <div class="card_title title-white" (click)="onTitleClick()">
-    {{ game.name }} ({{ game.dateRelease | date : "yyyy" | gameOffer  }})
+  <div
+    class="card_title title-white"
+    (click)="onTitleClick()"
+    appHighlight="red"
+  >
+    {{ game.name }} ({{ game.dateRelease | date : "yyyy" | gameOffer }})
   </div>
 </div>
