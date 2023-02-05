@@ -1,6 +1,6 @@
 {{ names | json }}
 {{ names | gameNames }}
-<button (click)="handleAddManolo()">Add Manolo</button>
+<button (click)="handleAddManolo()" appHighlight="yellow">Add Manolo</button>
 
 <div *ngFor="let game of games">
   <app-card-game

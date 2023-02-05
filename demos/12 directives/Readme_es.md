@@ -78,7 +78,7 @@ export class HighlightDirective {
 + originalColor!: string;
 + color : string;
 
-  constructor(private el: ElementRef) {    
+  constructor(private el: ElementRef) {
 +    this.color = 'yellow';
   }
 
@@ -100,7 +100,25 @@ export class HighlightDirective {
 }
 ```
 
-Fijate que la directiva la podemos utilizar en cualquier elemento del DOM, podríamos irnos al botón y añadirsela.
+Fíjate que la directiva la podemos utilizar en cualquier elemento del DOM, podríamos irnos al botón y añadirsela.
+
+_./src/app/pages/game-list/game-list.component.html_
+
+```diff
+- <button (click)="handleAddManolo()" appHighlight="red">Add Manolo</button>
++ <button (click)="handleAddManolo()" appHighlight="red">Add Manolo</button>
+```
+
+También podríamos cambiar el atributo a otro color, por ejemplo:
+
+_./src/app/pages/game-list/game-list.component.html_
+
+```diff
+- <button (click)="handleAddManolo()" appHighlight="red">Add Manolo</button>
++ <button (click)="handleAddManolo()" appHighlight="yellow">Add Manolo</button>
+```
+
+Y sólo se aplicaría al botón, las cards seguirían con el color rojo.
 
 # ¿Te apuntas a nuestro máster?
 
