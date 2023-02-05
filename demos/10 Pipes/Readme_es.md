@@ -54,7 +54,7 @@ _./src/app/pages/game-list/card-game/card-game.component.html_
 create a pipe
 
 ```bash
-ng g pipe pages/game-list/card-game/game-offer.pipe
+ng g pipe pages/game-list/card-game/game-offer
 ```
 
 - Vamos a crear un pipe que nos permita mostrar un texto en función de si el juego es una novedad o una oferta.
@@ -63,19 +63,22 @@ Y el pipe gameOffer lo vamos a implementar de la siguiente forma:
 
 _./src/app/pages/game-list/card-game/pipes/game-offer.pipe.ts_
 
-```javascript
+```diff
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
   name: "gameOffer",
 })
-export class GameOfferPipe implements PipeTransform {
-  transform(year: string): string {
-    const currentYear = new Date().getFullYear();
-    return value.dateRelease.getFullYear() >= currentYear
-      ? "Novedad"
-      : "Oferta";
-  }
+export class GameOffer implements PipeTransform {
+-  transform(value: unknown, ...args: unknown[]): unknown {
+-    return null;
++  transform(value: string | null): string {
++    if (value == null) return '';
++    const currentYear = new Date().getFullYear();
++    return +value >= currentYear
++      ? "Novedad"
++      : "Oferta";
++  }
 }
 ```
 
@@ -101,11 +104,13 @@ export const gameMockCollection = [
   new Game(
     'Super Mario Bros',
 -    '13 September 1985',
-+    '1 September 2023',
++    '13 September 2023',
 
     'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp',
     [
 ```
+
+-> pipes add
 
 # ¿Te apuntas a nuestro máster?
 

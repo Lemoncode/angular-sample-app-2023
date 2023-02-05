@@ -3,7 +3,7 @@ import { Game } from '../model/game.model';
 export const gameMockCollection = [
   new Game(
     'Super Mario Bros',
-    '13 September 1985',
+    '13 September 2023',
     'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp',
     [
       {
