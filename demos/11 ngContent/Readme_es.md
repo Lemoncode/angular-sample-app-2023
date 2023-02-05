@@ -29,7 +29,8 @@ Vamos a copiar el código del modal del _seller-list.component.html_ al _modal.c
 _./src/app/common/modal/modal.component.ts_
 
 ```diff
-import { Component } from '@angular/core';
+- import { Component } from '@angular/core';
++ import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -108,7 +109,7 @@ _./src/app/common/modal/modal.component.html_
  </div>
 ```
 
-Y ahora nos podemos ir al _seller-list.component.html_ y elimiar la logica del modal
+Y ahora nos podemos ir al _seller-list.component.html_ y eliminar la logica del modal
 
 _./src/app/seller/seller-list.component.html_
 
@@ -209,9 +210,9 @@ export class SellerListComponent {
 }
 ```
 
-Y directamente en app invocarlo:
+Y directamente en gamlist invocarlo:
 
-_./src/app/app.component.html_
+_./src/app/pages/game-list/game-list.component.html_
 
 ```diff
 + <app-modal *ngIf="showSellerList" (close)="onCloseSellerList()">

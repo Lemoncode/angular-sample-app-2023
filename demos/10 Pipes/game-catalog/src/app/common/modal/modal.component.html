@@ -1,1 +1,5 @@
-<p>modal works!</p>
+<div class="overlay"></div>
+<div class="modal">
+  <button class="modal-close-btn" (click)="onCloseClick($event)">✖️</button>
+  <ng-content></ng-content>
+</div>

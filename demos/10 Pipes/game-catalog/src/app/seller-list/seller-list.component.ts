@@ -7,14 +7,9 @@ import { Seller } from '../model/seller.model';
   styleUrls: ['./seller-list.component.css'],
 })
 export class SellerListComponent {
-  @Output() close = new EventEmitter();
   @Input() sellers: Seller[];
 
   constructor() {
     this.sellers = [];
-  }
-
-  onCloseClick(event?: MouseEvent) {
-    this.close.emit();
   }
 }
