@@ -1,0 +1,16 @@
+{{ names | json }}
+{{ names | gameNames }}
+<button (click)="handleAddManolo()">Add Manolo</button>
+
+<div *ngFor="let game of games">
+  <app-card-game
+    [game]="game"
+    (showSellerList)="onShowSellerList($event)"
+  ></app-card-game>
+</div>
+
+<app-seller-list
+  *ngIf="showSellerList"
+  (close)="onCloseSellerList()"
+  [sellers]="sellers"
+></app-seller-list>
