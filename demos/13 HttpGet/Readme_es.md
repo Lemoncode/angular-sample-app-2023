@@ -14,7 +14,100 @@ Igual estás pensando, ahora viene una _fetch_ y promesas, bueno, podrías traba
 npm install
 ```
 
+- Podemos arrancar el ejemplo con _ng serve_
 
+```bash
+npm start
+```
+
+- Vamos ahora a abrir otra instancia de visual studiocode y arrancar nuestro servidor web.
+
+```bash
+cd server
+```
+
+```bash
+npm start
+```
+
+Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3000/games](http://localhost:3000/games)
+
+- Como vamos a usar el modulo de _http_ de angular, tenemos que importarlo en el _app.module.ts_
+
+_./src/app/app.module.ts_
+
+```diff
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
++ import { HttpClientModule } from '@angular/common/http';
+```
+
+Y lo registramos:
+
+```diff
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    ReactiveFormsModule,
++   HttpClientModule
+  ],
+```
+
+- Ahora vamos a modificar nuestro servicio para que consuma la api rest (ojo vamos a poner las URL harcodeadas, en una aplicación real utilizaríamos variables de entorno para apuntar), que hacemos aquí:
+
+- Importamos el modulo _HttpClient_.
+- Lo pedimos tirando de inyección de dependencias en el constructor.
+- Cambiamos el método _getAll_ para que devuelva un observable, y lo subscribimos en el componente.
+
+_./src/app/services/game.api.service.ts_
+
+```diff
+import { Injectable } from '@angular/core';
+import { Game } from '../model/game.model';
+import { gameMockCollection } from './game-api.mock';
++ import { HttpClient } from '@angular/common/http';
++ import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class GameApiService {
+-  constructor() {}
++  constructor(private http: HttpClient) {}
+
+
+-  getAll(): Promise<Game[]> {
++  getAll(): Observable<Game[]> {
+-    return Promise.resolve(gameMockCollection);
++    return this.http.get<Game[]>('http://localhost:3001/games');
+  }
+```
+
+Vamos a modificar el componente de la página de la lista de juegos para que se suscriba al observable y muestre los datos, ¿Qué hacemos aquí?
+
+- Hemos definido el método de la api para que devuelva un observable.
+- Lo invocamos y llamamos al método _subscribe_ para que nos suscribamos al observable.
+- Ese método _subscribe_ recibe una función de callback que se ejecutará cuando el observable emita un valor, y aquí es donde asignamos a la propiedad _games_ el valor que nos llega.
+
+_./src/app/pages/game-list/game-list.component.ts_
+
+```diff
+  loadGames = async () => {
+-    this.games = await this.gameApiService.getAll();
++    this.gameApiService.getAll().subscribe((games) => (this.games = games));
+-    console.log(this.games);
+  };
+```
+
+- Vamos a probarlo (acuérdate de tener levantado del servidor web)
+
+```bash
+ng serve
+```
 
 # ¿Te apuntas a nuestro máster?
 

@@ -26,7 +26,7 @@ export class GameListComponent {
   }
 
   loadGames = async () => {
-    this.games = await this.gameApiService.getAll();
+    this.gameApiService.getAll().subscribe((games) => (this.games = games));
     console.log(this.games);
   };
 
