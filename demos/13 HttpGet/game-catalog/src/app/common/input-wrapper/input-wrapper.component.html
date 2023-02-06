@@ -1,0 +1,13 @@
+<div class="wrapper">
+  <label>{{ label }}</label>
+  <input
+    name="label"
+    [type]="type"
+    [ngModel]="fieldValue"
+    (ngModelChange)="onChange($event)"
+    (blur)="onTouch()"
+  />
+  <app-field-error-display
+    [fieldNgModel]="_formControl"
+  ></app-field-error-display>
+</div>

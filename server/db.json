@@ -1,0 +1,29 @@
+{
+  "games": [
+    {
+      "id": 4,
+      "name": "Super Mario Kart 8",
+      "dateRelease": "2014-05-30",
+      "sellers": []
+    },
+    {
+      "id": 4,
+      "name": "Super Mario Maker 2",
+      "dateRelease": "2019-06-28",
+      "sellers": []
+    },
+    {
+      "id": 1,
+      "name": "Super Mario Bros",
+      "dateRelease": "1985-09-13",
+      "imageUrl": "https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp",
+      "sellers": []
+    },
+    {
+      "id": 2,
+      "name": "Legend of Zelda",
+      "dateRelease": "1986-02-21",
+      "sellers": []
+    }
+  ]
+}
