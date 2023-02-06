@@ -42,9 +42,17 @@ export class GameEditComponent {
 
   handleSaveClick() {
     if (this.gameForm.valid) {
-      console.log(this.gameForm.value);
       const game = mapVmToGame(this.gameForm.value);
-      this.gameApi.Insert(game);
+      this.gameApi.Insert(game).subscribe({
+        next: (game) => {
+          alert('Juego insertado correctamente');
+          console.log(game);
+        },
+        error: (error) => {
+          alert('Error al insertar el juego');
+          console.log(error);
+        },
+      });
     } else {
       // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
       alert(
