@@ -96,7 +96,8 @@ Vamos a modificar el componente de la página de la lista de juegos para que se 
 _./src/app/pages/game-list/game-list.component.ts_
 
 ```diff
-  loadGames = async () => {
+-  loadGames = async () => {
++  loadGames = () => {
 -    this.games = await this.gameApiService.getAll();
 +    this.gameApiService.getAll().subscribe((games) => (this.games = games));
 -    console.log(this.games);
@@ -108,6 +109,24 @@ _./src/app/pages/game-list/game-list.component.ts_
 ```bash
 ng serve
 ```
+
+> Si no te funciona asegúrate que tienes levantado el servidor web y que estás apuntando al puerto correcto.
+
+- Para manejar errores podemos hacerlo a distintos niveles, vamos a ver como controlar esto a nivel de componente: el método _subscribe_ recibe un segundo parámetro que es una función de callback que se ejecutará cuando el observable emita un error.
+
+```diff
+  loadGames = async () => {
+    this.gameApiService.getAll().subscribe(
+        (games) => (this.games = games),
++       (error) =>  alert(error.message);
+    );
+    console.log(this.games);
+  };
+```
+
+- Para saber más sobre gestión de erroreS:
+
+https://www.tektutorialshub.com/angular/angular-http-error-handling/
 
 # ¿Te apuntas a nuestro máster?
 

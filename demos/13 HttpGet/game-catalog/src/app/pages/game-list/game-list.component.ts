@@ -25,9 +25,13 @@ export class GameListComponent {
     this.names = [...this.names, 'manolo'];
   }
 
-  loadGames = async () => {
-    this.gameApiService.getAll().subscribe((games) => (this.games = games));
-    console.log(this.games);
+  loadGames = () => {
+    this.gameApiService.getAll().subscribe(
+      (games) => (this.games = games),
+      (error) => {
+        alert(error.message);
+      }
+    );
   };
 
   ngOnInit(): void {
