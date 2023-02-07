@@ -11,12 +11,12 @@ export class GameApiService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Game[]> {
-    return this.http.get<Game[]>('http://localhost:3000/games');
+    return this.http.get<Game[]>('http://localhost:3001/games');
   }
 
   Insert(game: Game): Observable<Game> {
     // Tendríamos que modificar el mapper para que generara los campos de que pide la API Rest
-    return this.http.post<Game>(`localhost:3000/games`, {
+    return this.http.post<Game>(`./api/games`, {
       name: game.name,
       dateRelease: game.dateRelease.toISOString().substring(0, 10),
       imageUrl: game.imageUrl,

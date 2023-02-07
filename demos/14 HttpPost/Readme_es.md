@@ -79,10 +79,75 @@ Fecha: 2020-04-30
 
 Como estamos en dominios separados, tenemos un error de CORS, aquí tenemos dos opciones:
 
-- Si en producción desplegamos en el mismo dominio que la api, podemos usar en local un proxy.
+- Si en producción desplegamos en el mismo dominio que la api, podemos usar en local un proxy (hay veces que lo que se hace es poner un proxy en el servidor de producción, que por el mismo dominio después internamente redirija las peticiones al server back o front).
 - Si no, tenemos que configurar CORS para que permite hacer un post desde otro dominio.
 
-Más info: https://www.stackhawk.com/blog/angular-cors-guide-examples-and-how-to-enable-it/
+Vamos a seguir la aproximación de montar un proxy en local (si un día fueraos a desplegar miraríamos que tipo de infraestructura se va a montar).
+
+Creamos un fichero debajo de _src_ que se va a llamar _proxy.conf.json_, y le indicamos que todo lo que venga por el prefijo _api_ lo redirija a _localhost:3000_ (como estamos en local le indicamos que trabajmos con http, no con https)
+
+¿Que hacemos aquí?
+
+- Le indicamos que para todas las rutas http://localhost:4200/api/_ redirija a http://localhost:3000/_
+- Le indicamos que no use https
+- Le indicamos que muestre el log de debug
+- Le indicamos que elimine el prefijo _api_ de la ruta (en nuestro caso el servidor final no tiene el prefijo api)
+
+_./src/proxy.conf.json_
+
+```json
+{
+  "/api/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
+```
+
+Y lo asignamos en el fichero principal (ojo que encontrar el sitio exacto puede ser lioso):
+
+_./angular.json_
+
+```diff
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
++            "proxyConfig": "src/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "game-catalog:build:production"
+            },
+            "development": {
+              "browserTarget": "game-catalog:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+```
+
+Vamos a cambiar la ruta de entrada de la api, para que sea _/api/games_ y no _/games_:
+
+_./src/app/services/game.api.service.ts_
+
+```diff
+- return this.http.post<Game>(`localhost:3000/games`, {
++ return this.http.post<Game>(`./api/games`, {
+```
+
+Más info:
+
+https://www.positronx.io/handle-cors-in-angular-with-proxy-configuration/
+
+https://www.stackhawk.com/blog/angular-cors-guide-examples-and-how-to-enable-it/
+
+https://angular.io/guide/build
+
+https://jmrobles.medium.com/mastering-angular-proxy-configuration-6c8df0b175fe
 
 # ¿Te apuntas a nuestro máster?
 
