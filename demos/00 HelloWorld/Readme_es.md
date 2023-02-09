@@ -80,7 +80,7 @@ ng serve
 
 Podemos ver cuatro grandes bloques:
 
-- Unos ficheros en el raíz del proyecto (angular.json, package.json, tsconfig.json, tslint.json, etc.), son configuraciones.
+- Unos ficheros en la raíz del proyecto (angular.json, package.json, tsconfig.json, tslint.json, etc.), son configuraciones.
 - Una carpeta `src`: aquí tenemos el código fuente de la aplicación.
 - Una carpeta `.angular`: aquí tenemos cachés de build y otros ficheros temporales, el cli de angular automáticamente añade esta ruta a su _.gitignore_ para que no se suba al repositorio.
 - Una carpeta _.vscode_: settings de workspace de Visual Studio Code para el proyecto.
@@ -89,7 +89,7 @@ Nos vamos a centrar en le carpeta _src_ (más adelante se detallan todos los fic
 
 Aquí podemos ver el punto de entrada de la aplicación:
 
-- `index.html`: la página HTML de entrada de la aplicación, aquí se carga el fichero _main.js_ que es el punto de entrada de la aplicación.
+- `index.html`: Archivo principal de la aplicación, donde se carga el módulo principal de la aplicación.
 - `main.ts`: es el punto de entrada de la aplicación, aquí se carga el módulo principal de la aplicación, que es _app.module.ts_.
 - `styles.css`: es el fichero de estilos de la aplicación, aquí se cargan los estilos globales de la aplicación.
 - `favicon.ico`: es el icono de la aplicación.
@@ -119,35 +119,8 @@ Si tienes curiosidad para que sirve cada fichero de configuración, aquí tienes
   - `tsconfig.app.json`: Archivo de configuración de TypeScript para la aplicación.
   - `tsconfig.spec.json`: Archivo de configuración de TypeScript para los tests.
   - `tsconfig.app.json`: Archivo de configuración de TypeScript para la aplicación.
-  - `tsconfig.spec.json`: Archivo de configuración de TypeScript para los tests.
 
-### Detalle ficheros en la carpeta `src`
-
-- En la carpeta `src` podemos ver los siguientes archivos:
-
-  - `index.html`: Archivo principal de la aplicación, donde se carga el módulo principal de la aplicación.
-  - `main.ts`: Archivo principal de la aplicación, donde se carga el módulo principal de la aplicación.
-  - `polyfills.ts`: Archivo que contiene los polyfills necesarios para que la aplicación funcione en todos los navegadores.
-  - `styles.css`: Archivo de estilos principal de la aplicación.
-  - `test.ts`: Archivo de test principal de la aplicación.
-
-- En la carpeta `src/app` podemos ver los siguientes archivos:
-
-  - `app.component.css`: Archivo de estilos del componente principal de la aplicación.
-  - `app.component.html`: Archivo de plantilla del componente principal de la aplicación.
-  - `app.component.spec.ts`: Archivo de test del componente principal de la aplicación.
-  - `app.component.ts`: Archivo de código del componente principal de la aplicación.
-  - `app.module.ts`: Archivo de configuración del módulo principal de la aplicación.
-
-- En la carpeta `src/assets` podemos ver los siguientes archivos:
-  - `/.gitkeep`: Archivo que se usa para mantener la carpeta en el repositorio de git.
-
-- En la carpeta `src/environments` podemos ver los siguientes archivos:
-
-  - `environment.prod.ts`: Archivo de configuración de producción.
-  - `environment.ts`: Archivo de configuración de desarrollo.
-
-  # ¿Te apuntas a nuestro máster?
+# ¿Te apuntas a nuestro máster?
 
 Si te ha gustado este ejemplo y tienes ganas de aprender Front End
 guiado por un grupo de profesionales ¿Por qué no te apuntas a
