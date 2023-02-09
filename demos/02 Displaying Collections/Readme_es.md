@@ -381,8 +381,24 @@ Aunque esto está fuera del estudio de Angular, un breve resumen de lo como est�
   - En la imagen en si lo más destacable es que le indicamos que haga un _object-fit: cover_ para que la imagen se adapte al tamaño de la caja y no se estire.
 - Vamos ahora al título, aquí hacemos varias cosas:
   - La más importante: queremos que el título aparezca en la parte inferior de la imagen, para ello usamos _position:absolute_ (que tomara como refrencia el card padre que está como relative) y lo posicionamos en la parte inferior del card y lo movemos hacia arriba con _top: 80%_.
-  - Por otro lado para que el div aparezca centrado en la parte inferior del card (al esta en absoluto aparece a la izquierda), lo posicionamos en el centro con _left: 50%_ y lo movemos hacia la izquierda con _transform: translateX(-50%)_.
-  - Y ya lo que hacemos es usar un contenedor Flex para centrar el texto vertical y horizontalmente (jugando con _align-items_ y _justify-content_).
+  - Por otro lado para que el div aparezca centrado en la parte inferior del card utilizamos `top: 50%`, `left: 50%` y `transform: translate(-50%, -50%);` para centrar el elemento. Si dejásemos solamente `top: 50%`, `left: 50%`, estamos centrando la esquina superior-izquierda de la card, que no coincide con el punto central que necesitamos.
+
+```
+Punto que estamos moviendo con top y left
+    |
+    ▼
+    *--------------------------------
+    |                               |
+    |                               |
+    |                               |
+    |               *               | ⏴- Punto central de la card que necesitamos
+    |                               |  en el centro de la pantalla
+    |                               |
+    |                               |
+    ---------------------------------
+```
+
+- Y ya lo que hacemos es usar un contenedor Flex para centrar el texto vertical y horizontalmente (jugando con _align-items_ y _justify-content_).
 
 # ¿Te apuntas a nuestro máster?
 
@@ -396,4 +412,3 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apuntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
-

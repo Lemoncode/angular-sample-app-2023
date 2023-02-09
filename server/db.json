@@ -1,0 +1,32 @@
+{
+  "games": [
+    {
+      "id": 4,
+      "name": "Super Mario Kart 8",
+      "imageUrl": "https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/mario-kart-8-deluxe.jpeg",
+      "dateRelease": "2014-05-30",
+      "sellers": []
+    },
+    {
+      "id": 4,
+      "name": "Super Mario Maker 2",
+      "dateRelease": "2019-06-28",
+      "imageUrl": "https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/super-mario-maker-2.jpg",
+      "sellers": []
+    },
+    {
+      "id": 1,
+      "name": "Super Mario Bros",
+      "dateRelease": "1985-09-13",
+      "imageUrl": "https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp",
+      "sellers": []
+    },
+    {
+      "id": 2,
+      "name": "Legend of Zelda",
+      "dateRelease": "1986-02-21",
+      "imageUrl": "https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/legend-zelda.webp",
+      "sellers": []
+    }
+  ]
+}
