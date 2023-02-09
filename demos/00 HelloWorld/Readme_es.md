@@ -49,7 +49,7 @@ ng new game-catalog
 
 Esto nos va a realizar una serie se preguntas:
 
-- ¿Desea agregar Angular routing? (y/n): Angular te puede generar una aplicación SPA con varias páginas y utiliza su propio enrutador, lo normal cuando arranques un proyecto es que si quieras enrutador, si eliges _y_ te genera todo lo necesario, si le das a _n_ más adelante puedes añadirlo pero tendrás que trabajarlo un poco (en este ejemplo partimos de que no lo tenemos), eligimos N.
+- ¿Desea agregar Angular routing? (y/n): Angular te puede generar una aplicación SPA con varias páginas y utiliza su propio enrutador, lo normal cuando arranques un proyecto es que sí quieras enrutador, si eliges _y_ te genera todo lo necesario, si le das a _n_ más adelante puedes añadirlo pero tendrás que trabajarlo un poco (en este ejemplo partimos de que no lo tenemos), eligimos N.
 
 - ¿Desea usar CSS? (y/n): Angular te permite usar CSS, SASS, LESS, etc. En este caso vamos a usar CSS, en un proyecto de más envergadura lo normal es elegir SASS ya que te permite usar variables, mixins, etc., te es más fácil por ejemplo mantener la imagen coroporativa de tu empresa.
 
