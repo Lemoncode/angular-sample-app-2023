@@ -19,9 +19,9 @@ Para ellos usaremos el cli de Angular, y después estudiaremos la estructura de,
 npm install -g @angular/cli
 ```
 
-Esto lo que hace es intalar el _cli_ de Angular de forma global en nuestro sistema.
+Esto lo que hace es instalar el _cli_ de Angular de forma global en nuestro sistema.
 
-> Nota (I), esto funciona bien desde el CMD de MS-Dos o desde el terminal bash de linux o MacOS, si estás usando power shell puedes tener algun problemilla, [en la página oficial de Angular te explican como solucionarlo](https://angular.io/start).
+> Nota (I), esto funciona bien desde el CMD de MS-Dos o desde el terminal bash de linux o MacOS, si estás usando power shell puedes tener algun problemilla, [en la página oficial de Angular te explican cómo solucionarlo](https://angular.io/start).
 
 > Nota (II) en Linux o MacOS, si tienes problemas de permisos, puedes ejecutar el comando con `sudo` delante (así se ejecuta el comando en modo administrador)
 
@@ -31,7 +31,7 @@ Esto lo que hace es intalar el _cli_ de Angular de forma global en nuestro siste
 ng version
 ```
 
-> Si es al primera vez que ejecutas un comando _ng_ te hará un par de preguntas de configuración (si quieres autocomplete, puedes elegir Y, y si quieres enviar informes de errores a Google si algo falla, aquí elije lo que mejor te venga).
+> Si es la primera vez que ejecutas un comando _ng_ te hará un par de preguntas de configuración (si quieres autocomplete, puedes elegir Y, y si quieres enviar informes de errores a Google si algo falla, aquí elije lo que mejor te venga).
 
 Si más adelante necesitamos actualizar el _cli_ podemos ejecutar:
 
@@ -47,11 +47,11 @@ ng new game-catalog
 
 > Aquí invocamos a la tool _ng_ con _new_ le decimos queremos crear un nuevo proyecto y _game-catalog_ es el nombre del proyecto (se crea un subcarpeta con ese nombre).
 
-Esto nos va a realizar una serie se preguntas:
+Esto nos va a realizar una serie de preguntas:
 
-- ¿Desea agregar Angular routing? (y/n): Angular te puede generar una aplicación SPA con varias páginas y utiliza su propio enrutador, lo normal cuando arranques un proyecto es que sí quieras enrutador, si eliges _y_ te genera todo lo necesario, si le das a _n_ más adelante puedes añadirlo pero tendrás que trabajarlo un poco (en este ejemplo partimos de que no lo tenemos), eligimos N.
+- ¿Desea agregar Angular _routing_? (y/n): Angular te puede generar una aplicación SPA con varias páginas y utilizar su propio enrutador, lo normal cuando arranques un proyecto es que sí quieras enrutador, si eliges _y_ te genera todo lo necesario, si le das a _n_ más adelante puedes añadirlo pero tendrás que trabajarlo un poco (en este ejemplo partimos de que no lo tenemos), elegimos N.
 
-- ¿Desea usar CSS? (y/n): Angular te permite usar CSS, SASS, LESS, etc. En este caso vamos a usar CSS, en un proyecto de más envergadura lo normal es elegir SASS ya que te permite usar variables, mixins, etc., te es más fácil por ejemplo mantener la imagen coroporativa de tu empresa.
+- ¿Desea usar CSS? (y/n): Angular te permite usar CSS, SASS, LESS, etc. En este caso vamos a usar CSS, en un proyecto de más envergadura lo normal es elegir SASS ya que te permite usar variables, mixins, etc., te es más fácil por ejemplo mantener la imagen corporativa de tu empresa.
 
 Con esto ya nos crea el proyecto.
 
@@ -80,9 +80,9 @@ ng serve
 
 Podemos ver cuatro grandes bloques:
 
-- Unos ficheros en el raiz del proyecto (angular.json, package.json, tsconfig.json, tslint.json, etc.), son configuraciones.
+- Unos ficheros en el raíz del proyecto (angular.json, package.json, tsconfig.json, tslint.json, etc.), son configuraciones.
 - Una carpeta `src`: aquí tenemos el código fuente de la aplicación.
-- Una carpeta `.angular`: aquí tenemos cachés de build y otros ficheros temporales, el cli de angular automaticamente añade esta ruta a su _.gitignore_ para que no se suba al repositorio.
+- Una carpeta `.angular`: aquí tenemos cachés de build y otros ficheros temporales, el cli de angular automáticamente añade esta ruta a su _.gitignore_ para que no se suba al repositorio.
 - Una carpeta _.vscode_: settings de workspace de Visual Studio Code para el proyecto.
 
 Nos vamos a centrar en le carpeta _src_ (más adelante se detallan todos los ficheros).
