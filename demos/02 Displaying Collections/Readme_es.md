@@ -1,6 +1,6 @@
 # Introducción
 
-Hemos mostrado datos de una entidad, ¿Pero que pasa si tenemos una colección? Es muy normal querer mostrar una lista de cards, o una tabla con los datos de una colección.
+Hemos mostrado datos de una entidad, ¿Pero qué pasa si tenemos una colección? Es muy normal querer mostrar una lista de _cards_, o una tabla con los datos de una colección.
 
 En este ejemplo:
 
@@ -33,7 +33,7 @@ _./src/app/app.component.ts_
   }
 ```
 
-- Vamos ahora a exponer la lista de juegos como publica y eliminar lo referente a un sólo juego:
+- Vamos ahora a exponer la lista de juegos como pública y eliminar lo referente a un sólo juego:
 
 _./src/app/app.component.ts_
 
@@ -74,7 +74,7 @@ export class AppComponent {
 -  <label>Years from release:</label>
 -  <span>{{ game.getYearsFromRelease() }}</span>
 - </div>
-{{games}}
++ {{games}}
 ```
 
 Bueno lo que saca por pantalla es la serialización del objeto (un array de objectos):
@@ -93,7 +93,7 @@ _./src/app/app.component.html_
 <h2>{{ title + "(" + title.length + ")" }})</h2>
 - {{games}}
 + <div *ngFor="let game of games">
-+   <img src={{game.imageUrl}}  style="max-width: 240px"/>
++   <img src="{{game.imageUrl}}"  style="max-width: 240px"/>
 +   <p>{{game.name}}</p>
 +   <p>{{game.getYearsFromRelease()}}</p>
 + </div>
@@ -102,13 +102,13 @@ _./src/app/app.component.html_
 ¿Qué estamos haciendo aquí?
 
 - Tenemos un contenedor padre (un _div_), aquí definimos que vamos a iterar por la lista de juegos, y en cada iteración asignamos a la variable _game_ el elemento actual.
-- Dentro del contenedor padre tenemos 3 elementos hijos, que se van a repetir por cada elemento de la lista de juegos (la imagen y los dos parrafos).
+- Dentro del contenedor padre tenemos 3 elementos hijos, que se van a repetir por cada elemento de la lista de juegos (la imagen y los dos párrafos).
 - En cada elemento hijo usamos la variable _game_ para acceder a las propiedades del elemento actual.
 - El elemento hijo se repite tantas veces como elementos haya en la lista de juegos.
 
 Bueno, ya tenemos esto andando en modo básico.
 
-Ahora imaginate que queremos darle estilo a cada juego de la lista, lo suyo sería mostrar cada juego dentro de un card, ¿Qué pasa si intentamos hacer esto en el propio app? Pues nos podemos encontrar con que nuestro componente App acabe con un sphagetthi de código HTML, y que sea muy difícil de mantener, también sería complicado poder reutilizar el componente card en otro sitio.
+Ahora imagínate que queremos darle estilos a cada juego de la lista, lo suyo sería mostrar cada juego dentro de un _card_, ¿Qué pasa si intentamos hacer esto en el propio app? Pues nos podemos encontrar con que nuestro componente App acabe con un sphagetthi de código HTML, y que sea muy difícil de mantener, también sería complicado poder reutilizar el componente _card_ en otro sitio.
 
 ¿Qué podemos hacer? Pues crear un componente nuevo, que se encargue de mostrar la ficha de un juego, y que lo podamos reutilizar en cualquier otro sitio.
 
@@ -132,7 +132,7 @@ ng generate component card-game
 
 Vamos a fijarnos en lo que se ha generado:
 
-En la ruta _app/card-game_ se han creado los siguientes fichero:
+En la ruta _app/card-game_ se han creado los siguientes ficheros:
 
 - _card-game.component.ts_: La lógica del componente.
 - _card-game.component.html_: El HTML del componente.
@@ -162,11 +162,11 @@ import { AppComponent } from './app.component';
 })
 ```
 
-Vamos a incluir este componente en nuestro _ngFor_, para saber que selector usar (en esto caso _app-card-game_) podemos verlo en el fichero _card-game.component.ts_, en la entrada _selecrtor_:
+Vamos a incluir este componente en nuestro _ngFor_, para saber que selector usar (en esto caso _app-card-game_) podemos verlo en el fichero _card-game.component.ts_, en la entrada _selector_:
 
 _./src/card-game/card-game.component.ts_
 
-** Codigo de referencia, no copiar **
+** Código de referencia, no copiar **
 
 ```diff
 @Component({
@@ -193,7 +193,7 @@ _./src/app/app.component.html_
 </div>
 ```
 
-Si ejecutamos podemos ver que ¡¡eyyy!! se instancia el nuevo componente, vamos ahora a pasar el contenido de la ficha al nuevo componente que hemos creado, aquí nos vamos a dar cuenta de que nos falta algo, y es que el componente no tiene ninguna propiedad, para poder pasarle el juego que queremos mostrar.
+Si ejecutamos podemos ver que ¡¡eyyy!! Se instancia el nuevo componente, vamos ahora a pasar el contenido de la ficha al nuevo componente que hemos creado, aquí nos vamos a dar cuenta de que nos falta algo, y es que el componente no tiene ninguna propiedad, para poder pasarle el juego que queremos mostrar.
 
 _./src/app/card-game/card-game.component.html_
 
@@ -204,7 +204,7 @@ _./src/app/card-game/card-game.component.html_
 +   <p>{{game.getYearsFromRelease()}}</p>
 ```
 
-Así que nos vamos a ir al fichero que define la lógica del componente y le vamos a indicar que aceptamos un parametro de entrada, para ello vamos a usar el decorador _@Input_:
+Así que nos vamos a ir al fichero que define la lógica del componente y le vamos a indicar que aceptamos un parámetro de entrada, para ello vamos a usar el decorador _@Input_:
 
 _./src/app/card-game/card-game.component.ts_
 
@@ -225,7 +225,7 @@ export class CardGameComponent {
 
 > Con el signo de exclamación le estamos diciendo a TypeScript, que si que _game_ no lo he inicializado a null, pero que sabemos lo que estamos haciendo ;) (otra opción habría sido inicializar _game_ a un valor por defecto).
 
-Vamos ahora a por el componente app, y vamos a eliminar el código antiguo y añadir el binding a game para el nuevo componente.
+Vamos ahora a por el componente app, y vamos a eliminar el código antiguo y añadir el _binding_ a _game_ para el nuevo componente.
 
 _./src/app/app.component.html_
 
@@ -249,7 +249,7 @@ Para poder aceptar un parámetro de entrada en un componente podemos usar dos de
 - @Input: para aceptar un parámetro de entrada
 - @Output: para emitir un evento (si por ejemplo queremos que el componente padre sepa que se ha pulsado un botón) (\* veremos esto más adelante).
 
-Ahora podemos ver como hemos usado el binding de propiedad, que es el que hemos usado para pasar el parámetro de entrada, en este caso _game_.
+Ahora podemos ver cómo hemos usado el _binding_ de propiedad, que es el que hemos usado para pasar el parámetro de entrada, en este caso _game_.
 
 ** Este código es de referencia no copiar y pegar en la solución**
 
@@ -348,7 +348,7 @@ _./src/app/card-game/card-game.component.css_
 }
 ```
 
-Y modificamos el markup para adptar layout y estilo
+Y modificamos el _markup_ para adaptar layout y estilo
 
 _./src/app/card-game/card-game.component.html_
 
@@ -366,7 +366,7 @@ _./src/app/card-game/card-game.component.html_
 
 Aunque esto está fuera del estudio de Angular, un breve resumen de lo como está montando este CSS:
 
-- Definimos un contenedor _card_ que será el que contiene la imagen y el título, soBre este contenedor:
+- Definimos un contenedor _card_ que será el que contiene la imagen y el título, sobre este contenedor:
 
   - Le damos una posición relativa para que el título se pueda posicionar sobre la imagen, este truco lo emplearemos para el texto del título, que lo posicionaremos en la parte inferior de la imagen.
   - Para simplificar trabajamos en pixeles y le damos un tamaño fijo.
@@ -375,10 +375,10 @@ Aunque esto está fuera del estudio de Angular, un breve resumen de lo como est�
   - Le ponemos un cursor de mano para indicar que es un elemento interactivo.
   - Le añadimos una transición para que cuando pasemos el ratón por encima se haga más grande.
 
-- Definimos dentro de es card la imagen de fondo y el título:
+- Definimos dentro de esa card la imagen de fondo y el título:
   - Para el div de la imagen le indicamos que heredemos el ancho y alto de su contenedor (así la imagen ocupará todo el espacio disponible del card).
   - Le indicamos un border radius de 40px como el padre (aquí podríamos habernos planteado usar _inherit_ también)
-  - En la imagen en si lo más destacable es que le indicamos que haga un _object-fit: cover_ para que la imagen se adapte al tamaño de la caja y no se estire.
+  - En la imagen en sí lo más destacable es que le indicamos que haga un _object-fit: cover_ para que la imagen se adapte al tamaño de la caja y no se estire.
 - Vamos ahora al título, aquí hacemos varias cosas:
   - La más importante: queremos que el título aparezca en la parte inferior de la imagen, para ello usamos _position:absolute_ (que tomara como refrencia el card padre que está como relative) y lo posicionamos en la parte inferior del card y lo movemos hacia arriba con _top: 80%_.
   - Por otro lado para que el div aparezca centrado en la parte inferior del card utilizamos `top: 50%`, `left: 50%` y `transform: translate(-50%, -50%);` para centrar el elemento. Si dejásemos solamente `top: 50%`, `left: 50%`, estamos centrando la esquina superior-izquierda de la card, que no coincide con el punto central que necesitamos.
