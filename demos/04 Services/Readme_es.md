@@ -1,6 +1,6 @@
 # Servicios
 
-Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de concerns debemos de extraerlo, para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, validar un formulario, etc.
+Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de _concerns_ debemos de extraerlo, para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, validar un formulario, etc.
 
 En este ejemplo vamos a encapsular la carga de datos inicial (que de momento es mock) en un servicio, así:
 
@@ -30,6 +30,8 @@ Este comando:
 
 - Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos, en este caso los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de
   aquí:
+
+_./src/app/services/game-api.service.ts_
 
 ```diff
 import { Injectable } from '@angular/core';
@@ -104,7 +106,7 @@ export class GameApiService {
 }
 ```
 
-- Pero lo ideal es poner una firma de método que nos permita obtener datos de forma asíncrona, en Angular es muy normal utilizar observables y RxJs, pero de momento nos vamos a quedar con promesas (después migraremos el ejemplo y veremos que ventajas nos aporta RxJs), así que nuestro método quedaría así:
+- Pero lo ideal es poner una firma de método que nos permita obtener datos de forma asíncrona, en Angular es muy normal utilizar observables y RxJs, pero de momento nos vamos a quedar con promesas (después migraremos el ejemplo y veremos qué ventajas nos aporta RxJs), así que nuestro método quedaría de esta forma:
 
 _./src/app/services/game-api.service.ts_
 
@@ -134,9 +136,9 @@ export class GameApiService {
 }
 ```
 
-- Vamos ahora utilizar este componente en nuestro _app_, para ello utilizamos la inyección de dependencia en Angular, en que consiste:
+- Vamos ahora a utilizar este componente en nuestro _app_, para ello utilizamos la inyección de dependencia en Angular, en que consiste:
 
-- Previamente (al crear el componente) hemos registrars el servicio en el módulo principal de la aplicación, para ello vamos a _app.module.ts_
+- Previamente (al crear el componente) hemos registrado el servicio en el módulo principal de la aplicación, para ello vamos a _app.module.ts_
 
 - Ahora que queremos utilizar este servicio en el component, en el decorador @Component añadimos una nueva entrada llamada _providers_ aquí indicamos que servicios queremos usar (es un array, así que podemos indicar varios servicios), en nuestro caso solo tenemos uno, así que lo añadimos.
 
@@ -146,12 +148,11 @@ _./src/app/app.component.ts_
 
 ```diff
 import { Component } from '@angular/core';
-import { MemberEntity } from './model/member';
-+ import { GameApiService } from './services/game-api';
-
-import { Component } from '@angular/core';
 import { Game } from './model/game.model';
 import { Seller } from './model/seller.model';
+
++ import { GameApiService } from './services/game-api.service';
+
 
 @Component({
   selector: 'app-root',
@@ -182,7 +183,7 @@ styleUrls: ['./app.component.css'],
 ```
 
 
-Y sustituimos el código mock por la llamada al servicio (esta vez sabiendo que el metodo me devuelve una promesa):
+Y sustituimos el código mock por la llamada al servicio (esta vez sabiendo que el método me devuelve una promesa):
 
 - En este caso lo eliminamos del constructor.
 - Y lo cargamos en el evento ngOnInit, que es el evento que se dispara cuando el componente se ha inicializado (veremos que esto cobra sentido en cuanto pasemos a trabajar con páginas y routing).
@@ -251,10 +252,14 @@ _./src/app.component.ts_
 -        []
 -      ),
 -    ];
--  }
+  }
+
++  loadGames = async () => {
++    this.games = await this.gameApiService.getAll();
++  };
 
   ngOnInit(): void {
-+   this.games = await this.gameServiceApi.getAll();
++   this.loadGames();
   }
 
   onShowSellerList(sellers: Seller[]) {
@@ -263,7 +268,7 @@ _./src/app.component.ts_
   }
 ````
 
-Fijate que _games_ sale en rojo, esto es porque aunque lo inicializemos en el init, para TypeScript esto es un problema tenemos que iniciarlizala a un valor seguro en el constructor.
+Fíjate que _games_ sale en rojo, esto es porque aunque lo inicialicemos en el init, para TypeScript esto es un problema tenemos que inicializarla a un valor seguro en el constructor.
 
 _./src/app.component.ts_
 
@@ -279,7 +284,7 @@ Como hemos tocado muchos conceptos nuevos vamos a hacer un pequeño resumen:
 - Queremos extraer lógica que no sea de presentación de nuestro componente, para ello creamos un servicio (usamos el CLI para ello y así nos lo registra automáticamente en el módulo de aplicación)
 - En ese servicio encapsulamos en un método la carga de la lista de gamecard, ya que estamos lo hacemos asíncrono, así cuando queramos sustituir los datos mock por una llamada a una API real sólo tenemos que tocar la implementación del servicio y no impactará en el componente.
 - Para usar el servicio en el componente que queramos utilizamos la inyección de dependencia de Angular, así obtenemos una instancia del servicio y podemos usarlo en el componente.
-- A tener en cuenta aunque usemos un servicios en varios componentes, por defecto se creará una sóla instancia.
+- A tener en cuenta aunque usemos un servicio en varios componentes, por defecto se creará una sola instancia.
 
 # ¿Te apuntas a nuestro máster?
 
