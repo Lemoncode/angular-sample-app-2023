@@ -58,7 +58,7 @@ Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usar
 
 Antes de hacer esto tenemos que pasar todo el contenido de _app_ a _game-list_.
 
-> Fijate que aquí ya empieza a ser una lata trabajar con imports relativos (../../) en el proximo ejemplo vamos a ver como utilizar alias para evitar esto.
+> Fíjate que aquí ya empieza a ser una lata trabajar con imports relativos (../../) en el próximo ejemplo vamos a ver cómo utilizar alias para evitar esto.
 
 _./src/app/pages/game-list/game-list.component.ts_
 
@@ -126,7 +126,7 @@ export class AppComponent {
 -    this.showSellerList = false;
 -    this.sellers = [];
 -    this.games = [];
--  }
+  }
 
 -  loadGames = async () => {
 -    this.games = await this.gameApiService.getAll();
@@ -149,7 +149,7 @@ export class AppComponent {
 
 Y hacemos lo mismo con el HTML
 
-_./src/app/pages/game-list/game-list.component.ts_
+_./src/app/pages/game-list/game-list.component.html_
 
 ```diff
 + <div *ngFor="let game of games">
@@ -188,7 +188,7 @@ _./src/app/app.component.html_
 
 - Vamos a actualizar el router para que apunte a nuestra página:
 
-_./src/app/app-routing.module.ts_
+_./src/app/app.module.ts_
 
 ```diff
 import { SellerListComponent } from './seller-list/seller-list.component';
@@ -220,7 +220,7 @@ ng-serve
 
 Antes de seguir, vamos a hacer un pequeño refactor para que todo lo que hay dentro de la página de _game-list_ quede dentro de esa carpeta:
 
-Vamos a crear una subcarpeta components y dentro de ella metemos game_card:
+Vamos a crear una subcarpeta components y dentro de ella metemos _card_game_:
 
 ![movemos game-edit a esa carpeta](./content/folder-game-list-page.png)
 
@@ -254,11 +254,11 @@ const appRoutes: Routes = [
 ```
 
 Para ver que todo funciona, vamos a probar a navegar a la página de edición, ruta:
-\_http://localhost:4200/edit
+_http://localhost:4200/edit_
 
 - Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
 
-En este header metemos dos enlace (a la página de list y a la de crear juego), fijate que al _anchor_ de html le informamos con una directiva para que haga la navegación Angular (navegación SPA) a la página de edit.
+En este header metemos dos enlace (a la página de list y a la de crear juego), fíjate que al _anchor_ de html le informamos con una directiva para que haga la navegación Angular (navegación SPA) a la página de edit.
 
 _./src/app/app.component.html_
 
@@ -290,7 +290,7 @@ label {
 +  padding: 10px;
 +  background-color: #fcfaea;
 +  border-bottom: 1px solid #e5e5e5;
-}
++ }
 ```
 
 Aquí le estamos indicando:
@@ -346,7 +346,7 @@ export class CardGameComponent {
   }
 
 + handleImageClick() {
-+   router.navigate(['/edit', this.game.id]);
++   this.router.navigate(['/edit', this.game.name]);
 + }
 }
 ```
@@ -363,7 +363,7 @@ const appRoutes: Routes = [
 ];
 ```
 
-Y podemos leer ese parametro desde la página de edición:
+Y podemos leer ese parámetro desde la página de edición:
 
 _./src/app/pages/game-edit/game-edit.component.ts_
 
@@ -386,8 +386,9 @@ Y ahora para leerlo, tenemos que suscribirnos al evento _params_ del _ActivatedR
 
 ```diff
 constructor(private route: ActivatedRoute) {
++   this.id = '';
 +   this.route.params.subscribe(params => {
-+     this.id = params.id;
++     this.id = params['id'];
 +   });
 }
 ```
@@ -415,5 +416,4 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
-
 
