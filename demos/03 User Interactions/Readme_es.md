@@ -1,8 +1,8 @@
 # Interacción con el usuario
 
-Bueno ya sabemos como mostrar datos, hasta incluso podemos mostrar una lista de elmentos.
+Bueno ya sabemos cómo mostrar datos, hasta incluso podemos mostrar una lista de elementos.
 
-Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir al usuario mostrar una lista de vendedores disponibles para un juego: al pulsar sobre un vendedor se mostrará un modal una lista de los juegos que tiene a la venta.
+Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir al usuario mostrar una lista de vendedores disponibles para un juego: al pulsar sobre un vendedor se mostrará un modal con la lista de los juegos que tiene a la venta.
 
 # Paso a paso
 
@@ -28,7 +28,7 @@ export interface Seller {
 }
 ```
 
-> En este caso hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' al interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo por que estándar sigues (no existe bala de plata, ambas aproximaciones tienen sus pros y cons, lo importante es ser consistente).
+> En este caso hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' al interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo porque estándar sigues (no existe bala de plata, ambas aproximaciones tienen sus pros y cons, lo importante es ser consistente).
 
 - Vamos a actualizar la entidad game para que tenga una lista de vendedores por cada juego.
 
@@ -122,7 +122,7 @@ _./src/app/app.component.ts_
         'Sonic',
         '26 June 1981',
         'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/sonic-frontiers.webp',
-        []
++       []
       ),
     ];
   }
@@ -227,7 +227,7 @@ Y vamos a instanciarlo en el app.component.html
 + <app-seller-list></app-seller-list>
 ```
 
-Vamos a controlar el estado del modal con una variable booleana, en este caso por dar una solución simple lo gestionaremos desde el componente padre, esto nos servirá para aprender como funciona la directiva _ngIf_, en un proyecto real usarías un componente modal de una librería que ya traería encapsulada esta implementación.
+Vamos a controlar el estado del modal con una variable booleana, en este caso por dar una solución simple lo gestionaremos desde el componente padre, esto nos servirá para aprender cómo funciona la directiva _ngIf_, en un proyecto real usarías un componente modal de una librería que ya traería encapsulada esta implementación.
 
 _./src/app/app.component.ts_
 
@@ -250,7 +250,7 @@ _./src/app/app.component.html_
 </div>
 
 - <app-seller-list></app-seller-list>
-+ <app-seller-list *ngIf={showSellerList}></app-seller-list>
++ <app-seller-list *ngIf="showSellerList"></app-seller-list>
 ```
 
 Si te fijas ya no aparece el modal, ¿Por qué? Porque el valor de _showSellerList_ es _false_.
@@ -287,7 +287,7 @@ export class CardGameComponent {
 }
 ```
 
-Vamos a definir un handler para el click en el titulo:
+Vamos a definir un handler para el click en el título:
 
 _./src/app/card-game/card-game.component.ts_
 
@@ -313,7 +313,7 @@ _./src/app/card-game/card-game.component.html_
   </div>
 ```
 
-Ya estamos cerca, vamos ahora recoger el evento de titulo clicado en el componente padre y cambiar el valor de _showSellerList_ a _true_.
+Ya estamos cerca, vamos ahora recoger el evento de título clicado en el componente padre y cambiar el valor de _showSellerList_ a _true_.
 
 _./src/app/app.component.ts_
 
@@ -342,7 +342,7 @@ _./src/app/app.component.html_
 
 Vamos a probarlo...
 
-Ey ! pinchamos en el título y se muestra el diálogo modal (ojo si hacemos scroll más abajo veremos que no se muestra el modal, tenemos que hacer scroll, actualizaremos esto más adelante).
+¡Ey! pinchamos en el título y se muestra el diálogo modal (ojo si hacemos scroll más abajo veremos que no se muestra el modal, tenemos que hacer scroll, actualizaremos esto más adelante).
 
 Vamos ahora añadir la funcionalidad para cerrar el modal, en este caso si pinchamos en el bóton de aspa emitiremos un evento desde el componente hijo y lo recogeremos en el componente padre.
 
@@ -421,13 +421,14 @@ _./src/app/app.component.html_
 
 - Primero tenemos que pasar la lista de sellers al componente modal:
 
-Primero añadimos el parametro al modal
+Primero añadimos el parámetro al modal
 
 _./src/app/seller-list/seller-list.component.ts_
 
 ```diff
 - import { Component, EventEmitter, Output } from '@angular/core';
 + import { Component, EventEmitter, Input, Output } from '@angular/core';
++ import { Seller } from '../model/seller.model';
 
 @Component({
   selector: 'app-seller-list',
@@ -476,7 +477,7 @@ _./src/app/app.component.html_
 + <app-seller-list *ngIf="showSellerList" (close)="onCloseSellerList()" [sellers]="sellers"></app-seller-list>
 ```
 
-Para probar rápido que este llegando la lista de sellers vamos a pintarla en el modal:
+Para probar rápido que esté llegando la lista de sellers vamos a pintarla en el modal:
 
 _./src/app/seller-list/seller-list.component.html_
 
@@ -539,7 +540,7 @@ _./src/app/seller-list/seller-list.component.html_
 </div>
 ```
 
-Bueno parece que esta, PEEEEROOOO... ¿Qué ha pasado aquí? Al poner un Div en el ng for nos cargamos el grid de CSS : ¿Cómo podemos hacer para eliminar ese div? Para ello en vez de usar un _div_ vamos a usar un _ng-container_ que es un elemento que no se renderiza en el DOM.
+Bueno parece que esta, PEEEEROOOO... ¿Qué ha pasado aquí? Al poner un Div en el ng for nos cargamos el grid de CSS: ¿Cómo podemos hacer para eliminar ese div? Para ello en vez de usar un _div_ vamos a usar un _ng-container_ que es un elemento que no se renderiza en el DOM.
 
 ```diff
   <div class="seller-grid-container">
@@ -558,7 +559,7 @@ Bueno parece que esta, PEEEEROOOO... ¿Qué ha pasado aquí? Al poner un Div en 
   </div>
 ```
 
-- Ahora si que se muestra en cada columna.
+- Ahora sí que se muestra en cada columna.
 
 - Vamos a terminar tocando un poco de CSS, si te fijas, si hacemos scroll, el dialogo modal se sigue mostrando arriba del todo, para ello cambiamos el position a fixed.
 
