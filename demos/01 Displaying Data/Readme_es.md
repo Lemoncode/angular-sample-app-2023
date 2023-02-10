@@ -8,19 +8,17 @@ En este ejemplo vamos a dar nuestros primeros pasos con Angular:
 
 # Paso a paso
 
-- Antes de arrancarnos, es buena idea instalar una serie de extensiones de VSCode que están especializadas en mejorar nuestra experiencia de usuario cuando desarrollemos con Angular, hay una extensión de extensiones interesante:
+- Antes de arrancarnos, es buena idea instalar una serie de extensiones de VSCode que están especializadas en mejorar nuestra experiencia de usuario cuando desarrollemos con Angular, hay una variedad de extensiones interesantes:
 
 - Angular Essentials:
-  - Compendio de extensiones que nos ayudarán a desarrollar con Angular (entre
-    otras el [language service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) que incluye autocomplete etc..)
+  - Compendio de extensiones que nos ayudarán a desarrollar con Angular (entre otras el [language service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template) que incluye autocomplete etc...)
   - https://marketplace.visualstudio.com/items?itemName=johnpapa.angular-essentials
 
 > Si nunca has instalado extensiones en VSCode, aquí va una guía para instalar una extensión de Vscode: https://learn.microsoft.com/es-es/visualstudio/ide/finding-and-using-visual-studio-extensions?view=vs-2022
 
-- Vamos a mostrar los datos de un juego, como estamos trabajando con _TypeScript_ es muy aconsejable crear
-  una entidad tipada, para ello vamos a crear un directorio debajo de src al que llamaremos `model` y dentro un fichero `game.model.ts`:
+- Vamos a mostrar los datos de un juego, como estamos trabajando con _TypeScript_ es muy aconsejable crear una entidad tipada, para ello vamos a crear un directorio debajo de src al que llamaremos `model` y dentro un fichero `game.model.ts`:
 
-_./src/app/game.model.ts_
+_./src/app/model/game.model.ts_
 
 ```typescript
 export class Game {
@@ -59,7 +57,7 @@ base lo importamos de la librería de Angular:
 import { Component } from "@angular/core";
 ```
 
-El componente lo definimos como una clase, pero le ponemos justo encima un decorador (@Component), en este decorador le indicamos unos parametros de configuración:
+El componente lo definimos como una clase, pero le ponemos justo encima un decorador (@Component), en este decorador le indicamos unos parámetros de configuración:
 
 - Como se va a llamar el componente, en este caso `app-root`, esto es lo que utilizaremos en el HTML para referenciarlo.
 - La ruta del fichero HTML que contiene la plantilla de este componente, es decir un componente tiene este fichero y otro de HTML donde definimos el interfaz de usuarios.
@@ -100,10 +98,10 @@ Si ejecutas la aplicación puedes ver que se muestra el título que hemos defini
 Si ahora ejecutamos puedes ver que por pantalla aparece tanto _My Application_ como _game-catalog_ (el contenido de la variable _title_), ¿Qué está pasando aquí?
 
 - Las propiedades públicas del componente son visible en el HTML del mismo.
-
-- Con los llaves estamos indicando que queremos mostrar el contenido de una variable, en este caso la variable _title_, esta sintaxis se llama _interpolación_, cuando Angular ve en un HTML de un componente lago escrito entre esas dobles llaves lo evalúa y lo trata de convertir a una cadena de texto para volcarlo en un texto.
-
+- Con los llaves estamos indicando que queremos mostrar el contenido de una variable, en este caso la variable _title_, esta sintaxis se llama _interpolación_, cuando Angular ve en un HTML de un componente algo escrito entre esas dobles llaves lo evalúa y lo trata de convertir a una cadena de texto para volcarlo en un texto.
 - De hecho en la cadena podemos poner una expresión, por ejemplo vamos mostrar el nombre de la variable y la longitud de la misma:
+
+_src/app/app.component.html_
 
 ```diff
 <h1>My application</h1>
@@ -113,7 +111,7 @@ Si ahora ejecutamos puedes ver que por pantalla aparece tanto _My Application_ c
 
 - Fíjate que ahora aparece el texto: _game-catalog (12)_, es decir muestra el título y se calcula la longitud del mismo.
 
-- ¿Y donde se usa mi componente? Vamos a tirar del hilo, si te fijas
+- ¿Y dónde se usa mi componente? Vamos a tirar del hilo, si te fijas
   en el decorador hemos definido un selector, que hemos llamado _app-root_, si buscamos este selector lo podemos encontrar en el fichero _index.html_
 
 **No copiar este código, es sólo de referencia**
@@ -128,9 +126,11 @@ _./src/index.html_
 
 - Vamos a darle un poco más de vidilla a este componente, vamos a definir una lista de juegos, y vamos a mostrar la ficha del primer juego del array.
 
-Para ello vamos a definir una variable miembro que va a ser privada (de momento) y tendrá un array de juegos, a su vez vamos a definir una variable miembro publica que va a tener el primer juego de la lista.
+Para ello vamos a definir una variable _games_ que va a ser privada (de momento) y tendrá un array de juegos, a su vez vamos a definir una variable _game_ pública que va a tener el primer juego de la lista.
 
-De primeras definimos las variables miembro:
+De primeras definimos las variables _games_ y _game_:
+
+_src/app/app.component.ts_
 
 ```diff
 
@@ -149,7 +149,7 @@ export class AppComponent {
 }
 ```
 
-> Podemos ver algunos avisos de TypeScript indicando que no hemos definido el tipo de la variable _games_ y _game_, esto es porque no hemos importado el modelo _Game_... en breve lo arreglamos.
+> Podemos ver algunos avisos de TypeScript indicando que no hemos inicializado las variables _games_ y _game_,... en breve lo arreglamos.
 
 Y para inicializar la lista de juegos lo hacemos en el constructor:
 
@@ -171,8 +171,7 @@ export class AppComponent {
 
 En este caso usamos el constructor (algo estándar de ES6 / TypeScript) porque queremos introducir unos valores hardcodeados, ya veremos más adelante que el constructor lo usaremos para inyectar servicios.
 
-A la hora de establecer datos iniciales, lo más habitual es hacerlo en el método _ngOnInit_ que es un método que se ejecuta cuando el componente se _inicializa_,
-vamos a usar esto para inicializar la variable _game_ con el primer juego de la lista.
+A la hora de establecer datos iniciales, lo más habitual es hacerlo en el método _ngOnInit_ que es un método que se ejecuta cuando el componente se _inicializa_, vamos a usar esto para inicializar la variable _game_ con el primer juego de la lista.
 
 ```diff
 export class AppComponent {
@@ -194,7 +193,7 @@ export class AppComponent {
 }
 ```
 
-- Fíjate que a pesar se que _this.game_ lo inicializamos en el _ngOnInit_ nos sigue saliendo un error, esto porque _game_ no esta inicializado en el constructor, vamos a añadir un fix rápido para que no aparezca (lo inicializamos a un valor por defecto):
+- Fíjate que a pesar de que _this.game_ lo inicializamos en el _ngOnInit_ nos sigue saliendo un error, esto porque _game_ no está inicializado en el constructor, vamos a añadir un fix rápido para que no aparezca (lo inicializamos a un valor por defecto):
 
 ```diff
 -  game: Game;
@@ -225,7 +224,7 @@ Para comprobar que esto se ejecuta en el orden que hemos comentado, vamos a aña
 
 Ahora si ejecutamos y abrimos la consola del navegador podemos ver que se llama primero el constructor y después el onInit.
 
-Para ellos abrimos las herramientas de desarrollo del navegador y vamos a la pestaña _sources_ en la parte izquierda del arbol elegimos _webpack://_ y en la parte derecha buscamos el fichero _app.component.ts_ y ponemos un breakpoint en el constructor y en el _ngOnInit_, si refrescamos podemos ver como se para.
+Para ello abrimos las herramientas de desarrollo del navegador y vamos a la pestaña _sources_ en la parte izquierda del arbol elegimos _webpack://_ y en la parte derecha buscamos el fichero _app.component.ts_ y ponemos un breakpoint en el constructor y en el _ngOnInit_, si refrescamos podemos ver como se para.
 
 También podemos depurar usando las tool del navegador.
 
@@ -254,7 +253,7 @@ Vamos ahora a darle un poco de estilo.
 
 Primero vamos a aplicar un cambio global (queremos que se use en toda la aplicación), vamos a indicar que se usa la fuente _arial_ en el fichero _styles.css_:
 
-_./app/styles.css_
+_./src/styles.css_
 
 ```diff
 + html, body {
@@ -264,7 +263,7 @@ _./app/styles.css_
 
 Y ahora vamos a poner las etiquetas _name_ y _years_ en negrita, pero esta vez sólo queremos que ese estilo se aplique en este componente, para ello vamos a crear un fichero _app.component.css_:
 
-_./app/app.component.css_
+_./src/app/app.component.css_
 
 ```css
 label {
