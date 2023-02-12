@@ -549,13 +549,13 @@ Bueno parece que esta, PEEEEROOOO... ¿Qué ha pasado aquí? Al poner un Div en 
     <div class="seller-grid-header">Precio</div>
     <div class="seller-grid-header">Disponible</div>
 -    <div *ngFor="let seller of sellers" class="seller-grid-item">
-+    <ngContainer *ngFor="let seller of sellers" class="seller-grid-item">
++    <ng-container *ngFor="let seller of sellers" class="seller-grid-item">
       <span>{{ seller.name }}</span>
       <span>{{ seller.amount }}</span>
       <span>{{ seller.price }}</span>
       <span>{{ seller.isAvailable ? "✅" : "✖️" }}</span>
 -    </div>
-+   </ngContainer>
++   </ng-container>
   </div>
 ```
 
