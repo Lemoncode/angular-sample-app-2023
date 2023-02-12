@@ -108,7 +108,7 @@ Fíjate que en esa carpeta lo que tenemos es un fichero _.gitkeep_, esto es para
 
 ### Detalle ficheros raíz
 
-Si tienes curiosidad para que sirve cada fichero de configuración, aquí tienes un detalle.
+Si tienes curiosidad en saber para que sirve cada fichero de configuración, aquí tienes un detalle.
 
 - En la raíz del proyecto, podemos ver los siguientes archivos:
 
@@ -117,8 +117,8 @@ Si tienes curiosidad para que sirve cada fichero de configuración, aquí tienes
   - `tsconfig.json`: Archivo de configuración de TypeScript, donde podemos ver las opciones de compilación de TypeScript.
   - `tslint.json`: Archivo de configuración de TSLint, donde podemos ver las reglas de linting de TypeScript.
   - `tsconfig.app.json`: Archivo de configuración de TypeScript para la aplicación.
-  - `tsconfig.spec.json`: Archivo de configuración de TypeScript para los tests.
-  - `tsconfig.app.json`: Archivo de configuración de TypeScript para la aplicación.
+  - `tsconfig.spec.json`: Archivo de configuración de TypeScript con settings específicos para los tests.
+  - `tsconfig.app.json`: Archivo de configuración de TypeScript con settings específicos para la aplicación.
 
 # ¿Te apuntas a nuestro máster?
 
