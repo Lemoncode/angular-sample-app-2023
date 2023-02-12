@@ -108,7 +108,7 @@ _./src/app/app.component.html_
 
 Bueno, ya tenemos esto andando en modo básico.
 
-Ahora imagínate que queremos darle estilos a cada juego de la lista, lo suyo sería mostrar cada juego dentro de un _card_, ¿Qué pasa si intentamos hacer esto en el propio app? Pues nos podemos encontrar con que nuestro componente App acabe con un sphagetthi de código HTML, y que sea muy difícil de mantener, también sería complicado poder reutilizar el componente _card_ en otro sitio.
+Ahora imagínate que queremos montar un diseño más elaborado para cada juego de la lista, lo suyo sería mostrar cada juego dentro de un _card_, ¿Qué pasa si intentamos hacer esto en el propio app? Pues nos podemos encontrar con que nuestro componente App acabe con un sphagetthi de código HTML, y que sea muy difícil de mantener, también sería complicado poder reutilizar el componente _card_ en otro sitio.
 
 ¿Qué podemos hacer? Pues crear un componente nuevo, que se encargue de mostrar la ficha de un juego, y que lo podamos reutilizar en cualquier otro sitio.
 
