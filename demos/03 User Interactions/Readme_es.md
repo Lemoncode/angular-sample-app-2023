@@ -497,8 +497,8 @@ _./src/app/seller-list/seller-list.component.html_
 A nivel de estilado:
 
 - Para crear una lista vamos a usar el estándar CSS-Grid.
-- Vamos a crear definir 4 columnas, le vamos a darle tamaño fijo a todas las columnas menos a la columna nombre ahí le diremos que coja todo el espacio disponibles (será la única que tenga definido FR), si más adelante quisiéramos dejar esto más fino podríamos usar mediaqueries.
-- Vamos a definir una clase para la cabecera de la columna con un color de fondo.
+- Vamos a definir 4 columnas, le vamos a dar un tamaño fijo a todas las columnas menos a la columna nombre y ahí le diremos que tome todo el espacio disponibles (será la única que tenga definido el valor FR), si más adelante quisiéramos dejar esto más fino podríamos usar mediaqueries.
+-  También definimos una clase para la cabecera de la columna con un color de fondo.
 
 _./src/app/seller-list/seller-list.component.css_
 
