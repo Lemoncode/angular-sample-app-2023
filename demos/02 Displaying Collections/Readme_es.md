@@ -279,8 +279,8 @@ Ahora viene otro punto de magia este binding cuando lo vamos a usar lo envolvemo
   - Esto lo podemos usar para leer datos de un _input.value_, o engancharnos a un evento, por ejemplo un botón _(click)="onSave()"_.
 - ¿Y si usamos las dos? [()]
   - A esto lo llamamos _banana in a box_ y es un binding en dos direcciones, es decir, si cambia el valor en el componente, se actualiza el objeto y viceversa.
-  - Se puede usar en los casos en los que queremos que el valor de un input se actualice en el objeto y viceversa, lo enlazaríamos a la propiedad value.
-  - El binding two way genera mucha discusión y controversia, en escenarios sencillos puede ser una solución más que válida.
+  - Se puede usar en los casos en los que queremos que el valor de un input se actualice en el objeto y tmabién en el sentido contrario, del objeto al input, y esto lo enlazaríamos a la propiedad value.
+  - El binding two way genera mucha discusión y controversia, en escenarios sencillos puede ser una solución más que válida, en otros a veces te introduce errores que son muy complicado de poder depurar.
 
 > Más información: https://stackoverflow.com/questions/35944749/what-is-the-difference-between-parentheses-brackets-and-asterisks-in-angular2
 
