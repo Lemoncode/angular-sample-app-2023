@@ -1,6 +1,6 @@
 # Servicios
 
-Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de _concerns_ debemos de extraerlo, para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, validar un formulario, etc.
+Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de _concerns_ debemos de extraerlo, para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, realizar unos cálculos, etc.
 
 En este ejemplo vamos a encapsular la carga de datos inicial (que de momento es mock) en un servicio, así:
 
