@@ -104,7 +104,7 @@ Dentro de la carpeta _app_, iremos añadiendo el código que necesitemos, aquí 
 
 Para finalizar nos queda la carpeta _assets_, aquí iremos añadiendo los ficheros estáticos que necesitemos, como por ejemplo, imágenes, etc.
 
-Fíjate que en esa carpeta lo que tenemos es un fichero _.gitkeep_, esto es para que git no elimine la carpeta cuando no tenga ningún fichero dentro (es un _hack_ aceptado usar esto).
+Fíjate que en esa carpeta lo que tenemos es un fichero _.gitkeep_, esto es para que git no elimine la carpeta cuando no tenga ningún contenido dentro (es un _hack_ aceptado usar esto).
 
 ### Detalle ficheros raíz
 
