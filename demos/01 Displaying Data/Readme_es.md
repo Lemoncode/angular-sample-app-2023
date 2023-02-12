@@ -4,7 +4,7 @@ En este ejemplo vamos a dar nuestros primeros pasos con Angular:
 
 - Instalaremos una serie de plugins de VSCode que nos harán la vida más fácil.
 - Definiremos un modelo de datos con TypeScript.
-- Mostraremos la información de un juego en pantalla.
+- Y terminaremos la demo mostrando la información de un juego en pantalla.
 
 # Paso a paso
 
