@@ -2,7 +2,7 @@
 
 Bueno ya sabemos cómo mostrar datos, hasta incluso podemos mostrar una lista de elementos.
 
-Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir que éste muestra una lista de vendedores disponibles para un juego: al pulsar sobre un vendedor se mostrará un modal con la lista de los juegos que tiene a la venta.
+Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir que éste muestra una lista de vendedores disponibles para un juego: al pulsar sobre un juego se mostrará un modal con la lista de los vendedores que tiene.
 
 # Paso a paso
 
