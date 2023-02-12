@@ -2,7 +2,7 @@
 
 Vamos a crear un proyecto de arranque en Angular.
 
-Para ellos usaremos el cli de Angular, y después estudiaremos la estructura de, proyecto generado.
+Para ellos usaremos el cli de Angular, y después estudiaremos la estructura del proyecto generado.
 
 # Prerequisitos
 
