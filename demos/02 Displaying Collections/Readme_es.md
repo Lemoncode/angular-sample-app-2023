@@ -290,8 +290,8 @@ Añadimos un poco de CSS para:
 
 - Mostrar la imagen en como fondo.
 - Añadir un borde redondeado.
-- Añadir abajo el título del juego y el precio.
-- Añadir un efecto de hover.
+- Añadir abajo el título del juego y los años que se hace que se pulicó.
+- Y Añadir un efecto de zoom cuando pongamos el ratón encima (hover).
 
 _./src/app/card-game/card-game.component.css_
 
@@ -348,7 +348,7 @@ _./src/app/card-game/card-game.component.css_
 }
 ```
 
-Y modificamos el _markup_ para adaptar layout y estilo
+Vamos a modifcar el _markup_ para adaptar layout y estilo
 
 _./src/app/card-game/card-game.component.html_
 
