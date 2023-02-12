@@ -136,11 +136,11 @@ export class GameApiService {
 }
 ```
 
-- Vamos ahora a utilizar este componente en nuestro _app_, para ello utilizamos la inyección de dependencia en Angular, en que consiste:
+- Vamos ahora a usar este componente en nuestro _app_, para ello utilizamos la inyección de dependencia en Angular, en que consiste:
 
 - Previamente (al crear el componente) hemos registrado el servicio en el módulo principal de la aplicación, para ello vamos a _app.module.ts_
 
-- Ahora que queremos utilizar este servicio en el component, en el decorador @Component añadimos una nueva entrada llamada _providers_ aquí indicamos que servicios queremos usar (es un array, así que podemos indicar varios servicios), en nuestro caso solo tenemos uno, así que lo añadimos.
+- Ahora que queremos utilizar este servicio en el componente: directamente en el constructor lo pedimos (cuando lo pedimos así el servicio es un singleton para toda la aplicación, si queremos que sea una instancia nueva por cada componente que se instancia debemos de colorlo en el decorador @Component y añadirlo en una nueva entrada llamada _providers_, este providers es un array, así que podemos indicar varios servicios)
 
 > Aquí angular usa Inyección de dependencias: es un patrón de diseño que consiste en que un objeto no crea sus dependencias, sino que las recibe de fuera. En Angular, esto se consigue a través de los servicios, que son clases que se inyectan en los componentes.
 
