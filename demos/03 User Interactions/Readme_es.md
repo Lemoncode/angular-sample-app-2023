@@ -28,7 +28,7 @@ export interface Seller {
 }
 ```
 
-> En este caso hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' al interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo porque estándar sigues (no existe bala de plata, ambas aproximaciones tienen sus pros y cons, lo importante es ser consistente).
+> Hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' al interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo porque estándar sigues (no existe bala de plata, ambas aproximaciones tienen sus pros y cons, lo importante es ser consistente).
 
 - Vamos a actualizar la entidad game para que tenga una lista de vendedores por cada juego.
 
