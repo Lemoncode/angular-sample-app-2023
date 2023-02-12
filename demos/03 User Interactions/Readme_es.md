@@ -199,8 +199,8 @@ _./src/app/seller-list.component.css_
     - Se posiciona de manera absoluta respecto al primer padre que encuentre posicionado (en esta caso quedará dentro del modal.).
     - Lo posicionamos en la posición 10,10 (right y top), es decir a la izquierda del modal.
     - Le damos un tamaño de 20 pixeles.
-    - Después en el HTML pondremos un emoticon de aspa para indicar que es cierre del modal.
-  - Clase _overlay_: esta clase se suele usar en un DIV para envolver a todos los elementos menos el modal y tiene una transparencia para que sea vea que el resto de elementos están deshabilitados.
+    - Después en el HTML pondremos un emoticono de aspa para indicar que es cierre del modal.
+  - Clase _overlay_: esta clase se suele usar en un DIV para envolver a todos los elementos menos el modal y tiene una transparencia para que de el efecto de que el resto de elementos están deshabilitados.
     - Le damos una opacidad de 0.7.
     - Le aplicamos position fixed (se posiciona respecto a la ventana del navegador).
     - Le aplicamos top, left, right y bottom a 0 y un ancho y alto del 100% para que ocupe toda la ventana.
