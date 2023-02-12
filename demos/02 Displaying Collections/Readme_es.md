@@ -284,7 +284,7 @@ Ahora viene otro punto de magia este binding cuando lo vamos a usar lo envolvemo
 
 > Más información: https://stackoverflow.com/questions/35944749/what-is-the-difference-between-parentheses-brackets-and-asterisks-in-angular2
 
-Para finalizar estilar un poco el componente card.
+Para finalizar estilar el componente card.
 
 Añadimos un poco de CSS para:
 
