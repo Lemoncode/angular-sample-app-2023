@@ -7,7 +7,7 @@ En este ejemplo vamos a encapsular la carga de datos inicial (que de momento es 
 - Por un lado nuestro componente se centrará en mostrar la información.
 - Por otro lado nuestro servicio se centrará en obtener la información.
 - Es más fácil poder a futuro pasar de mock a fuente de datos real, ya que esta funcionalidad está encapsulada en un servicio.
-- A futuro es más fácil poder realizar pruebas unitarias ya que la funcionalidad está encapsulada en un servicio.
+- Y también es más fácil poder realizar pruebas unitarias ya que la funcionalidad la hemos encapsulado en un servicio, no haría falta montar el componente para probar sólo el acceso a una API.
 
 # Paso a paso
 
