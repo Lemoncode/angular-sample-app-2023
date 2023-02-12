@@ -76,7 +76,7 @@ ng serve
 
 - Para parar el servidor, simplemente pulsamos `Ctrl + C`
 
-- Ahora vamos a estudiar la estructura del proyecto, para ello abrimos el proyecto en nuestro editor de código favorito (yo uso Visual Studio Code).
+- Ahora vamos a estudiar la estructura del proyecto, para ello lo abrimos en nuestro editor de código favorito (yo uso Visual Studio Code).
 
 Podemos ver cuatro grandes bloques:
 
