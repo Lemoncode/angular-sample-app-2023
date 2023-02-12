@@ -16,7 +16,7 @@ En este ejemplo vamos a dar nuestros primeros pasos con Angular:
 
 > Si nunca has instalado extensiones en VSCode, aquí va una guía para instalar una extensión de Vscode: https://learn.microsoft.com/es-es/visualstudio/ide/finding-and-using-visual-studio-extensions?view=vs-2022
 
-- Vamos a mostrar los datos de un juego, como estamos trabajando con _TypeScript_ es muy aconsejable crear una entidad tipada, para ello vamos a crear un directorio debajo de src al que llamaremos `model` y dentro un fichero `game.model.ts`:
+- Vamos a mostrar los datos de un juego, como estamos trabajando con _TypeScript_ es muy aconsejable crear una entidad tipada, para ello vamos a crear un directorio debajo de src al que llamaremos `model` y dentro crearemos un fichero `game.model.ts`:
 
 _./src/app/model/game.model.ts_
 
