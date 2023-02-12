@@ -26,7 +26,7 @@ ng generate service services/game-api
 Este comando:
 
 - Me va a generar los ficheros necesarios para crear un servicio.
-- Me va a registrar el servicio en el módulo principal de la aplicación.
+- Me va a añadir un decorador al servicio que permitirá a angular detectarlo y levantar un singleton del mismo cuando haga falta.
 
 - Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos, en este caso los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de
   aquí:
@@ -138,9 +138,12 @@ export class GameApiService {
 
 - Vamos ahora a usar este componente en nuestro _app_, para ello utilizamos la inyección de dependencia en Angular, en que consiste:
 
-- Previamente (al crear el componente) hemos registrado el servicio en el módulo principal de la aplicación, para ello vamos a _app.module.ts_
+- Previamente (al crear el componente) hemos registrado con el decorador provided in root (el cli de angular ha hecho esto por nosotros)
 
-- Ahora que queremos utilizar este servicio en el componente: directamente en el constructor lo pedimos (cuando lo pedimos así el servicio es un singleton para toda la aplicación, si queremos que sea una instancia nueva por cada componente que se instancia debemos de colorlo en el decorador @Component y añadirlo en una nueva entrada llamada _providers_, este providers es un array, así que podemos indicar varios servicios)
+- Ahora que queremos utilizar este servicio en el componente: directamente en el constructor lo pedimos (cuando lo pedimos así el servicio es un singleton para toda la aplicación) existen formas de configurarlo de una manera diferente (por ejemplo que se cree una instancia nueva cada vez que se invoque en el constructor), más información sobre esto:
+
+- [Providing dependencies in modules](https://angular.io/guide/providers)
+- [Angular Singleton services](https://angular.io/guide/singleton-services)
 
 > Aquí angular usa Inyección de dependencias: es un patrón de diseño que consiste en que un objeto no crea sus dependencias, sino que las recibe de fuera. En Angular, esto se consigue a través de los servicios, que son clases que se inyectan en los componentes.
 
