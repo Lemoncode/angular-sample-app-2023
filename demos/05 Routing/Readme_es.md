@@ -258,7 +258,7 @@ _http://localhost:4200/edit_
 
 - Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
 
-En este header metemos dos enlace (a la página de list y a la de crear juego), fíjate que al _anchor_ de html le informamos con una directiva para que haga la navegación Angular (navegación SPA) a la página de edit.
+En este header metemos dos enlaces (uno a la página de list y otro a la de crear juego), fíjate que al elemento estándar _anchor_ de html le informamos con una directiva para que realize la navegación(navegación SPA) a la página de edit.
 
 _./src/app/app.component.html_
 
