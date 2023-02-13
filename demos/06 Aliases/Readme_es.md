@@ -2,7 +2,7 @@
 
 Si te fijas hemos estado trabajando con rutas relativas en los imports, en cuanto un proyecto empieza a crecer esto puede ser un problema, ya que si movemos un fichero de lugar, tendremos que actualizar todas las rutas relativas que apuntan a ese fichero (aquí VS Code te ayuda a veces), pero lo que es peor acertar con un path relativo puede ser complicado.
 
-Vamos a ver como definir alias a nivel de carpeta raíz para que podamos importar de forma más sencilla.
+Vamos a ver cómo definir alias a nivel de carpeta raíz para que podamos importar de forma más sencilla.
 
 # Paso a paso
 
@@ -19,7 +19,7 @@ npm install
     "lib": [
       "ES2022",
       "dom"
--    ],
+    ],
      "baseUrl": "./",
 +    "paths": {
 +      "@/*": ["./src/app/*"]
@@ -27,7 +27,7 @@ npm install
   },
 ```
 
-Con esto le estamos diciendo a TypeScript que cuando vea un import que empiece por _@_ lo que tiene que hacer es buscar en la carpeta _src/app_ y concatene lo que este contenido en el caracter asterisco.
+Con esto le estamos diciendo a TypeScript que cuando vea un import que empiece por _@_ lo que tiene que hacer es buscar en la carpeta _src/app_ y concatenar este contenido en el carácter asterisco.
 
 Ahora podemos cambiar los path relativos por _@/_, por ejemplo:
 
