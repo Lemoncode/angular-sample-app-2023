@@ -1,8 +1,8 @@
 # Template Form
 
-Otro punto básico cuando queremos crear una aplicación web es la creación de formularios, en este ejemplo vamos a ver como crear un formulario con un template.
+Otro punto básico cuando queremos crear una aplicación web es la creación de formularios, en este ejemplo vamos a ver cómo crear un formulario con un template.
 
-Esta forma es la más fácil de generar un form, pero también la menos óptima, en escenarios complejos puede ser buena idea utilizar React Forms (lo veremos más adelante)
+Esta forma es la más fácil de generar un form, pero también la menos óptima, en escenarios complejos puede ser buena idea utilizar Reactive Forms (lo veremos más adelante)
 
 # Paso a paso
 
@@ -49,7 +49,7 @@ import { RouterModule, Routes } from '@angular/router';
 })
 ```
 
-Lo primero vamos a crear un juego vacio en la página para poder tener un punto de partida:
+Lo primero vamos a crear un juego vacío en la página para poder tener un punto de partida:
 
 _./src/app/pages/game-edit/game-edit.component.ts_
 
@@ -98,7 +98,7 @@ _./src/app/pages/game-edit/game-edit.component.html_
 + </div>
 ```
 
-Fijate que aquí con _ngModel_ estamos enlazando el valor del input con el valor de la propiedad _name_ del modelo _game_ y así con el resto de propiedades.
+Fíjate que aquí con _ngModel_ estamos enlazando el valor del input con el valor de la propiedad _name_ del modelo _game_ y así con el resto de propiedades.
 
 De hecho vamos añadir un botón de guardado y un handler para el evento _click_ del botón.
 
@@ -136,13 +136,13 @@ _./src/app/pages/game-edit/game-edit.component.html_
 
 Si ahora probamos, podemos ver como al pulsar en el botón se imprime por consola el juego que hemos creado.
 
-Vamos a conectar ahora con el servicio de juegos para poder guardar el juego, esto será una implementacíon mock pero más adelante no permitirá guardar el juego en el servidor.
+Vamos a conectar ahora con el servicio de juegos para poder guardar el juego, esto será una implementacíon mock pero más adelante nos permitirá guardar el juego en el servidor.
 
-Vamos a hacer un pequeño refactor en _gami-api.service_ para poder trabajar en memoria mientras esperamos a que el server este listo:
+Vamos a hacer un pequeño refactor en _gami-api.service_ para poder trabajar en memoria mientras esperamos a que el server esté listo:
 
 Primero la lista de juegos la vamos a poner en una variable en un fichero aparte:
 
-_./services/game-api.mock.ts_
+_./src/app/services/game-api.mock.ts_
 
 ```ts
 import { Game } from "../model/game.model";
@@ -329,7 +329,9 @@ export class GameEditComponent {
 - Vamos a probarlo, introduce estos datos:
 
 Nombre: Streets of rage 4
+
 Url imagen: https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/streetsofrage4.jpeg
+
 Fecha de lanzamiento: 02/02/2021
 
 - Si volvemos a la página de listado, veremos que se ha añadido el juego, PEEEEROOOOO,
@@ -357,7 +359,7 @@ Vamos a partir por añadir las siguientes validaciones a nuestro formulario:
 
 Para ello podemos usar la directiva _required_ y _pattern_.
 
-_./pages/game-edit/game-edit.component.ts_
+_./pages/game-edit/game-edit.component.html_
 
 ```diff
 <div>
@@ -372,9 +374,9 @@ _./pages/game-edit/game-edit.component.ts_
 
 ¿Qué estamos haciendo aquí?
 
-- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, esta es estandar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, y también podemos crear nuestras propias validaciones, además de esto tenemos que crear una variable global (fijate el _#name_) que referencia al _ngModel_ .
+- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, esta es estándar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, y también podemos crear nuestras propias validaciones, además de esto tenemos que crear una variable global (fijate el _#name_) que referencia al _ngModel_.
 
-- Segundo comprobamos si el campo tiene errors, y si el usuario ha pasado por el o si ha modificado algo (dirty o touched), es decir mientras no haya pasado por el campo o no
+- Segundo comprobamos si el campo tiene errores, y si el usuario ha pasado por el o si ha modificado algo (dirty o touched), es decir mientras no haya pasado por el campo o no
   hay pulsado en el botón de guardar no mostramos el mensaje de error, así evitamos el patrón
   odioso de mostrar errores cuando todavía no he podido ni rellenar el formulario, ojo para esto usamos la variable que hemos creado previamente en el tag input que se llame _#name_
 
@@ -444,7 +446,7 @@ _./pages/game-edit/game-edit.component.html_
   </div>
 ```
 
-Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parecer fácil podemos probar a hacer lo siguiente:
 
 Creamos una carpeta common y creamos nuestro widget para mostrar errores:
 
@@ -474,7 +476,7 @@ export class FieldErrorDisplayComponent {
 }
 ```
 
-Aquí aceptamos el ngModel como parametro.
+Aquí aceptamos el ngModel como parámetro.
 
 _./common/field-error-display/field-error-display.component.html_
 
@@ -496,10 +498,11 @@ _./pages/game-edit/game-edit.component.html_
     required
     #name="ngModel"
   />
+
   <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
 ```
 
-Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
+Si ahora ejecutamos y jugamos con el control de _name_ vaciándolo y poniéndole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
 
 Así que vamos a implementar el resto de comportamiento.
 
@@ -570,7 +573,7 @@ _./pages/game-edit/game-edit.component.html_
 
 ```
 
-Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuviera en produccíon tendríamos que tener en cuenta casuistica que nos haría complicado sacar un componente genérico:
+Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuviera en producción tendríamos que tener en cuenta casuística que nos haría complicado sacar un componente genérico:
 
 - Primero, tenemos que meter todos lo validadores en ese componente o un array (no te olvides de añadirlos...) si no, no se mostraría el mensaje de error, otra opción es informar esas validaciones en un array, pero entonces tendríamos que definirlas dos veces, en el componente y en la validación.
 
@@ -584,7 +587,7 @@ https://angular.io/guide/form-validation
 
 https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1
 
-Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
+Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el botón de grabar!, vamos a resolver esto de dos maneras y ver los pros y contras de cada una:
 
 - Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
 
@@ -629,7 +632,7 @@ _./pages/game-edit/game-edit.component.html_
 
 Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
 
-Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
+Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parámetro la variable del formulario (la que creamos con _#gameForm_).
 
 _./pages/game-edit/game-edit.component.html_
 
@@ -644,6 +647,11 @@ _./pages/game-edit/game-edit.component.html_
 _./pages/game-edit/game-edit.component.ts_
 
 ```diff
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
++ import { NgForm } from '@angular/forms';
+......
+ 
 -  handleSaveClick() {
 +  handleSaveClick(form: NgForm) {
 +    if (form.valid) {
