@@ -6,7 +6,7 @@ NOTA PARA EL PROFESOR O SI ERES AUTODIDACTA:
 
 Este ejemplo es duro y lleva una carga de complejidad:
 
-- Sirve para ver que _NgModel_ es algo muy límitado y que en cuanto nos metemos a hacer algo más complejo nos metemos en un jardín considerable (entrás en "modo java")
+- Sirve para ver que _NgModel_ es algo muy limitado y que en cuanto nos metemos a hacer algo más complejo nos metemos en un jardín considerable (entras en "modo java")
 
 - Sirve para ver que con un caso tan tonto como hacerte tu componente custom las cosas se empiezan a complicar bastante.
 
@@ -47,7 +47,7 @@ ng g c common/input-wrapper
 
 Vamos a por la parte visual:
 
-_./src/app/components/input-wrapper/input-wrapper.component.html_
+_./src/app/components/input-wrapper/input-wrapper.component.css_
 
 ```css
 .wrapper {
@@ -114,7 +114,7 @@ _./src/app/components/input-wrapper/input-wrapper.component.html_
 
 Vamos a instanciar este componente en el formulario de creación de juegos:
 
-_./src/app/components/game-edit/game-edit.component.html_
+_./src/app/pages/game-edit/game-edit.component.html_
 
 ```diff
 + <app-input-wrapper label="Name"></app-input-wrapper>
@@ -135,9 +135,9 @@ _./src/app/components/game-edit/game-edit.component.html_
 Bien tenemos un componente mejor aspecto (queda pendiente envolverlo en un contenedor que no tenga un ancho fijo, pero ese ajuste lo haremos más adelante), vamos ahora al turrón, nos hace falta tirar de ngModel ¿Qué pasa aquí?
 
 - El componente _input-wrapper_ no tiene ngModel, por lo que no podemos usarlo directamente.
-- Tenemos que implementar la fontanería necesaria para que el componente _input-wrapper_ pueda ser usado como ngModel, y después usarlo intermanente en el componente _input-wrapper_.
+- Tenemos que implementar la fontanería necesaria para que el componente _input-wrapper_ pueda ser usado como ngModel, y después usarlo internamente en el componente _input-wrapper_.
 
-Aquí es donde todo el azúcar que habíamos ganado utilizando _ng-model_ se esfuma, agarrate que vienen curvas: Tenemos que implementar la interfaz _ControlValueAccessor_.
+Aquí es donde todo el azúcar que habíamos ganado utilizando _ng-model_ se esfuma, agárrate que vienen curvas: Tenemos que implementar la interfaz _ControlValueAccessor_.
 
 Vamos a decirle a nuestro componente que herede de _ControlValueAccessor_, este interfaz expone los siguientes métodos:
 
@@ -147,24 +147,27 @@ Vamos a decirle a nuestro componente que herede de _ControlValueAccessor_, este 
 
 - set value: setea el valor usado por en ngModel del elemento.
 
-- writeValue: actualiza el valor de la vista cunado el el valor del modelo cambia (lo cambiamos desde código)
+- writeValue: actualiza el valor de la vista cuando el valor del modelo cambia (lo cambiamos desde código)
 
-- registerOnChange: Este método se llama cuando el componente padre quiere saber cuando el valor del componente cambia.
+- registerOnChange: Este método se llama cuando el componente padre quiere saber cuándo el valor del componente cambia.
 
 - registerOnTouched: aquí marcamos que el componente ha sido tocado (ha pasado el foco por él, esta información se suele usar para no mostrar mensajes de error hasta que se haya tocado el componente).
 
-- registerOnChange: Este método se llama cuando el componente padre quiere saber cuando el valor del componente cambia.
+- registerOnChange: Este método se llama cuando el componente padre quiere saber cuándo el valor del componente cambia.
 
 - set value: Este método se llama cuando el componente padre quiere actualizar el valor del componente.
 
 Vamos a implementar todo esta fontanería de primeras sin implementación, ¿Que hacemos aquí?
 
 a) Indicarle en tiempo de run time que hemos implementado el interfaz _ControlValueAccessor_.
+
 b) Indicar que implementamos los métodos que nos obliga a implementar el interfaz _ControlValueAccessor_.
-c) Esta parte es "un poco guarrería", dejamos los metodos _onChange_ y _onTouch_ implementados, para que angular los sobreescriba durante el tiempo de ejecución, un tema importante no debemos de implementar nada en estos handlers.
+
+c) Esta parte es "un poco guarrería", dejamos los métodos _onChange_ y _onTouch_ implementados, para que angular los sobreescriba durante el tiempo de ejecución, un tema importante no debemos de implementar nada en estos handlers.
+
 d) Aquí en el write value asignaremos el valor que nos viene del modelo (lo veremos más adelante)
 
-_./src/app/components/input-wrapper/input-wrapper.component.ts_
+_./src/app/common/input-wrapper/input-wrapper.component.ts_
 
 ```diff
 - import { Component, Input, forwardRef } from '@angular/core';
@@ -188,13 +191,16 @@ _./src/app/components/input-wrapper/input-wrapper.component.ts_
 + // b)
 + export class InputWrapperComponent implements ControlValueAccessor {
   @Input() label: string;
-+ fieldValue = "";
++ name: string;
++  fieldValue: string;
 
   constructor() {
     this.label = '';
++   this.fieldValue = '';
++   this.name = '';
   }
 
-// c)
++ // c)
 +  onChange: any = () => {}
 +  onTouch: any = () => {}
 +  set value(val: string){}
@@ -230,6 +236,7 @@ Ahora vamos con el método writeValue, este método se llama cuando el component
 
 ```diff
   writeValue(obj: any): void {
+-   throw new Error('Method not implemented.');
 +   this.fieldValue = obj;
   }
 ```
@@ -238,14 +245,16 @@ Y ahora toca registrar los eventos onChange y onTouch, para ello vamos a impleme
 
 ```diff
   registerOnChange(fn: any): void {
+-   throw new Error('Method not implemented.');
 +   this.onChange = fn;
   }
   registerOnTouched(fn: any): void {
+-   throw new Error('Method not implemented.');
 +   this.onTouch = fn;
   }
 ```
 
-- Vámonos ahora al html y enlazamos la propiedad _value_ del componente al elemento \_input interno:
+- Vámonos ahora al html y enlazamos la propiedad _value_ del componente al elemento _input_ interno:
 
 - Aquí por un lado bindeamos la propiedad ngModel al valor que nos viene del modelo.
 
@@ -254,14 +263,14 @@ Y ahora toca registrar los eventos onChange y onTouch, para ello vamos a impleme
 _./src/app/components/input-wrapper/input-wrapper.component.html_
 
 ```diff
-  <div class="input-wrapper">
+  <div class="wrapper">
     <label>{{ label }}</label>
 -   <input type="text" />
 +   <input type="text" [ngModel]="value" (ngModelChange)="onChange($event)"/>
   </div>
 ```
 
-Vamos a rizar el rizo para, vamos a indicar cuando el component está "tocado" (es decir ha el usuario ha puesto el foco en él elemento y lo ha quitado):
+Vamos a rizar el rizo, vamos a indicar cuando el component está "tocado" (es decir el usuario ha puesto el foco en el elemento y lo ha quitado):
 
 ```diff
  <input
@@ -272,7 +281,7 @@ Vamos a rizar el rizo para, vamos a indicar cuando el component está "tocado" (
   />
 ```
 
-- Hora de añadir el _ngModel_ al input que pusimos de prueba en el _game-edit_:
+- Es hora de añadir el _ngModel_ al input que pusimos de prueba en el _game-edit_:
 
 _./src/app/pages/game-edit/game-edit.component.html_
 
@@ -363,7 +372,7 @@ _./src/app/components/input-wrapper/input-wrapper.component.html_
 
 Nos falta una cosa más, en el InputField tenemos que añadir un tipo adicional en ese input:
 
-_./src/app/field-error-display.component.ts_
+_./src/app/common/field-error-display.component.ts_
 
 ```diff
 import { Component, Input } from '@angular/core';
@@ -490,7 +499,7 @@ Y ahora tenemos un formulario con validación, un componente input-wrapper que p
 
 # Referencias
 
-En estos enlaces encontrarás informacíon más detallada de como implementar _ControlValueAccessor_ en Angular, y todo el problema de tipado que hemos tenido:
+En estos enlaces encontrarás informacíon más detallada de cómo implementar _ControlValueAccessor_ en Angular, y todo el problema de tipado que hemos tenido:
 
 https://stackoverflow.com/questions/45659742/angular4-no-value-accessor-for-form-control
 
