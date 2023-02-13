@@ -1,6 +1,6 @@
 # Aliases
 
-Si te fijas hemos estado trabajando con rutas relativas en los imports, en cuanto un proyecto empieza a crecer esto puede ser un problema, ya que si movemos un fichero de lugar, tendremos que actualizar todas las rutas relativas que apuntan a ese fichero (aquí VS Code te ayuda a veces), pero lo que es peor acertar con un path relativo puede ser complicado.
+Si te fijas hemos estado trabajando con rutas relativas en los imports, en cuanto un proyecto empieza a crecer esto puede ser un problema, ya que si movemos un fichero de lugar, tendremos que actualizar todas las rutas relativas que apuntan a ese fichero (aquí VS Code te ayuda a veces), pero lo que es peor es que acertar con un path relativo puede ser complicado.
 
 Vamos a ver como definir alias a nivel de carpeta raíz para que podamos importar de forma más sencilla.
 
@@ -44,6 +44,8 @@ import { Router } from '@angular/router';
 
 @Component({
 ```
+
+> En algunos casos puede que estos cambios VSCode no los pille al vuelo, una cosa que puedes es hacer un restart de TypeScript, o algo más radical es cerrar abrir de nuevo el VSCode.
 
 # ¿Te apuntas a nuestro máster?
 
