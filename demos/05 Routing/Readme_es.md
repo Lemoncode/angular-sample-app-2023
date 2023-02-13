@@ -1,8 +1,8 @@
 # Routing
 
-Hasta ahora hemos estado apilando componentes directamente en App, pero en una aplicación real solemos dividirla en páginas, para ello Angular nos ofrece el concepto de routing, que nos permite definir componentes que se van a mostrar en función de la url y navegación entre páginas.
+Hasta ahora hemos estado apilando componentes directamente en el fichero app, pero una aplicación real suele estar dividida en páginas, para ello Angular nos ofrece el concepto de routing, que nos permite definir componentes que se van a mostrar en función de la url y también nos ofrece servicios de navegación entre páginas.
 
-En este ejemplo vamos crear una página de listado de juegos (moveremos todo lo que hay en app a esa página) y una página que permite crear un juego.
+En este ejemplo vamos crear una página de listado de juegos (moveremos todo lo que hay en app a esa página) y añadiremos otra página que me permita añadir un juego.
 
 # Paso a paso
 
@@ -12,13 +12,13 @@ En este ejemplo vamos crear una página de listado de juegos (moveremos todo lo 
 npm install
 ```
 
-- Vamos a crear una nueva carpeta que vamos a llamar _pages_, dentro de ella vamos a crear dos componentes, uno para la página de listado de juegos y otro para la página de creación de juegos, para ello ejecutamos los siguientes comandos:
+- Vamos a crear una nueva carpeta que vamos a llamar _pages_, dentro de ella vamos a crear dos componentes, uno para la página de listado de juegos y otro para la página de creación de juegos, empezamos por crear la página de game-list:
 
 ```bash
 ng generate component pages/game-list
 ```
 
-- Vamos ahora a indicarle a la aplicación:
+- Si te acuerdas, cuando creamos el proyecto, le indicamos al cli de Angular que no queríamos Routing, de esta manera, podemos aprender como añadir esta funcionalidad a un proyecto existente, vamos indicarle a la aplicación...:
   - Que vamos a utilizar el modulo _@angular/router_
   - Definir las rutas de nuestra aplicación.
   - Asociarlas al router.
