@@ -410,7 +410,7 @@ _./pages/game-edit/game-edit.component.ts_
 </div>
 ```
 
-No está de mas, darle un poco de estilado al mensaje de erorr para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
+No está de mas, darle un poco de estilado al mensaje de error para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
 
 _./pages/game-edit/game-edit.component.css_
 
@@ -444,6 +444,89 @@ _./pages/game-edit/game-edit.component.html_
     <div *ngIf="imageurl.errors?.['pattern']">Image URL is not valid</div>
   </div>
 ```
+
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, y repitiendo un montón de texto, tiene pinta que esta solución en un proyecto mediano nos va a llevar a problemas en le futuro.
+
+Para este caso nada como usar _ng-template_ de Angular, veamos como tener un único template para mostrar los errores.
+
+Creamos en el inicio del HTML la siguiente plantilla
+
+- Aquí le indicamos que va a haber una variable llamada _control_, es la alimentaremos desde cada llamada a la plantilla para indicarle en ngModel que queremos validar.
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
++ <ng-template #errorMessages let-control class="errors">
++    <div
++    *ngIf="control.invalid && (control.dirty || control.touched)"
++    class="errors"
++    >
++      <div *ngIf="control.errors?.required">Field is required</div>
++      <div *ngIf="control.errors?.pattern">Field is not well formed</div>
++    </div>
++ </ng-template>
+<div>
+  <div>
+    <label for="name">Name</label>
+```
+
+Y ahora debajo de cada input sustituimos el div que mostraba los errores por la plantilla que hemos creado, fijate que aquí:
+
+- Usamos _loginForm_ para acceder al campo _name_ (podríamos haber usado la aproximación anterior de la variable en el input,
+  pero es interesante que veamos esta otra aproximación, puede ser más limpia en un formulario grande).
+- Y para pásarle a la plantilla el _ngModel_ asociado el input utilizamos el parametro _context_ de _ngTemplateOutlet_.
+
+Vamos primero a por el campo de nombre.
+
+```diff
+  <div>
+    <label for="name">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="game.name"
+      required
+      #name="ngModel"
+    />
+-    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="errors">
+-      <div *ngIf="name.errors?.['required']">Name is required</div>
+-    </div>
++    <div *ngIf="name.invalid">
++      <div *ngTemplateOutlet="errorMessages; context: { $implicit: name }"></div>
++    </div>
+  </div>
+```
+
+Y ahora a por el de la URL.
+
+```diff
+    <input
+      type="text"
+      id="imageurl"
+      name="imageurl"
+      required
+      pattern="https?://.+"
+      [(ngModel)]="game.imageUrl"
+      #imageurl="ngModel"
+    />
+-    <div
+-      *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)"
+-      class="errors"
+-    >
+-      <div *ngIf="imageurl.errors?.['required']">Image Url is required</div>
+-      <div *ngIf="imageurl.errors?.['pattern']">
+-        Image Url is not a valid http url
+-      </div>
+-    </div>
++    <div *ngIf="imageurl.invalid">
++      <div *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"></div>
++    </div>
+```
+
+- Vamos a ver si esto sigue funcionando igual...
+
+---
 
 Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
 
