@@ -344,7 +344,7 @@ Fecha de lanzamiento: 02/02/2021
 
 https://coryrylan.com/blog/using-html5-date-input-with-date-objects-and-angular
 
-Esto lo dejaremos para cuando cubramos las directivas.
+Esto lo resolveremos más adelante.
 
 - Vamos a continuar completando la parte estándar de nuestro formulario.
   - Completamos el formulario añadiendo validación.
