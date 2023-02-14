@@ -1,9 +1,0 @@
-<div
-  *ngIf="
-    fieldNgModel?.invalid && (fieldNgModel?.dirty || fieldNgModel?.touched)
-  "
-  class="errors"
->
-  <div *ngIf="fieldNgModel?.errors?.['required']">Field is required</div>
-  <div *ngIf="fieldNgModel?.errors?.['pattern']">Format not valid</div>
-</div>

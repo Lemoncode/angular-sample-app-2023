@@ -10,18 +10,16 @@ import { GameApiService } from '../../services/game-api.service';
 })
 export class GameListComponent {
   games: Game[];
-  showSellerList: boolean;
+  showSellerList: boolean = false;
   sellers: Seller[];
 
   constructor(private gameApiService: GameApiService) {
-    this.showSellerList = false;
     this.sellers = [];
     this.games = [];
   }
 
   loadGames = async () => {
     this.games = await this.gameApiService.getAll();
-    console.log(this.games);
   };
 
   ngOnInit(): void {

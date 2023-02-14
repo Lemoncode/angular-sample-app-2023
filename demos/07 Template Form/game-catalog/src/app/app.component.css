@@ -4,7 +4,7 @@ label {
 
 nav {
   display: flex;
-  justify-content: flex-start;
+  justify-content: start;
   column-gap: 15px;
   padding: 10px;
   background-color: #fcfaea;

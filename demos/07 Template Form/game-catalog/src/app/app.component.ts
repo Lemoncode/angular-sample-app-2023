@@ -9,6 +9,4 @@ export class AppComponent {
   title = 'game-catalog';
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

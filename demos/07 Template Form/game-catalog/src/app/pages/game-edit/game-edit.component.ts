@@ -14,11 +14,13 @@ export class GameEditComponent {
   game: Game;
 
   constructor(private route: ActivatedRoute, private gameApi: GameApiService) {
-    this.id = '';
     this.game = new Game('');
-    this.route.params.subscribe((params) => {
+    this.id = '';
+    /*this.route.params.subscribe((params) => {
       this.id = params['id'];
-    });
+    });*/
+
+    this.id = this.route.snapshot.paramMap.get('id')!;
   }
 
   handleSaveClick(form: NgForm) {
@@ -27,7 +29,7 @@ export class GameEditComponent {
     } else {
       // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
       alert(
-        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
+        'Formulario no válido: chequea si hay errores de validación en alguno de los campos del formulario'
       );
     }
   }

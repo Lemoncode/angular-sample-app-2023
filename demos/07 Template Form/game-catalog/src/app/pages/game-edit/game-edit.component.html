@@ -1,39 +1,56 @@
+<ng-template #errorMessages let-control class="errors">
+  <div
+    *ngIf="control.invalid && (control.dirty || control.touched)"
+    class="errors"
+  >
+    <div *ngIf="control.errors?.required">Field is required</div>
+    <div *ngIf="control.errors?.pattern">Field is not well formed</div>
+  </div>
+</ng-template>
 <form #gameForm="ngForm">
   <div>
-    <label for="name">Name</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      [(ngModel)]="game.name"
-      required
-      #name="ngModel"
-    />
-    <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+    <div>
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="game.name"
+        required
+        #name="ngModel"
+      />
+      <div *ngIf="name.invalid">
+        <div
+          *ngTemplateOutlet="errorMessages; context: { $implicit: name }"
+        ></div>
+      </div>
+    </div>
+    <div>
+      <label for="imageurl">Picture Url</label>
+      <input
+        type="text"
+        id="imageurl"
+        name="imageurl"
+        required
+        pattern="https?://.+"
+        [(ngModel)]="game.imageUrl"
+        #imageurl="ngModel"
+      />
+      <div *ngIf="imageurl.invalid">
+        <div
+          *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"
+        ></div>
+      </div>
+    </div>
+    <div>
+      <label for="daterelease">Release Date</label>
+      <input
+        type="date"
+        id="daterelease"
+        name="daterelease"
+        [(ngModel)]="game.dateRelease"
+      />
+    </div>
+    <button (click)="handleSaveClick(gameForm)">Save</button>
   </div>
-  <div>
-    <label for="imageurl">Picture Url</label>
-    <input
-      type="text"
-      id="imageurl"
-      name="imageurl"
-      [(ngModel)]="game.imageUrl"
-      required
-      pattern="https?://.+"
-      #imageurl="ngModel"
-    />
-    <app-field-error-display
-      [fieldNgModel]="imageurl"
-    ></app-field-error-display>
-  </div>
-  <div>
-    <label for="daterelease">Release Date</label>
-    <input
-      type="date"
-      id="daterelease"
-      name="daterelease"
-      [(ngModel)]="game.dateRelease"
-    />
-  </div>
-  <button (click)="handleSaveClick(gameForm)">Save</button>
 </form>

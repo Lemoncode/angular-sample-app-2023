@@ -3,6 +3,6 @@
     <img [src]="game.imageUrl" (click)="handleImageClick()" />
   </div>
   <div class="card_title title-white" (click)="onTitleClick()">
-    {{ game.name }} ({{ game.getYearsFromRelease() }})
+    {{ game.name }} {{ game.getYearsFromRelease() }}
   </div>
 </div>
