@@ -38,7 +38,7 @@ Vemos que por consola sale algo poco util _[object Object],[object Object],[obje
 
 Si te fijas, hemos añadido el pipe json al final de la expresión, y ahora vemos que se muestra el array de juegos en formato json.
 
-- Ahora vamos a usar un pipe que nos permite formatear fechas, en concreto vamos a usar el pipe date, que viene incluido en angular, vamos a extraer el año en el que se publico un juego
+- Ahora vamos a usar un pipe que nos permite formatear fechas, en concreto vamos a usar el pipe date, que viene incluido en angular, vamos a extraer el año en el que se público un juego
 
 _./src/app/pages/game-list/card-game/card-game.component.html_
 
@@ -109,9 +109,9 @@ export const gameMockCollection = [
     [
 ```
 
-- Para terminar vamos a tratar un tema importante con los pipes, y es que por defecto son funciones puras, ¿Qué quiere decir esto? Que si el valor de entrada no cambia (es decir el putenro del parámetro) la salid no cambia, es decir recuerda el valor de la última vez que se ejecutó, y nos ahorramos ciclos de CPU, si no tenemos esto en cuenta nos podemos encontrar con problemas tales como que nos da la impresión que no se actualiza el pipe.
+- Para terminar vamos a tratar un tema importante con los pipes, y es que por defecto son funciones puras, ¿Qué quiere decir esto? Que si el valor de entrada no cambia (es decir el puntero del parámetro) la salida no cambia, es decir recuerda el valor de la última vez que se ejecutó, y nos ahorramos ciclos de CPU, si no tenemos esto en cuenta nos podemos encontrar con problemas tales como que nos da la impresión que no se actualiza el pipe.
 
-Veámoslo con un ejemplo, vamos a hacer un pipe que una lista de nombres que hay a en un array, y vamos a crear un pipe que itere sobre y los concatene en un array.
+Veámoslo con un ejemplo, vamos a hacer un pipe que una lista de nombres que haya en un array, y vamos a crear un pipe que itere sobre y los concatene en un array.
 
 ```bash
 ng g pipe pages/game-list/game-names
@@ -175,7 +175,7 @@ _./src/app/pages/game-list/game-list.component.html_
 <div *ngFor="let game of games">
 ```
 
-Fijate que no se muestra nada, ¿Qué está pasando? Que al usar _push_ en el array que pasamos por parametro no se crea uno nuevo y la pipe no se ejecuta, se queda con el valor de la última vez que se ejecutó para ese array en concreto.
+Fíjate que no se muestra nada, ¿Qué está pasando? Que al usar _push_ en el array que pasamos por parámetro no se crea uno nuevo y la pipe no se ejecuta, se queda con el valor de la última vez que se ejecutó para ese array en concreto.
 
 Aquí tenemos dos soluciones: una es decirle que no es una función pura, y que se ejecute cada vez que se ejecute el componente, para ello añadimos el decorador _pure: false_ en el pipe.
 
