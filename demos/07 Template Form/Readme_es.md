@@ -544,13 +544,11 @@ Más info acerca de _ngTemplate_ y _ngTemplateOutlet_: https://blog.angular-univ
 
 Si quieres ver otra posible aproximación, al final de esta guía, te proponemos otra que lo solución creadno un componente específico (apartado Apéndice: Solución con componente)
 
----
-
 Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
 
 - Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
 
-- Para obtener la información global del formulario vamos a añadir un atributo al formulario:
+- Para obtener la información global del formulario vamos a añadir un atributo al formulario: aquí fijate que declaramos una variable llamada _gameForm_ y le indicamos que es de tipo _NgForm_, esto nos permitiera acceder por ejemplo a la información del _ngModel_ asociado a cada campo y no tener que ir creando una variable por cada uno como hemos hecho antes, nosotros lo vamos a usar para chequear si el formulario completo es válido o no.
 
 _./pages/game-edit/game-edit.component.html_
 
@@ -591,7 +589,7 @@ _./pages/game-edit/game-edit.component.html_
 
 Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
 
-Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
+Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parámetro la variable del formulario (la que creamos con _#gameForm_).
 
 _./pages/game-edit/game-edit.component.html_
 
@@ -603,9 +601,14 @@ _./pages/game-edit/game-edit.component.html_
     >
 ```
 
+> Sale _gameForm_ en rojo, esto es porque tenemos que añadirlo en la parte de TypeScript del componente, para que el compilador de TypeScript sepa que existe.
+
 _./pages/game-edit/game-edit.component.ts_
 
 ```diff
++ import { NgForm } from '@angular/forms';
+//(...)
+
 -  handleSaveClick() {
 +  handleSaveClick(form: NgForm) {
 +    if (form.valid) {
@@ -613,7 +616,7 @@ _./pages/game-edit/game-edit.component.ts_
 +    } else {
 +      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
 +      alert(
-+        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
++        'Formulario no válido, chequea si hay errores de validación en alguno de los campos del formulario'
 +      );
 +    }
   }
