@@ -49,7 +49,7 @@ export class HighlightDirective {
 
 Vamos ahora a usarlo en la lista de juegos:
 
-_./src/app/pages/game-list/game-card/game-card.component.html_
+_./src/app/pages/game-list/card-game/card-game.component.html_
 
 ```diff
 <div class="card">
