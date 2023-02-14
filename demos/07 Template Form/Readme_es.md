@@ -376,14 +376,11 @@ _./pages/game-edit/game-edit.component.ts_
 
 ¿Qué estamos haciendo aquí?
 
-- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, esta es estandar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, y también podemos crear nuestras propias validaciones, además de esto tenemos que crear una variable global (fijate el _#name_) que referencia al _ngModel_ .
+- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, ésta es estándar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, e incluso podemos crear nuestras propias validaciones, además de esto, tenemos que crear una variable en el html (fijate el _#name_ en el tag input) que referencia al _ngModel_, estos nos servirá para poder referenciarlo en el HTML que muestra los resultados de la validación.
 
-- Segundo comprobamos si el campo tiene errors, y si el usuario ha pasado por el o si ha modificado algo (dirty o touched), es decir mientras no haya pasado por el campo o no
-  hay pulsado en el botón de guardar no mostramos el mensaje de error, así evitamos el patrón
-  odioso de mostrar errores cuando todavía no he podido ni rellenar el formulario, ojo para esto usamos la variable que hemos creado previamente en el tag input que se llame _#name_
+- Segundo comprobamos si el campo tiene errores, y si el usuario ha pasado por él o si ha modificado algo, para ello usamos la variable _name_ que tiene el _ngModel_, si la que hemos creado con _#name_, (fijate en los flag _dirty_ o _touched_), es decir mientras no haya pasado por el campo o no haya pulsado en el botón de guardar no mostramos el mensaje de error, así evitamos el patrón odioso de mostrar errores cuando todavía no he podido ni rellenar el formulario.
 
-- Tercero, comprobamos si el campo tiene el error _required_ y mostramos el mensaje de error en
-  ese caso.
+- Tercero, comprobamos si el campo tiene el error _required_ y mostramos el mensaje de error en ese caso.
 
 Veámoslo en funcionamiento:
 
@@ -391,7 +388,7 @@ Veámoslo en funcionamiento:
 ng serve
 ```
 
-Vamos ahora a por el campo de la URL, para ello vamos a usar la directiva _pattern_.
+Vamos ahora a por el campo de la URL, además de validar que el campo esté informado, vamos a asegurarnos de que la URL está bien formada, para ello vamos a usar la directiva _pattern_, que nos permite validar el contenido de un campo contra una expresión regular que hayamos definido.
 
 _./pages/game-edit/game-edit.component.ts_
 
@@ -413,7 +410,7 @@ _./pages/game-edit/game-edit.component.ts_
 </div>
 ```
 
-Vamos darle un poco de estilado a esto para que sea vea el mensaje de error en rojo.
+No está de mas, darle un poco de estilado al mensaje de erorr para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
 
 _./pages/game-edit/game-edit.component.css_
 
