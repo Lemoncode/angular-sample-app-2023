@@ -4,7 +4,7 @@ La directiva NgContent nos permite insertar contenido en un componente.
 
 Esto nos permite hacer componentes reutilizables, que pueden ser usados en diferentes contextos, por ejemplo ¿Te acuerdas del diálogo modal que utilizamos para mostrar el listado de vendedores? En esta implementación teníamos un problema, si queríamos implementar otro modal para mostrar otro contenido, tendríamos que crear un nuevo componente y copiar toda la lógica del modal, eso suena raro ¿Verdad?
 
-Vamos a ver como podemos extraer el armazon del modal, e inyectarle el contenido que toque voluntad.
+Vamos a ver cómo podemos extraer el armazón del modal, e inyectarle el contenido que toque voluntad.
 
 # Paso a paso
 
@@ -16,15 +16,13 @@ npm install
 
 Vamos a revisar el código de _seller-list.component.html_ y el _ts_
 
-Fijate que este componente hace dos cosas, por un lado mostrar un modal, por otro mostrar el listado de vendedores.
+Fíjate que este componente hace dos cosas, por un lado mostrar un modal, por otro mostrar el listado de vendedores.
 
-Vamos a extraer el modal en un componente, y vamos a hacer que el contenido del modal sea dinámico, para ello crearemos un componente que se llame _modal.component_ y como va a ser reusable lo vamos a colocar bajo la carpeta _common_
+Vamos a extraer el modal en un componente, y vamos a hacer que el contenido del modal sea dinámico, para ello crearemos un componente que se llame _modal.component_ y cómo va a ser reusable lo vamos a colocar bajo la carpeta _common_
 
 ```bash
 ng g c common/modal
 ```
-
-Vamos a copiar el código del modal del _seller-list.component.html_ al _modal.component.html_ y el ts
 
 _./src/app/common/modal/modal.component.ts_
 
@@ -95,7 +93,7 @@ _./src/app/common/modal/modal.component.html_
 + </div>
 ```
 
-Y ¿como ponemos el contenido a voluntad? Pues con la directiva _ngContent_ que nos permite insertar contenido en un componente.
+Y ¿cómo ponemos el contenido a voluntad? Pues con la directiva _ngContent_ que nos permite insertar contenido en un componente.
 
 _./src/app/common/modal/modal.component.html_
 
@@ -109,7 +107,7 @@ _./src/app/common/modal/modal.component.html_
  </div>
 ```
 
-Y ahora nos podemos ir al _seller-list.component.html_ y eliminar la logica del modal
+Y ahora nos podemos ir al _seller-list.component.html_ y eliminar la lógica del modal:
 
 _./src/app/seller/seller-list.component.html_
 
@@ -210,7 +208,7 @@ export class SellerListComponent {
 }
 ```
 
-Y directamente en gamlist invocarlo:
+Y directamente en _game-list_ invocarlo:
 
 _./src/app/pages/game-list/game-list.component.html_
 
@@ -224,7 +222,7 @@ _./src/app/pages/game-list/game-list.component.html_
 + </app-modal>
 ```
 
-Si queremos, ahora podemos facilmente crear otro modal envolviendo el contenido que queramos (ejercicio para el alumno)
+Si queremos, ahora podemos fácilmente crear otro modal envolviendo el contenido que queramos (ejercicio para el alumno)
 
 # ¿Te apuntas a nuestro máster?
 
