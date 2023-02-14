@@ -6,17 +6,17 @@ Hemos visto como trabajar con formularios de plantilla en Angular con su _ngMode
 - El _ngModel_ me imponen restricciones, todo el proceso de actualización es mágico y sin poder internvenir de manera fácil, por ejemplo, gestionar un input de tipo date y enlazarlo a un campo fecha es algo que no va muy bien.
 - Si además queremos crear un componente custom que soporte _ngModel_ tenemos que implementar la interfaz _ControlValueAccessor_ y no es algo directo.
 
-Vamos a ver como podemos resolver estos problemas con _Reactive Forms_, una aproximación que se basa en código para definir la gestión de un formulario y que nos permite tener un control más fino de lo que se está haciendo en el formulario.
+Vamos a ver cómo podemos resolver estos problemas con _Reactive Forms_, una aproximación que se basa en código para definir la gestión de un formulario y que nos permite tener un control más fino de lo que se está haciendo en el formulario.
 
-¿Qué meda un formulario Reactivo sobre uno de plantilla?
+¿Qué me da un formulario Reactivo sobre uno de plantilla?
 
-- Una acceso seguro al modelo de datos.
+- Un acceso seguro al modelo de datos.
 - Una forma de hacer tracking del modelo de datos de una forma más predecible.
 - Una serie de operadores que me permiten trabaja con inmutabilidad de datos.
 
 Los pasos que vamos a seguir son:
 
-1. En el TS del componente de crear juego,definir el formulario reactivo.
+1. En el TS del componente de crear juego, definir el formulario reactivo.
 2. Cambiamos el HTML y volvemos a componentes básicos (sin NgModel)
 3. Reutilizamos las validaciones
 4. Arreglamos el problema de la fecha
@@ -30,9 +30,9 @@ Los pasos que vamos a seguir son:
 npm install
 ```
 
-Vamos refactorizar el componente de crear juego para reemplazar el formulario de plantilla por uno reactivo.
+Vamos a refactorizar el componente de crear juego para reemplazar el formulario de plantilla por uno reactivo.
 
-- Lo primero en el modulo principal tenemos que decirle que vamos a usar _ReactiveFormsModule_.
+- Lo primero en el módulo principal tenemos que decirle que vamos a usar _ReactiveFormsModule_.
 
 _./src/app/app.module.ts_
 
@@ -61,7 +61,7 @@ Ahora nos vamos a código y vamos a definir los campos del formulario, para ello
 
 - FormGroup: Es el contenedor de todos los campos del formulario.
 - FormControl: Es el campo en sí, es decir, el input.
-- Validators: Es un conjunto de validaciones que podemos aplicar a un campo (aquí distinguimos entre dos tipos de validadores, los sincronos y los asincronos).
+- Validators: Es un conjunto de validaciones que podemos aplicar a un campo (aquí distinguimos entre dos tipos de validadores, los síncronos y los asíncronos).
 
 Para ayudarnos con todo este galimatías, Angular nos ofrece un _builder_ que nos permite crear el formulario de manera más sencilla.
 
@@ -75,7 +75,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Game } from '@/model/game.model';
 import { GameApiService } from '@/services/game-api.service';
 - import { NgForm } from '@angular/forms';
-+ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
++ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 ```
 
 ```diff
@@ -143,7 +143,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
       name="name"
       label="Name"
 -      [(ngModel)]="game.name"
-+      [formControlName]="name"
++      formControlName="name"
 -      required
     ></app-input-wrapper>
 
@@ -152,7 +152,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
       name="imageurl"
       label="Picture Url"
 -      [(ngModel)]="game.imageUrl"
-+      [formControlName]="imageUrl"
++      formControlName="imageUrl"
 -      required
 -      pattern="https?://.+"
     ></app-input-wrapper>
@@ -162,7 +162,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
       name="daterelease"
       label="Release Date"
 -      [(ngModel)]="game.dateRelease"
-+      [formControlName]="dateRelease"
++      formControlName="dateRelease"
     ></app-input-wrapper>
 
 -    <button (click)="handleSaveClick(gameForm)">Save</button>
@@ -175,7 +175,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
 ng serve
 ```
 
-- Fíjate que todo funciona correctamente pero... ¡ estamos usando un custom component ¿Cómo puede ser eso? ¿Como entiende el _formControlName_? Porque anteriormente implementamos la interfaz _ControlValueAccessor_ y esto también aplica a los Reactive forms.
+- Fíjate que todo funciona correctamente pero... ¡estamos usando un custom component! ¿Cómo puede ser eso? ¿Cómo entiende el _formControlName_? Porque anteriormente implementamos la interfaz _ControlValueAccessor_ y esto también aplica a los Reactive forms.
 
 Vamos ahora a arreglar el problema que teníamos con el _dateRelease_, si te acuerdas teníamos un campo de tipo date y el input espera un texto, que vamos a hacer:
 
@@ -184,7 +184,7 @@ Vamos ahora a arreglar el problema que teníamos con el _dateRelease_, si te acu
 - Vamos a crear un mapper, esta función se encarga de convertir de un modelo a otro, en este caso de un modelo de api a un modelo de vista.
 - A la hora de grabar convertiremos de modelo de vista a modelo de api.
 
-- Primero vamos a por el _type_, que por defecto es _text_, pero vamos a permitir que se pueda cambiar.:
+- Primero vamos a por el _type_, que por defecto es _text_, pero vamos a permitir que se pueda cambiar:
 
 _./src/app/games/input-wrapper/input-wrapper.component.ts_
 
@@ -244,7 +244,7 @@ Vamos ahora a por el modelo de la vista y los mappers.
 
 - Creamos el modelo de la vista:
 
-_./src/app/games/game-edit/game.vm.ts_
+_./src/app/pages/game-edit/game.vm.ts_
 
 ```ts
 export interface GameVm {
@@ -350,7 +350,7 @@ _./src/app/shared/components/input-wrapper/input-wrapper.component.html_
   <input
     name="label"
     [type]="type"
--    [ngModel]="fieldValue"
+-    [ngModel]="value"
 +    [ngModel]="fieldValue"
     (ngModelChange)="onChange($event)"
     (blur)="onTouch()"
