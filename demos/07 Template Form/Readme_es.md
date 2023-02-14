@@ -526,9 +526,110 @@ Y ahora a por el de la URL.
 
 - Vamos a ver si esto sigue funcionando igual...
 
+```bash
+ng serve
+```
+
+Que conseguimos con esto:
+
+- Pasamos a tener un punto común para mostrar los errores, si cambiamos el texto de los errores, sólo tenemos que cambiarlo en un sitio.
+- En un formulario real tendremos muchos tipos de validaciones, nos podría quedar un HTML enorme de cosas repetidas, con esta solución tenemos sólo una plantilla.
+- Si un día queremos cambiar el comportamiento de los errores sólo tenemos que tocar en un sitio.
+
+Peeero... no es bala de plata: ¿Qué pasa si queremos mostrar un mensaje personalizado para un caso concreto? Por ejemplo, es muy normal que para la validación de Pattern en la que le pasamos una RegEx, no nos valga el mensaje genérico de "El formato no es valido", lo suyo es decir por ejemplo "El campo DNI tienes que tener nueve caracteres y terminar por una letra", o "El campo de IBAN tiene que tener el formato...".
+
+Aquí nos podríamos complicar un poco más y jugar con NgIF concreto para este caso en el propio caso del campo, o utilizar variables en la propia plantilla para sobreescribir texto de los errores,... como siempre, aquí el _martillo fino_ y los casos _aristas_ son matadores.
+
+Más info acerca de _ngTemplate_ y _ngTemplateOutlet_: https://blog.angular-university.io/angular-ng-template-ng-container-ngtemplateoutlet/
+
+Si quieres ver otra posible aproximación, al final de esta guía, te proponemos otra que lo solución creadno un componente específico (apartado Apéndice: Solución con componente)
+
 ---
 
-Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
+Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
+
+- Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
+
+- Para obtener la información global del formulario vamos a añadir un atributo al formulario:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
++ <form #gameForm="ngForm">
+<div>
+  <label for="name">Name</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
+  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+</div>
+// (...)
+  <button (click)="handleSaveClick()">Save</button>
++ </form>
+```
+
+- Vamos a añadir un atributo al botón de grabar:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+- <button (click)="handleSaveClick()">Save</button>
++ <button
++   (click)="handleSaveClick()"
++   [disabled]="gameForm?.invalid"
++ >
++   Save
++ </button>
+```
+
+¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
+
+Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
+
+Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+  <button
+-    (click)="handleSaveClick()"
++    (click)="handleSaveClick(gameForm)"
+-    [disabled]="gameForm?.invalid"
+    >
+```
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
+-  handleSaveClick() {
++  handleSaveClick(form: NgForm) {
++    if (form.valid) {
+      this.gameApi.Insert(this.game);
++    } else {
++      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
++      alert(
++        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
++      );
++    }
+  }
+```
+
+También puedes crear validadores custom:
+
+https://www.tektutorialshub.com/angular/custom-validator-in-template-driven-forms-in-angular/
+
+# Apéndice: Solución con componente
+
+**Este ejemplo no está implementado en la demo, si quieres implementarlo con está guía tendrías que ponerte justo en el paso antes de introducir el ngTemplate**
+
+Hemos visto la solución de _ngTemplate_ y _ngTemplateOutlet_, para resolver el problema de tener que ir repitiendo mensajes de error en el HTML, y vimos que esto en un proyecto real puede ser un poco engorroso en ciertos casos.
+
+Otra opción puede ser no liarte tanto con las platillas y usar la potencia de los componentes para resolver este problema, en este apéndice te mostramos un punto de partida con un componente, al final del mismo te indicamos desafíos pendientes que quedarían por resolver, podrían ser interesante para crear una librería open source.
 
 Creamos una carpeta common y creamos nuestro widget para mostrar errores:
 
@@ -668,83 +769,6 @@ https://angular.io/guide/form-validation
 
 https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1
 
-Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
-
-- Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
-
-- Para obtener la información global del formulario vamos a añadir un atributo al formulario:
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-+ <form #gameForm="ngForm">
-<div>
-  <label for="name">Name</label>
-  <input
-    type="text"
-    id="name"
-    name="name"
-    [(ngModel)]="game.name"
-    required
-    #name="ngModel"
-  />
-  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
-</div>
-// (...)
-  <button (click)="handleSaveClick()">Save</button>
-+ </form>
-```
-
-- Vamos a añadir un atributo al botón de grabar:
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-- <button (click)="handleSaveClick()">Save</button>
-+ <button
-+   (click)="handleSaveClick()"
-+   [disabled]="gameForm?.invalid"
-+ >
-+   Save
-+ </button>
-```
-
-¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
-
-Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
-
-Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-  <button
--    (click)="handleSaveClick()"
-+    (click)="handleSaveClick(gameForm)"
--    [disabled]="gameForm?.invalid"
-    >
-```
-
-_./pages/game-edit/game-edit.component.ts_
-
-```diff
--  handleSaveClick() {
-+  handleSaveClick(form: NgForm) {
-+    if (form.valid) {
-      this.gameApi.Insert(this.game);
-+    } else {
-+      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
-+      alert(
-+        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
-+      );
-+    }
-  }
-```
-
-También puedes crear validadores custom:
-
-https://www.tektutorialshub.com/angular/custom-validator-in-template-driven-forms-in-angular/
-
 # ¿Te apuntas a nuestro máster?
 
 Si te ha gustado este ejemplo y tienes ganas de aprender Front End
@@ -757,15 +781,3 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
