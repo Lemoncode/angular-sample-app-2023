@@ -329,7 +329,9 @@ export class GameEditComponent {
 - Vamos a probarlo, introduce estos datos:
 
 Nombre: Streets of rage 4
+
 Url imagen: https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/streetsofrage4.jpeg
+
 Fecha de lanzamiento: 02/02/2021
 
 - Si volvemos a la página de listado, veremos que se ha añadido el juego, PEEEEROOOOO,
