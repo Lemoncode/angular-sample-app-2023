@@ -77,7 +77,7 @@ export class GameEditComponent {
 }
 ```
 
-- Ya que tenemos los datos es hjora de enlazarlo con tres inputs en el HTML
+- Ya que tenemos los datos es hora de enlazarlo con tres inputs en el HTML
 
 _./src/app/pages/game-edit/game-edit.component.html_
 
