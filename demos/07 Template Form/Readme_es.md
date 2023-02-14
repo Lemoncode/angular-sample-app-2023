@@ -136,9 +136,9 @@ _./src/app/pages/game-edit/game-edit.component.html_
 
 Si ahora probamos, podemos ver como al pulsar en el botón se imprime por consola el juego que hemos creado.
 
-Vamos a conectar ahora con el servicio de juegos para poder guardar el juego, esto será una implementacíon mock pero más adelante no permitirá guardar el juego en el servidor.
+Vamos a simular que interactuamos con un servicio que se encarga de grabar el juego en un servidor, de momento arrancamos con una implementación mock, y más adelante lo migraremos para que actue contra una API REST.
 
-Vamos a hacer un pequeño refactor en _gami-api.service_ para poder trabajar en memoria mientras esperamos a que el server este listo:
+Ya que queremos trabajar con un array en memoria, pasamos a realizar un pequeño refactor en _gami-api.service_:
 
 Primero la lista de juegos la vamos a poner en una variable en un fichero aparte:
 
@@ -205,6 +205,8 @@ export const gameMockCollection = [
   ),
 ];
 ```
+
+Pasamos a usar esta varialbe en el servicio, y para simular un insert hacemos un _push_ en el array:
 
 _./services/game-api.service.ts_
 
@@ -289,7 +291,7 @@ export class GameApiService {
 }
 ```
 
-Y en la página vamos a llamar al metodo _Insert_ del servicio, para ello lo importamos, nos lo traemos por _dependency injection_,y lo invocamos en el _handleSaveClick_:
+En la página de gameEdit reemplazamos el _console.log_ por una llamda al metodo _Insert_ del servicio, para ello lo importamos, nos lo traemos por _dependency injection_,y lo invocamos en el _handleSaveClick_:
 
 _./pages/game-edit/game-edit.component.ts_
 
