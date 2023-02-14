@@ -1,8 +1,8 @@
 # Template Form
 
-Otro punto básico cuando queremos crear una aplicación web es la creación de formularios, en este ejemplo vamos a ver como crear un formulario con un template.
+Otro punto básico cuando queremos desarrollar una aplicación web es la creación de formularios, en este ejemplo vamos a ver como armar un formulario con un template.
 
-Esta forma es la más fácil de generar un form, pero también la menos óptima, en escenarios complejos puede ser buena idea utilizar React Forms (lo veremos más adelante)
+Esta forma es la más fácil de generar un form, pero también la menos óptima, en escenarios complejos puede ser buena idea utilizar Reactive Forms (esto lo veremos más adelante)
 
 # Paso a paso
 
@@ -12,12 +12,12 @@ Esta forma es la más fácil de generar un form, pero también la menos óptima,
 npm install
 ```
 
-- En los template forms para enlazar elemento utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente, de esta manera:
+- En los template forms para enlazar elementos con datis utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente, de esta manera:
 
 - Si un valor del modelo cambia, se actualiza el input.
 - Si un valor del input cambia se actualiza el modelo.
 
-Vamos a empezar a usarlo en nuestra página de edición de un juego, vamos a cubrir el caso de creación de un juego.
+Vamos a empezar a usar esto, en nuestra página de edición de un juego, cubriendo el caso de inserción de un nuevo juego.
 
 Antes de usar _ngModel_ tenemos que importarnos el _FormsModule_ en el módulo principal de la aplicación.
 
@@ -49,7 +49,7 @@ import { RouterModule, Routes } from '@angular/router';
 })
 ```
 
-Lo primero vamos a crear un juego vacio en la página para poder tener un punto de partida:
+En el game-edit component, vamos a añadir una variable miembro que almacene un juego en blanco.
 
 _./src/app/pages/game-edit/game-edit.component.ts_
 
@@ -77,7 +77,7 @@ export class GameEditComponent {
 }
 ```
 
-- Vamos ahora a enlazar estos datos con tres _inputs_ en la parte del _html_
+- Ya que tenemos los datos es hjora de enlazarlo con tres inputs en el HTML
 
 _./src/app/pages/game-edit/game-edit.component.html_
 
@@ -98,9 +98,9 @@ _./src/app/pages/game-edit/game-edit.component.html_
 + </div>
 ```
 
-Fijate que aquí con _ngModel_ estamos enlazando el valor del input con el valor de la propiedad _name_ del modelo _game_ y así con el resto de propiedades.
+Fijate que aquí con _ngModel_ estamos enlazando el valor del input con el valor de cada propiedad de la entidad de _game_, por ejeplo _game.name_, _game.image_url_ y _game.daterelease_.
 
-De hecho vamos añadir un botón de guardado y un handler para el evento _click_ del botón.
+Con los datos enlazados, nos queda añadir un botón de guardado y un handler para el evento _click_ del botón.
 
 _./src/app/pages/game-edit/game-edit.component.ts_
 
