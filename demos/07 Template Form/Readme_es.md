@@ -410,7 +410,7 @@ _./pages/game-edit/game-edit.component.ts_
 </div>
 ```
 
-No está de mas, darle un poco de estilado al mensaje de erorr para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
+No está de mas, darle un poco de estilado al mensaje de error para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
 
 _./pages/game-edit/game-edit.component.css_
 
@@ -571,13 +571,116 @@ _./pages/game-edit/game-edit.component.html_
 
 ```
 
-Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuviera en produccíon tendríamos que tener en cuenta casuistica que nos haría complicado sacar un componente genérico:
+Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuviera en producción tendríamos que tener en cuenta casuistica que nos haría complicado sacar un componente genérico:
 
 - Primero, tenemos que meter todos lo validadores en ese componente o un array (no te olvides de añadirlos...) si no, no se mostraría el mensaje de error, otra opción es informar esas validaciones en un array, pero entonces tendríamos que definirlas dos veces, en el componente y en la validación.
 
 - Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que is un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información), otra opción sería iterar por las propiedades de _errors_ (como si fuera un array), pero aquí el orden de validación no lo conocemos.
 
 - Tercero para las validaciones de tipo patrón, no vale con decir Patrón no valido, si no "NIF no valido", o "Email no valido"
+
+¿Porque no creamos un interface para tener controlado los mensaje de error?
+
+_./common/field-error-display/field-error-display.component.ts_
+
+```diff
++ type ValidatorsId = "required" | "pattern";
+
++ interface FieldError {
++  [key: string]: string;
++ }
++
++ const fieldErrors = {
++  required: "Field is required",
++  pattern: "Format not valid",
++ }
++
++ interface CustomErrorEntry {
++  id : string;
++  text : string;
++ }
+
+
+@Component({
+```
+
+Vamos a añadir un parámetro de entrada más al componente para poder cambiar los textos, y los field Errors que tengamos.
+
+_./common/field-error-display/field-error-display.component.ts_
+
+```diff
+export class FieldErrorDisplayComponent {
+  @Input() fieldNgModel: AbstractControlDirective | null;
++ @Input() customFieldErrors?: CustomErrorEntry[] = null;
+
++  fieldErrorObject : FieldError;
+
+  constructor() {
+    this.fieldNgModel = null;
++   this.fieldErrorObject = {
++  required: "Field is required",
++  pattern: "Format not valid",
++ }
+  }
+
+```
+
+Y en el _ngOnInit_ sobreescribimos los mensajes de error:
+
+_./common/field-error-display/field-error-display.component.ts_
+
+```diff
+  constructor() {
+    this.fieldNgModel = null;
+  }
+
++  ngOnInit(): void {
++      if (this.customFieldErrors) {
++        this.customFieldErrors.map(customError =>
++          this.fieldErrorObject[customError.id] = customError.text)
++    }
++  }
+```
+
+Y en el html, vamos a iterar por las propiedades de _errors_:
+
+_./common/field-error-display/field-error-display.component.html_
+
+```diff
+-  <div *ngIf="fieldNgModel?.errors?.['required']">The field is required</div>
+-  <div *ngIf="fieldNgModel?.errors?.['pattern']">The field is not well</div>
++  <div *ngFor="let error of fieldNgModel?.control?.errors | keyvalue">
++    {{ getErrorMessage(error.key) }}
++  </div>
+```
+
+Ahora vamos al GameEditComponent, y vamos a añadir el mensaje de validación personalizado para la validacíon _pattern_
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+  <div>
+    <label for="imageurl">Picture Url</label>
+    <input
+      type="text"
+      id="imageurl"
+      name="imageurl"
+      required
+      pattern="https?://.+"
+      [(ngModel)]="game.imageUrl"
+      #imageurl="ngModel"
+    />
+    <app-field-error-display
+      [fieldNgModel]="imageurl"
++      [customFieldErrors]="[
++        {
++          id: 'pattern',
++          text: 'Image URL should be well formed, http://www.mysite.com or https://www.mysite.com'
++        }
++      ]"></app-field-error-display>
+  </div>
+
+```
 
 Más información acerca de validadores y como hacer un implementar un widget para mostrar errores:
 
