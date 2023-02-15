@@ -11,20 +11,24 @@ npm install
 - Podemos arrancar el ejemplo con _ng serve_
 
 ```bash
-npm start
+ng serve
 ```
 
-- Vamos ahora a abrir otra instancia de visual studiocode y arrancar nuestro servidor web.
+- Vamos ahora a abrir otra instancia de visual studio code y arrancar nuestro servidor web.
 
 ```bash
 cd server
 ```
 
 ```bash
+npm install
+```
+
+```bash
 npm start
 ```
 
-Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3000/games](http://localhost:3000/games)
+Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3001/games](http://localhost:3001/games)
 
 - Vamos a implementar el insert game con llamada a la api rest, para ello vamos a hacer lo siguiente:
 
@@ -35,7 +39,12 @@ _./src/app/services/game.api.service.ts_
 +  Insert(game: Game): Observable<Game> {
 -    gameMockCollection.push(game);
 -    return Promise.resolve(game);
-+    return this.http.post<Game>(`localhost:3001/games`, game);
++    return this.http.post<Game>(`./api/games`, {
++      name: game.name,
++      dateRelease: game.dateRelease.toISOString().substring(0, 10),
++      imageUrl: game.imageUrl,
++      sellers: [],
++    });
   }
 ```
 
@@ -73,8 +82,10 @@ _./src/app/components/pages/game-edit/game.edit.component.ts_
 Vamos a probar a insertar este juego
 
 Nombre: Streets of Rage 4
+
 Imagen Url:
 https://raw.githubusercontent.com/Lemoncode/angular-sample-app-2023/main/media/streetsofrage4.jpeg
+
 Fecha: 2020-04-30
 
 Como estamos en dominios separados, tenemos un error de CORS, aquí tenemos dos opciones:
@@ -84,11 +95,11 @@ Como estamos en dominios separados, tenemos un error de CORS, aquí tenemos dos 
 
 Vamos a seguir la aproximación de montar un proxy en local (si un día fueraos a desplegar miraríamos que tipo de infraestructura se va a montar).
 
-Creamos un fichero debajo de _src_ que se va a llamar _proxy.conf.json_, y le indicamos que todo lo que venga por el prefijo _api_ lo redirija a _localhost:3000_ (como estamos en local le indicamos que trabajmos con http, no con https)
+Creamos un fichero debajo de _src_ que se va a llamar _proxy.conf.json_, y le indicamos que todo lo que venga por el prefijo _api_ lo redirija a _localhost:3001_ (como estamos en local le indicamos que trabajmos con http, no con https)
 
-¿Que hacemos aquí?
+¿Qué hacemos aquí?
 
-- Le indicamos que para todas las rutas http://localhost:4200/api/_ redirija a http://localhost:3000/_
+- Le indicamos que para todas las rutas http://localhost:4200/api/_ redirija a http://localhost:3001/_
 - Le indicamos que no use https
 - Le indicamos que muestre el log de debug
 - Le indicamos que elimine el prefijo _api_ de la ruta (en nuestro caso el servidor final no tiene el prefijo api)
@@ -98,7 +109,7 @@ _./src/proxy.conf.json_
 ```json
 {
   "/api/*": {
-    "target": "http://localhost:3000",
+    "target": "http://localhost:3001",
     "secure": false,
     "logLevel": "debug",
     "pathRewrite": {
@@ -115,9 +126,9 @@ _./angular.json_
 ```diff
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
++          "options": {
 +            "proxyConfig": "src/proxy.conf.json"
-          },
++          },
           "configurations": {
             "production": {
               "browserTarget": "game-catalog:build:production"
