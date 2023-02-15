@@ -538,9 +538,90 @@ Que conseguimos con esto:
 
 Peeero... no es bala de plata: ¿Qué pasa si queremos mostrar un mensaje personalizado para un caso concreto? Por ejemplo, es muy normal que para la validación de Pattern en la que le pasamos una RegEx, no nos valga el mensaje genérico de "El formato no es valido", lo suyo es decir por ejemplo "El campo DNI tienes que tener nueve caracteres y terminar por una letra", o "El campo de IBAN tiene que tener el formato...".
 
+Aquí podemos, ampliar la variable que admite _ng-template_ y añadir un parametro más que permita hacer un override del mensaje de error que queremos mostrar para un validador dado, lo que hacemos aquí es crear una variable que llamamos _validationInfo_ y dentro tenga el _control_ (el _ngModel_), y el _msg_ con los mensajes a hacer override, veamos como queda esto en código:
+
+Modificamos la plantilla:
+
+```diff
+- <ng-template #errorMessages let-control class="errors">
++ <ng-template #errorMessages let-validationinfo class="errors">
+  <div
+-    *ngIf="control.invalid && (control.dirty || control.touched)"
++    *ngIf="
++      validationinfo.control.invalid &&
++      (validationinfo.control.dirty || validationinfo.control.touched)
++    "
+    class="errors"
+  >
+-    <div *ngIf="control.errors?.required">Field is required</div>
++    <div *ngIf="validationinfo.control.errors?.required">
++      <ng-container *ngIf="!validationinfo.msg?.required">
++        Field is required
++      </ng-container>
++      <ng-container *ngIf="validationinfo.msg?.required">
++        validationinfo.msg.required
++      </ng-container>
++    </div>
+-    <div *ngIf="control.errors?.pattern">Field is not well formed</div>
++    <div *ngIf="validationinfo.control.errors?.pattern">
++      <ng-container *ngIf="!validationinfo.msg?.pattern">
++        Field is not well formed
++      </ng-container>
++      <ng-container *ngIf="validationinfo.msg?.pattern">
++        {{ validationinfo.msg.pattern }}
++      </ng-container>
++    </div>
+  </div>
+</ng-template>
+```
+
+Y realizamos en cambio en cada campo:
+
+```diff
+      <div *ngIf="name.invalid">
+        <div
+-          *ngTemplateOutlet="errorMessages; context: { $implicit: name }"
++          *ngTemplateOutlet="
++            errorMessages;
++            context: {
++              $implicit: {
++                control: name
++              }
++            }
++          "
+        ></div>
+      </div>
+```
+
+```diff
+      <div *ngIf="imageurl.invalid">
+        <div
+-          *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"
++          *ngTemplateOutlet="
++            errorMessages;
++            context: {
++              $implicit: {
++                control: imageurl,
++                msg: {
++                  pattern:
++                    'An url must have a format like http://www.mysite.com or https://www.mysite.com'
++                }
++              }
++            }
++          "
+        ></div>
+      </div>
+```
+
 Aquí nos podríamos complicar un poco más y jugar con NgIF concreto para este caso en el propio caso del campo, o utilizar variables en la propia plantilla para sobreescribir texto de los errores,... como siempre, aquí el _martillo fino_ y los casos _aristas_ son matadores.
 
 Más info acerca de _ngTemplate_ y _ngTemplateOutlet_: https://blog.angular-university.io/angular-ng-template-ng-container-ngtemplateoutlet/
+
+¿Y que pasa si quiero llevarme el template a un fichero común? Aquí te aconsejan envolverlo en un componente, o usar _portals_ de Angular:
+
+https://github.com/angular/angular/issues/27503
+
+https://stackoverflow.com/questions/49404822/angular2-ng-template-in-a-separate-file
 
 Si quieres ver otra posible aproximación, al final de esta guía, te proponemos otra que lo solución creadno un componente específico (apartado Apéndice: Solución con componente)
 
@@ -687,7 +768,7 @@ _./pages/game-edit/game-edit.component.html_
   <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
 ```
 
-Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
+Si ahora ejecutamos y jugamos con el control de _name_ vaciándolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
 
 Así que vamos a implementar el resto de comportamiento.
 

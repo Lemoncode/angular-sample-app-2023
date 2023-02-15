@@ -1,10 +1,27 @@
-<ng-template #errorMessages let-control class="errors">
+<ng-template #errorMessages let-validationinfo class="errors">
   <div
-    *ngIf="control.invalid && (control.dirty || control.touched)"
+    *ngIf="
+      validationinfo.control.invalid &&
+      (validationinfo.control.dirty || validationinfo.control.touched)
+    "
     class="errors"
   >
-    <div *ngIf="control.errors?.required">Field is required</div>
-    <div *ngIf="control.errors?.pattern">Field is not well formed</div>
+    <div *ngIf="validationinfo.control.errors?.required">
+      <ng-container *ngIf="!validationinfo.msg?.required">
+        Field is required
+      </ng-container>
+      <ng-container *ngIf="validationinfo.msg?.required">
+        validationinfo.msg.required
+      </ng-container>
+    </div>
+    <div *ngIf="validationinfo.control.errors?.pattern">
+      <ng-container *ngIf="!validationinfo.msg?.pattern">
+        Field is not well formed
+      </ng-container>
+      <ng-container *ngIf="validationinfo.msg?.pattern">
+        {{ validationinfo.msg.pattern }}
+      </ng-container>
+    </div>
   </div>
 </ng-template>
 <form #gameForm="ngForm">
@@ -21,7 +38,14 @@
       />
       <div *ngIf="name.invalid">
         <div
-          *ngTemplateOutlet="errorMessages; context: { $implicit: name }"
+          *ngTemplateOutlet="
+            errorMessages;
+            context: {
+              $implicit: {
+                control: name
+              }
+            }
+          "
         ></div>
       </div>
     </div>
@@ -38,7 +62,18 @@
       />
       <div *ngIf="imageurl.invalid">
         <div
-          *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"
+          *ngTemplateOutlet="
+            errorMessages;
+            context: {
+              $implicit: {
+                control: imageurl,
+                msg: {
+                  pattern:
+                    'An url must have a format like http://www.mysite.com or https://www.mysite.com'
+                }
+              }
+            }
+          "
         ></div>
       </div>
     </div>
