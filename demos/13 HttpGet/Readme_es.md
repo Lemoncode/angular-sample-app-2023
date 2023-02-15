@@ -20,7 +20,7 @@ npm install
 npm start
 ```
 
-- Vamos ahora a abrir otra instancia de visual studiocode y arrancar nuestro servidor web.
+- Vamos ahora a abrir otra instancia de _visual studio code_ y arrancar nuestro servidor web.
 
 ```bash
 cd server
@@ -30,9 +30,9 @@ cd server
 npm start
 ```
 
-Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3000/games](http://localhost:3000/games)
+Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3001/games](http://localhost:3001/games)
 
-- Como vamos a usar el modulo de _http_ de angular, tenemos que importarlo en el _app.module.ts_
+- Como vamos a usar el módulo de _http_ de angular, tenemos que importarlo en el _app.module.ts_
 
 _./src/app/app.module.ts_
 
@@ -59,7 +59,7 @@ Y lo registramos:
 
 - Ahora vamos a modificar nuestro servicio para que consuma la api rest (ojo vamos a poner las URL harcodeadas, en una aplicación real utilizaríamos variables de entorno para apuntar), que hacemos aquí:
 
-- Importamos el modulo _HttpClient_.
+- Importamos el módulo _HttpClient_.
 - Lo pedimos tirando de inyección de dependencias en el constructor.
 - Cambiamos el método _getAll_ para que devuelva un observable, y lo subscribimos en el componente.
 
@@ -112,7 +112,7 @@ ng serve
 
 > Si no te funciona asegúrate que tienes levantado el servidor web y que estás apuntando al puerto correcto.
 
-- Para manejar errores podemos hacerlo a distintos niveles, vamos a ver como controlar esto a nivel de componente: el método _subscribe_ recibe un segundo parámetro que es una función de callback que se ejecutará cuando el observable emita un error.
+- Para manejar errores podemos hacerlo a distintos niveles, vamos a ver cómo controlar esto a nivel de componente: el método _subscribe_ recibe un segundo parámetro que es una función de callback que se ejecutará cuando el observable emita un error.
 
 ```diff
   loadGames = async () => {
@@ -120,11 +120,10 @@ ng serve
         (games) => (this.games = games),
 +       (error) =>  alert(error.message);
     );
-    console.log(this.games);
   };
 ```
 
-- Para saber más sobre gestión de erroreS:
+- Para saber más sobre gestión de errores:
 
 https://www.tektutorialshub.com/angular/angular-http-error-handling/
 
