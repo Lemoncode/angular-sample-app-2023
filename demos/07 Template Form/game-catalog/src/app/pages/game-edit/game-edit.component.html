@@ -1,91 +1,39 @@
-<ng-template #errorMessages let-validationinfo class="errors">
-  <div
-    *ngIf="
-      validationinfo.control.invalid &&
-      (validationinfo.control.dirty || validationinfo.control.touched)
-    "
-    class="errors"
-  >
-    <div *ngIf="validationinfo.control.errors?.required">
-      <ng-container *ngIf="!validationinfo.msg?.required">
-        Field is required
-      </ng-container>
-      <ng-container *ngIf="validationinfo.msg?.required">
-        validationinfo.msg.required
-      </ng-container>
-    </div>
-    <div *ngIf="validationinfo.control.errors?.pattern">
-      <ng-container *ngIf="!validationinfo.msg?.pattern">
-        Field is not well formed
-      </ng-container>
-      <ng-container *ngIf="validationinfo.msg?.pattern">
-        {{ validationinfo.msg.pattern }}
-      </ng-container>
-    </div>
-  </div>
-</ng-template>
 <form #gameForm="ngForm">
   <div>
-    <div>
-      <label for="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        [(ngModel)]="game.name"
-        required
-        #name="ngModel"
-      />
-      <div *ngIf="name.invalid">
-        <div
-          *ngTemplateOutlet="
-            errorMessages;
-            context: {
-              $implicit: {
-                control: name
-              }
-            }
-          "
-        ></div>
-      </div>
-    </div>
-    <div>
-      <label for="imageurl">Picture Url</label>
-      <input
-        type="text"
-        id="imageurl"
-        name="imageurl"
-        required
-        pattern="https?://.+"
-        [(ngModel)]="game.imageUrl"
-        #imageurl="ngModel"
-      />
-      <div *ngIf="imageurl.invalid">
-        <div
-          *ngTemplateOutlet="
-            errorMessages;
-            context: {
-              $implicit: {
-                control: imageurl,
-                msg: {
-                  pattern:
-                    'An url must have a format like http://www.mysite.com or https://www.mysite.com'
-                }
-              }
-            }
-          "
-        ></div>
-      </div>
-    </div>
-    <div>
-      <label for="daterelease">Release Date</label>
-      <input
-        type="date"
-        id="daterelease"
-        name="daterelease"
-        [(ngModel)]="game.dateRelease"
-      />
-    </div>
-    <button (click)="handleSaveClick(gameForm)">Save</button>
+    <label for="name">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      [(ngModel)]="game.name"
+      required
+      #name="ngModel"
+    />
+    <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
   </div>
+  <div>
+    <label for="imageurl">Picture Url</label>
+    <input
+      type="text"
+      id="imageurl"
+      name="imageurl"
+      [(ngModel)]="game.imageUrl"
+      required
+      pattern="https?://.+"
+      #imageurl="ngModel"
+    />
+    <app-field-error-display
+      [fieldNgModel]="imageurl"
+    ></app-field-error-display>
+  </div>
+  <div>
+    <label for="daterelease">Release Date</label>
+    <input
+      type="date"
+      id="daterelease"
+      name="daterelease"
+      [(ngModel)]="game.dateRelease"
+    />
+  </div>
+  <button (click)="handleSaveClick(gameForm)">Save</button>
 </form>

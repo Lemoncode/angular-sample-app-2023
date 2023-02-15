@@ -357,7 +357,7 @@ _./src/app/components/input-wrapper/input-wrapper.component.html_
     (ngModelChange)="onChange($event)"
     (blur)="onTouch()"
   />
-+  <app-field-error-display [fieldNgModel]="_formControl"></app-field-error-display>
++  <app-field-error-display name="name" [fieldNgModel]="_formControl"></app-field-error-display>
 </div>
 ```
 

@@ -410,7 +410,7 @@ _./pages/game-edit/game-edit.component.ts_
 </div>
 ```
 
-No está de mas, darle un poco de estilado al mensaje de error para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
+No está de mas, darle un poco de estilado al mensaje de erorr para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
 
 _./pages/game-edit/game-edit.component.css_
 
@@ -445,275 +445,7 @@ _./pages/game-edit/game-edit.component.html_
   </div>
 ```
 
-Vale, esto no está mal, pero si te fijas estamos llenando el html de código, y repitiendo un montón de texto, tiene pinta que esta solución en un proyecto mediano nos va a llevar a problemas en le futuro.
-
-Para este caso nada como usar _ng-template_ de Angular, veamos como tener un único template para mostrar los errores.
-
-Creamos en el inicio del HTML la siguiente plantilla
-
-- Aquí le indicamos que va a haber una variable llamada _control_, es la alimentaremos desde cada llamada a la plantilla para indicarle en ngModel que queremos validar.
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-+ <ng-template #errorMessages let-control class="errors">
-+    <div
-+    *ngIf="control.invalid && (control.dirty || control.touched)"
-+    class="errors"
-+    >
-+      <div *ngIf="control.errors?.required">Field is required</div>
-+      <div *ngIf="control.errors?.pattern">Field is not well formed</div>
-+    </div>
-+ </ng-template>
-<div>
-  <div>
-    <label for="name">Name</label>
-```
-
-Y ahora debajo de cada input sustituimos el div que mostraba los errores por la plantilla que hemos creado, fijate que aquí:
-
-- Usamos _loginForm_ para acceder al campo _name_ (podríamos haber usado la aproximación anterior de la variable en el input,
-  pero es interesante que veamos esta otra aproximación, puede ser más limpia en un formulario grande).
-- Y para pásarle a la plantilla el _ngModel_ asociado el input utilizamos el parametro _context_ de _ngTemplateOutlet_.
-
-Vamos primero a por el campo de nombre.
-
-```diff
-  <div>
-    <label for="name">Name</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      [(ngModel)]="game.name"
-      required
-      #name="ngModel"
-    />
--    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="errors">
--      <div *ngIf="name.errors?.['required']">Name is required</div>
--    </div>
-+    <div *ngIf="name.invalid">
-+      <div *ngTemplateOutlet="errorMessages; context: { $implicit: name }"></div>
-+    </div>
-  </div>
-```
-
-Y ahora a por el de la URL.
-
-```diff
-    <input
-      type="text"
-      id="imageurl"
-      name="imageurl"
-      required
-      pattern="https?://.+"
-      [(ngModel)]="game.imageUrl"
-      #imageurl="ngModel"
-    />
--    <div
--      *ngIf="imageurl.invalid && (imageurl.dirty || imageurl.touched)"
--      class="errors"
--    >
--      <div *ngIf="imageurl.errors?.['required']">Image Url is required</div>
--      <div *ngIf="imageurl.errors?.['pattern']">
--        Image Url is not a valid http url
--      </div>
--    </div>
-+    <div *ngIf="imageurl.invalid">
-+      <div *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"></div>
-+    </div>
-```
-
-- Vamos a ver si esto sigue funcionando igual...
-
-```bash
-ng serve
-```
-
-Que conseguimos con esto:
-
-- Pasamos a tener un punto común para mostrar los errores, si cambiamos el texto de los errores, sólo tenemos que cambiarlo en un sitio.
-- En un formulario real tendremos muchos tipos de validaciones, nos podría quedar un HTML enorme de cosas repetidas, con esta solución tenemos sólo una plantilla.
-- Si un día queremos cambiar el comportamiento de los errores sólo tenemos que tocar en un sitio.
-
-Peeero... no es bala de plata: ¿Qué pasa si queremos mostrar un mensaje personalizado para un caso concreto? Por ejemplo, es muy normal que para la validación de Pattern en la que le pasamos una RegEx, no nos valga el mensaje genérico de "El formato no es valido", lo suyo es decir por ejemplo "El campo DNI tienes que tener nueve caracteres y terminar por una letra", o "El campo de IBAN tiene que tener el formato...".
-
-Aquí podemos, ampliar la variable que admite _ng-template_ y añadir un parametro más que permita hacer un override del mensaje de error que queremos mostrar para un validador dado, lo que hacemos aquí es crear una variable que llamamos _validationInfo_ y dentro tenga el _control_ (el _ngModel_), y el _msg_ con los mensajes a hacer override, veamos como queda esto en código:
-
-Modificamos la plantilla:
-
-```diff
-- <ng-template #errorMessages let-control class="errors">
-+ <ng-template #errorMessages let-validationinfo class="errors">
-  <div
--    *ngIf="control.invalid && (control.dirty || control.touched)"
-+    *ngIf="
-+      validationinfo.control.invalid &&
-+      (validationinfo.control.dirty || validationinfo.control.touched)
-+    "
-    class="errors"
-  >
--    <div *ngIf="control.errors?.required">Field is required</div>
-+    <div *ngIf="validationinfo.control.errors?.required">
-+      <ng-container *ngIf="!validationinfo.msg?.required">
-+        Field is required
-+      </ng-container>
-+      <ng-container *ngIf="validationinfo.msg?.required">
-+        validationinfo.msg.required
-+      </ng-container>
-+    </div>
--    <div *ngIf="control.errors?.pattern">Field is not well formed</div>
-+    <div *ngIf="validationinfo.control.errors?.pattern">
-+      <ng-container *ngIf="!validationinfo.msg?.pattern">
-+        Field is not well formed
-+      </ng-container>
-+      <ng-container *ngIf="validationinfo.msg?.pattern">
-+        {{ validationinfo.msg.pattern }}
-+      </ng-container>
-+    </div>
-  </div>
-</ng-template>
-```
-
-Y realizamos en cambio en cada campo:
-
-```diff
-      <div *ngIf="name.invalid">
-        <div
--          *ngTemplateOutlet="errorMessages; context: { $implicit: name }"
-+          *ngTemplateOutlet="
-+            errorMessages;
-+            context: {
-+              $implicit: {
-+                control: name
-+              }
-+            }
-+          "
-        ></div>
-      </div>
-```
-
-```diff
-      <div *ngIf="imageurl.invalid">
-        <div
--          *ngTemplateOutlet="errorMessages; context: { $implicit: imageurl }"
-+          *ngTemplateOutlet="
-+            errorMessages;
-+            context: {
-+              $implicit: {
-+                control: imageurl,
-+                msg: {
-+                  pattern:
-+                    'An url must have a format like http://www.mysite.com or https://www.mysite.com'
-+                }
-+              }
-+            }
-+          "
-        ></div>
-      </div>
-```
-
-Aquí nos podríamos complicar un poco más y jugar con NgIF concreto para este caso en el propio caso del campo, o utilizar variables en la propia plantilla para sobreescribir texto de los errores,... como siempre, aquí el _martillo fino_ y los casos _aristas_ son matadores.
-
-Más info acerca de _ngTemplate_ y _ngTemplateOutlet_: https://blog.angular-university.io/angular-ng-template-ng-container-ngtemplateoutlet/
-
-¿Y que pasa si quiero llevarme el template a un fichero común? Aquí te aconsejan envolverlo en un componente, o usar _portals_ de Angular:
-
-https://github.com/angular/angular/issues/27503
-
-https://stackoverflow.com/questions/49404822/angular2-ng-template-in-a-separate-file
-
-Si quieres ver otra posible aproximación, al final de esta guía, te proponemos otra que lo solución creadno un componente específico (apartado Apéndice: Solución con componente)
-
-Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
-
-- Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
-
-- Para obtener la información global del formulario vamos a añadir un atributo al formulario: aquí fijate que declaramos una variable llamada _gameForm_ y le indicamos que es de tipo _NgForm_, esto nos permitiera acceder por ejemplo a la información del _ngModel_ asociado a cada campo y no tener que ir creando una variable por cada uno como hemos hecho antes, nosotros lo vamos a usar para chequear si el formulario completo es válido o no.
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-+ <form #gameForm="ngForm">
-<div>
-  <label for="name">Name</label>
-  <input
-    type="text"
-    id="name"
-    name="name"
-    [(ngModel)]="game.name"
-    required
-    #name="ngModel"
-  />
-  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
-</div>
-// (...)
-  <button (click)="handleSaveClick()">Save</button>
-+ </form>
-```
-
-- Vamos a añadir un atributo al botón de grabar:
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-- <button (click)="handleSaveClick()">Save</button>
-+ <button
-+   (click)="handleSaveClick()"
-+   [disabled]="gameForm?.invalid"
-+ >
-+   Save
-+ </button>
-```
-
-¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
-
-Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
-
-Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parámetro la variable del formulario (la que creamos con _#gameForm_).
-
-_./pages/game-edit/game-edit.component.html_
-
-```diff
-  <button
--    (click)="handleSaveClick()"
-+    (click)="handleSaveClick(gameForm)"
--    [disabled]="gameForm?.invalid"
-    >
-```
-
-> Sale _gameForm_ en rojo, esto es porque tenemos que añadirlo en la parte de TypeScript del componente, para que el compilador de TypeScript sepa que existe.
-
-_./pages/game-edit/game-edit.component.ts_
-
-```diff
-+ import { NgForm } from '@angular/forms';
-//(...)
-
--  handleSaveClick() {
-+  handleSaveClick(form: NgForm) {
-+    if (form.valid) {
-      this.gameApi.Insert(this.game);
-+    } else {
-+      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
-+      alert(
-+        'Formulario no válido, chequea si hay errores de validación en alguno de los campos del formulario'
-+      );
-+    }
-  }
-```
-
-También puedes crear validadores custom:
-
-https://www.tektutorialshub.com/angular/custom-validator-in-template-driven-forms-in-angular/
-
-# Apéndice: Solución con componente
-
-**Este ejemplo no está implementado en la demo, si quieres implementarlo con está guía tendrías que ponerte justo en el paso antes de introducir el ngTemplate**
-
-Hemos visto la solución de _ngTemplate_ y _ngTemplateOutlet_, para resolver el problema de tener que ir repitiendo mensajes de error en el HTML, y vimos que esto en un proyecto real puede ser un poco engorroso en ciertos casos.
-
-Otra opción puede ser no liarte tanto con las platillas y usar la potencia de los componentes para resolver este problema, en este apéndice te mostramos un punto de partida con un componente, al final del mismo te indicamos desafíos pendientes que quedarían por resolver, podrían ser interesante para crear una librería open source.
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
 
 Creamos una carpeta common y creamos nuestro widget para mostrar errores:
 
@@ -768,7 +500,7 @@ _./pages/game-edit/game-edit.component.html_
   <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
 ```
 
-Si ahora ejecutamos y jugamos con el control de _name_ vaciándolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
+Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
 
 Así que vamos a implementar el resto de comportamiento.
 
@@ -853,6 +585,157 @@ https://angular.io/guide/form-validation
 
 https://medium.com/swlh/creating-a-reusable-component-for-display-validation-errors-in-angular-forms-fdfba4ac1ad1
 
+Vamos a por el último punto, los mensajes de error se muestran, peeerooo resulta que yo puedo seguir pulsando sobre el bóton de grabar !, vamos a resolver esto de dos maneras y ver los pros y cons de cada una:
+
+- Primera opción, deshabilitar el botón de grabar si hay errores, para ello:
+
+- Para obtener la información global del formulario vamos a añadir un atributo al formulario:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
++ <form #gameForm="ngForm">
+<div>
+  <label for="name">Name</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    [(ngModel)]="game.name"
+    required
+    #name="ngModel"
+  />
+  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
+</div>
+// (...)
+  <button (click)="handleSaveClick()">Save</button>
++ </form>
+```
+
+- Vamos a añadir un atributo al botón de grabar:
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+- <button (click)="handleSaveClick()">Save</button>
++ <button
++   (click)="handleSaveClick()"
++   [disabled]="gameForm?.invalid"
++ >
++   Save
++ </button>
+```
+
+¿Qué estamos haciendo aquí? Por un lado la información del formulario la guardamos en una variable _#gameForm_ y después en el atributo del botón de save comprobamos si está a true o no el campo _invalid_ para deshabilitar el botón.
+
+Esto parece estar muy bien, pero puede presentarte un problema serio de usabilidad (UX), el usuario no sabe por qué no puede pulsar el botón de grabar, si no le indicamos el motivo, no sabrá que hacer, así que lo mejor es dejarle al usuario que pulse en el botón de grabar y mostrarle un mensaje de error con las indicaciones para resolverlo.
+
+Para hacer esto lo que hacemos es pasarle al handler _handleSaveClick_ como parametro la variable del formulario (la que creamos con _#gameForm_).
+
+_./pages/game-edit/game-edit.component.html_
+
+```diff
+  <button
+-    (click)="handleSaveClick()"
++    (click)="handleSaveClick(gameForm)"
+-    [disabled]="gameForm?.invalid"
+    >
+```
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
+-  handleSaveClick() {
++  handleSaveClick(form: NgForm) {
++    if (form.valid) {
+      this.gameApi.Insert(this.game);
++    } else {
++      // TODO: esto habría que hacerlo más limpio, usando por ejemplo una notificación de angular material :)
++      alert(
++        'Formulario inválido, chequea si hay errores de validación en alguno de los campos del formulario'
++      );
++    }
+  }
+```
+
+También puedes crear validadores custom:
+
+https://www.tektutorialshub.com/angular/custom-validator-in-template-driven-forms-in-angular/
+
+# Apéndice Templates y Outlets
+
+Para gestionar los mensajes de error, otra posible aproximación puede ser utilizar un template y un outlet, para ello vamos a crear un componente que se encargue de mostrar los errores de validación, pero sobre esta opción:
+
+- Si queremos sacar el template a un fichero aparte, tendríamos que envolverlo en una componente o crear una directiva.
+- Si queremos poder cambiar los mensajes de error, tendríamos que enriquecer la variable que se le asigna al template, y empieza a ser muy fácil cometer errores ya que estamos metiendo logica en nuestro HTML.
+
+Un ejemplo de como podría ser:
+
+```html
+<!-- template para mostrar mensajes de error -->
+<ng-template #errorMessages let-control>
+  <div *ngIf="control.errors?.required">Please inform the field</div>
+  <div *ngIf="control.errors?.email">Please inform a valid email</div>
+</ng-template>
+
+<!-- formulario -->
+<form [formGroup]="loginForm">
+  <label for="loginField">Login:</label>
+  <input type="text" id="loginField" formControlName="loginField" />
+  <!-- mostrar mensajes de error -->
+  <div *ngIf="loginForm.get('loginField').invalid">
+    <div
+      *ngTemplateOutlet="errorMessages; context: { $implicit: loginForm.get('loginField') }"
+    ></div>
+  </div>
+</form>
+```
+
+Si quisieramos sacar la plantilla fuera:
+
+Crea un nuevo componente utilizando el comando ng generate component <nombre-del-componente> o crea uno manualmente. Por ejemplo:
+
+```bash
+ng generate component form-error-messages
+```
+
+Mueve el ng-template al archivo de plantilla del nuevo componente (form-error-messages.component.html) y renómbralo como desees.
+
+```html
+<div *ngIf="control.errors?.required">Please inform the field</div>
+<div *ngIf="control.errors?.email">Please inform a valid email</div>
+```
+
+En el archivo de clase del nuevo componente (form-error-messages.component.ts), agrega una entrada de @Input() para que el control del formulario se pase al componente.
+
+```ts
+import { Component, Input } from "@angular/core";
+import { AbstractControl } from "@angular/forms";
+
+@Component({
+  selector: "app-form-error-messages",
+  templateUrl: "./form-error-messages.component.html",
+})
+export class FormErrorMessagesComponent {
+  @Input() control: AbstractControl;
+}
+```
+
+En el archivo de plantilla del componente donde deseas utilizar el ng-template, importa el nuevo componente (<app-form-error-messages> en este ejemplo) y utilízalo pasando el control del formulario como entrada:
+
+```html
+<form [formGroup]="loginForm">
+  <label for="loginField">Login:</label>
+  <input type="text" id="loginField" formControlName="loginField" />
+  <!-- utilizar el nuevo componente -->
+  <app-form-error-messages
+    [control]="loginForm.get('loginField')"
+  ></app-form-error-messages>
+</form>
+```
+
+Al hacerlo de esta manera, puedes reutilizar el ng-template definido en el componente form-error-messages en cualquier otro fichero, simplemente importando y utilizando el componente app-form-error-messages y pasando el control del formulario correspondiente como entrada.
+
 # ¿Te apuntas a nuestro máster?
 
 Si te ha gustado este ejemplo y tienes ganas de aprender Front End
@@ -865,3 +748,15 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```

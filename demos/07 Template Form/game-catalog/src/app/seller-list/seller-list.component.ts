@@ -14,7 +14,7 @@ export class SellerListComponent {
     this.sellers = [];
   }
 
-  onCloseClick() {
+  onCloseClick(event?: MouseEvent) {
     this.close.emit();
   }
 }
