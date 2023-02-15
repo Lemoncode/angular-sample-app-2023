@@ -17,7 +17,7 @@ npm install
 - Podemos arrancar el ejemplo con _ng serve_
 
 ```bash
-npm start
+ng serve
 ```
 
 - Vamos ahora a abrir otra instancia de _visual studio code_ y arrancar nuestro servidor web.
@@ -25,6 +25,11 @@ npm start
 ```bash
 cd server
 ```
+
+```bash
+npm install
+```
+
 
 ```bash
 npm start
