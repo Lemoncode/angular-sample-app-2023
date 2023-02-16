@@ -579,7 +579,11 @@ Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuvier
 
 - Tercero para las validaciones de tipo patrón, no vale con decir Patrón no valido, si no "NIF no valido", o "Email no valido"
 
-¿Porque no creamos un interface para tener controlado los mensaje de error?
+Para terminar de jugar con este ejemplo, vamos a ver como podríamos hacer un _override_ de los mensajes de error.
+
+> Este lo estamos haciendo como un ejercicio para que veais hasta donde podemos llegar con Angular y como con un poco de esfuerzo podemos ahorrarnos un montón de código repetitivo, en un proyecto real, o bien usaríamos una librería de terceros, o nos pondríamos a trabajar sobre este componente y dejarlo bien ajustado para poder usarlo en producción
+
+Vamos a crear un interface que nos permita hacer tracking de los mensajes de error y sobreescribirlos por componente.
 
 _./common/field-error-display/field-error-display.component.ts_
 
@@ -588,11 +592,6 @@ _./common/field-error-display/field-error-display.component.ts_
 
 + interface FieldError {
 +  [key: string]: string;
-+ }
-+
-+ const fieldErrors = {
-+  required: "Field is required",
-+  pattern: "Format not valid",
 + }
 +
 + interface CustomErrorEntry {
@@ -625,7 +624,7 @@ export class FieldErrorDisplayComponent {
 
 ```
 
-Y en el _ngOnInit_ sobreescribimos los mensajes de error:
+Y en el _ngOnInit_ sobreescribimos los mensajes de error, y añadimos un helper para exponer esos mensajes en el html:
 
 _./common/field-error-display/field-error-display.component.ts_
 
@@ -639,6 +638,9 @@ _./common/field-error-display/field-error-display.component.ts_
 +        this.customFieldErrors.map(customError =>
 +          this.fieldErrorObject[customError.id] = customError.text)
 +    }
++  }
++  getErrorMessage = (errorId :string ) => {
++    return this.fieldErrorObject[errorId];
 +  }
 ```
 
