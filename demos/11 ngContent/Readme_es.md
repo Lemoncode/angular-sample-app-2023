@@ -4,7 +4,7 @@ La directiva NgContent nos permite insertar contenido en un componente.
 
 Esto nos permite hacer componentes reutilizables, que pueden ser usados en diferentes contextos, por ejemplo ¿Te acuerdas del diálogo modal que utilizamos para mostrar el listado de vendedores? En esta implementación teníamos un problema, si queríamos implementar otro modal para mostrar otro contenido, tendríamos que crear un nuevo componente y copiar toda la lógica del modal, eso suena raro ¿Verdad?
 
-Vamos a ver como podemos extraer el armazon del modal, e inyectarle el contenido que toque voluntad.
+Vamos a ver como podemos extraer el armazon del modal, e inyectarle el contenido que toque a voluntad.
 
 # Paso a paso
 
@@ -183,7 +183,7 @@ _./src/app/seller/seller-list.component.css_
 }
 ```
 
-Y eliminar código
+Y eliminar código en el que nos encargábamos de gestionar el estado del modal.
 
 _./src/app/seller/seller-list.component.ts_
 
@@ -210,7 +210,7 @@ export class SellerListComponent {
 }
 ```
 
-Y directamente en gamlist invocarlo:
+Y ahora podemos invocarlo en el gamelist wrapeado en nuestro recién creado _app-modal_:
 
 _./src/app/pages/game-list/game-list.component.html_
 
@@ -224,7 +224,7 @@ _./src/app/pages/game-list/game-list.component.html_
 + </app-modal>
 ```
 
-Si queremos, ahora podemos facilmente crear otro modal envolviendo el contenido que queramos (ejercicio para el alumno)
+Si queremos, ahora podemos crear otro modal envolviendo el contenido que queramos (ejercicio para el alumno)
 
 # ¿Te apuntas a nuestro máster?
 
