@@ -26,12 +26,10 @@ export class GameListComponent {
   }
 
   loadGames = () => {
-    this.gameApiService.getAll().subscribe(
-      (games) => (this.games = games),
-      (error) => {
-        alert(error.message);
-      }
-    );
+    this.gameApiService.getAll().subscribe({
+      next: (games) => (this.games = games),
+      error: (error) => console.log(error),
+    });
   };
 
   ngOnInit(): void {
