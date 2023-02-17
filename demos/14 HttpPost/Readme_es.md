@@ -24,7 +24,7 @@ cd server
 npm start
 ```
 
-Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3000/games](http://localhost:3000/games)
+Si quieres probarlo desde el navegador puedes acceder a [http://localhost:3001/games](http://localhost:3001/games)
 
 - Vamos a implementar el insert game con llamada a la api rest, para ello vamos a hacer lo siguiente:
 
@@ -80,11 +80,12 @@ Fecha: 2020-04-30
 Como estamos en dominios separados, tenemos un error de CORS, aquí tenemos dos opciones:
 
 - Si en producción desplegamos en el mismo dominio que la api, podemos usar en local un proxy (hay veces que lo que se hace es poner un proxy en el servidor de producción, que por el mismo dominio después internamente redirija las peticiones al server back o front).
+
 - Si no, tenemos que configurar CORS para que permite hacer un post desde otro dominio.
 
-Vamos a seguir la aproximación de montar un proxy en local (si un día fueraos a desplegar miraríamos que tipo de infraestructura se va a montar).
+Vamos a seguir la aproximación de montar un proxy en local (el día que vayas a desplegar a producción mira que tipo de infraestructura se va a montar).
 
-Creamos un fichero debajo de _src_ que se va a llamar _proxy.conf.json_, y le indicamos que todo lo que venga por el prefijo _api_ lo redirija a _localhost:3000_ (como estamos en local le indicamos que trabajmos con http, no con https)
+Creamos un fichero debajo de _src_ que se va a llamar _proxy.conf.json_, y le indicamos que todo lo que venga por el prefijo _api_ lo redirija a _localhost:3000_ (como estamos en local le indicamos que trabajamos con http, no con https)
 
 ¿Que hacemos aquí?
 
@@ -139,7 +140,7 @@ _./src/app/services/game.api.service.ts_
 + return this.http.post<Game>(`./api/games`, {
 ```
 
-Más info:
+Más info sobre como funciona esto:
 
 https://www.positronx.io/handle-cors-in-angular-with-proxy-configuration/
 
