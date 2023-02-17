@@ -1,6 +1,6 @@
 # Pipes
 
-Las pipes de angular son una forma de transformar datos en la vista, por ejemplo, las podemos usar: para formatear fechas, monedas, etc., o incluso, si estamos depurando, para mostrar por pantalla un objeto de forma más amigable.
+Las pipes de _Angular_ son una forma de transformar datos en la vista, por ejemplo, las podemos usar: para formatear fechas, monedas, etc., o incluso, si estamos depurando, para mostrar por pantalla un objeto de forma más amigable.
 
 # Paso a paso
 
@@ -10,7 +10,7 @@ Las pipes de angular son una forma de transformar datos en la vista, por ejemplo
 npm install
 ```
 
-- Imaginate que estamos viendo que está pasando con la lista de juegos en la pantalla GameList y queremos mostrar el array que de juegos por pantalla, si probamos a hacer esto:
+- Imaginate que queremos ver que objeto esta manejando la lista de juegos en la pantalla GameList y queremos mostrar el array que de juegos por pantalla, si probamos a hacer esto:
 
 _./src/app/pages/game-list/game-list.component.html_
 
@@ -57,8 +57,6 @@ create a pipe
 ng g pipe pages/game-list/card-game/game-offer
 ```
 
-- Vamos a crear un pipe que nos permita mostrar un texto en función de si el juego es una novedad o una oferta.
-
 Y el pipe gameOffer lo vamos a implementar de la siguiente forma:
 
 _./src/app/pages/game-list/card-game/pipes/game-offer.pipe.ts_
@@ -81,6 +79,8 @@ export class GameOffer implements PipeTransform {
 +  }
 }
 ```
+
+Y ahora lo añadimos a nuestro HTML
 
 _./src/app/pages/game-list/card-game/card-game.component.html_
 
@@ -109,9 +109,11 @@ export const gameMockCollection = [
     [
 ```
 
-- Para terminar vamos a tratar un tema importante con los pipes, y es que por defecto son funciones puras, ¿Qué quiere decir esto? Que si el valor de entrada no cambia (es decir el putenro del parámetro) la salid no cambia, es decir recuerda el valor de la última vez que se ejecutó, y nos ahorramos ciclos de CPU, si no tenemos esto en cuenta nos podemos encontrar con problemas tales como que nos da la impresión que no se actualiza el pipe.
+- Fíjate que ahora éste nos lo marca com novedad.
 
-Veámoslo con un ejemplo, vamos a hacer un pipe que una lista de nombres que hay a en un array, y vamos a crear un pipe que itere sobre y los concatene en un array.
+- Para terminar vamos a tratar un tema importante con los pipes, y es que por defecto se definen como funciones puras, ¿Qué quiere decir esto? Que si el valor de entrada no cambia (es decir el puntero del parámetro) la salida no cambia: recuerda el valor de la última vez que se ejecutó, y nos ahorramos ciclos de CPU, si no tenemos esto en cuenta nos podemos encontrar con problemas tales como que en ciertos escenario un pipe no se actualice.
+
+Veámoslo con un ejemplo, vamos a hacer un pipe que pinte una lista de nombres que hay en un array, y vamos a crear un pipe que itere sobre ellos y los concatene en un string.
 
 ```bash
 ng g pipe pages/game-list/game-names
@@ -134,7 +136,7 @@ export class GameNames implements PipeTransform {
 }
 ```
 
-Vamos ahora a crear esta lista de nombres en nuestro componente, y añadir un botón para añdir un elemento
+Vamos ahora a crear esta lista de nombres en nuestro componente, y crear un botón para añadir un elemento
 
 _./src/app/pages/game-list/game-list.component.ts_
 
@@ -175,9 +177,9 @@ _./src/app/pages/game-list/game-list.component.html_
 <div *ngFor="let game of games">
 ```
 
-Fijate que no se muestra nada, ¿Qué está pasando? Que al usar _push_ en el array que pasamos por parametro no se crea uno nuevo y la pipe no se ejecuta, se queda con el valor de la última vez que se ejecutó para ese array en concreto.
+Si pulsas en el botón, verás que no se muestra nada nuevo, ¿Qué está pasando? Que al usar _push_ en el array que pasamos por párametro el array está apuntando a la misma dirección de memoria (un push muta el array, y no crea uno nuevo) y la pipe no se ejecuta, se queda con el valor de la última vez que se ejecutó para ese array en concreto.
 
-Aquí tenemos dos soluciones: una es decirle que no es una función pura, y que se ejecute cada vez que se ejecute el componente, para ello añadimos el decorador _pure: false_ en el pipe.
+Aquí tenemos dos soluciones: una es decirle que no es una función pura, y que se ejecute bastante a menudo, para ello añadimos el decorador _pure: false_ en el pipe.
 
 _./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
 
@@ -196,9 +198,9 @@ export class GameNames implements PipeTransform {
 }
 ```
 
-Esto parece que funciona, pero... fíjate que pasa si abrimos la consola... se empieza a llamar un montón de veces con cualquier interacción, en un escenario simple no pasa nada, pero en una aplicación más compleja cosas como esta pueden hacer que nuestra aplicación se vuelva lenta.
+Si ejecutamos esto, parece que funciona, pero... fíjate que pasa si abrimos la consola... se empieza a llamar un montón de veces con cualquier interacción, en un escenario simple no pasa nada, pero en una aplicación más compleja cosas como esta pueden hacer que nuestra aplicación se vuelva lenta.
 
-Es mejor solución utilizar inmutabilidad, por ejemplo, en vez de un push utilizar el spread operator para crear un nuevo array en cada push
+Es mejor solución utilizar inmutabilidad, por ejemplo, en vez de un push utilizar el spread operator para crear un nuevo array cada vez que añadamos un nuevo elemento.
 
 _./src/app/pages/game-list/card-game/pipes/game-names.pipe.ts_
 

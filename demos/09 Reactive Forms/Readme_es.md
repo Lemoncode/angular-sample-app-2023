@@ -1,25 +1,27 @@
 # Reactive Forms
 
-Hemos visto como trabajar con formularios de plantilla en Angular con su _ngModel_, todo muy bonito y muy fácil, hasta que quieres hacer algo más allá de un formulario de login o la típica demo con el _happy path_, problemas que tienen:
+Hemos visto como trabajar con formularios de plantilla en Angular con su _ngModel_, todo muy bonito y muy fácil, hasta que quieres hacer algo más allá de un formulario de login o la típica demo con el _happy path_, si tienes que hacer algo más complejo, lo ideal es que uses _Reactive Forms_.
 
-- Manchamos el HTML con validaciones, es decir metemos en UI lógica de negocio.
-- El el enlace bidireccional del _ngModel_ me impone restricciones, todo el proceso de actualización es mágico y no se puede intervenir en el mismo de manera fácil, por ejemplo, gestionar un input de tipo date y enlazarlo a un campo fecha es algo que no va muy bien.
+Diferencias entre Template forms y Reactive forms:
 
-Vamos a ver como podemos resolver estos problemas con _Reactive Forms_, una aproximación que se basa en código para definir la gestión de un formulario y que nos permite tener un control más fino de lo que se está haciendo en el mismo.
+1. **Sintaxis:** Los Template-driven Forms utilizan una sintaxis declarativa y se basan en directivas estructurales como ngModel, ngForm, ngSubmit, etc. mientras que los Reactive Forms utilizan una sintaxis programática y se basan en clases de TypeScript.
 
-¿Qué meda un formulario Reactivo sobre uno de plantilla?
+2. **Validación:** La validación en Template-driven Forms se realiza mediante directivas como ngModel y ngForm, mientras que en Reactive Forms, la validación se realiza mediante funciones de validación que se pueden definir en la clase del formulario.
 
-- Una acceso seguro al modelo de datos.
-- Una forma de hacer tracking del modelo de datos más predecible.
-- Una serie de operadores que me permiten trabaja con inmutabilidad de datos.
+3. **Control sobre los datos:** Los Reactive Forms ofrecen un mayor control sobre los datos que se envían y reciben desde el formulario. Por ejemplo, los Reactive Forms permiten establecer valores predeterminados y realizar validaciones más complejas.
+
+4. **Pruebas:** Los Reactive Forms son más fáciles de probar porque se basan en clases TypeScript que se pueden instanciar y manipular directamente en las pruebas, mientras que los Template-driven Forms pueden ser más complicados de probar debido a la dependencia de las directivas del template.
+
+5. **Rendimiento:** Los Reactive Forms son más eficientes en términos de rendimiento, especialmente en formularios más complejos, porque ofrecen más control sobre cuándo y cómo se actualizan los datos del formulario.
+
+En general, los Reactive Forms son una opción más flexible y potente, especialmente en aplicaciones grandes y complejas, mientras que los Template-driven Forms pueden ser más fáciles de implementar y entender para formularios más simples y pequeños.
 
 Los pasos que vamos a seguir son:
 
 1. En el TS del componente de crear juego, definimos el formulario reactivo.
-2. Cambiamos el HTML y volvemos a componentes básicos (sin NgModel)
-3. Reutilizamos las validaciones
-4. Arreglamos el problema de la fecha
-5. Adaptamos nuestro componente genérico para que utilice Reactive Forms
+2. Definimos sus validaciones.
+3. Actualizamos el HTML
+4. Arreglaremos el problema del _date picker_.
 
 # Paso a paso
 
@@ -136,13 +138,12 @@ _./src/app/games/components/game-edit/game-edit.component.html_
 ```diff
 -  <form #gameForm="ngForm" class="form">
 +  <form [formGroup]="gameForm" class="form">
-
     <app-input-wrapper
       id="name"
       name="name"
       label="Name"
 -      [(ngModel)]="game.name"
-+      [formControlName]="name"
++      formControlName="name"
 -      required
     ></app-input-wrapper>
 
@@ -151,7 +152,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
       name="imageurl"
       label="Picture Url"
 -      [(ngModel)]="game.imageUrl"
-+      [formControlName]="imageUrl"
++      formControlName="imageUrl"
 -      required
 -      pattern="https?://.+"
     ></app-input-wrapper>
@@ -161,7 +162,7 @@ _./src/app/games/components/game-edit/game-edit.component.html_
       name="daterelease"
       label="Release Date"
 -      [(ngModel)]="game.dateRelease"
-+      [formControlName]="dateRelease"
++      formControlName="dateRelease"
     ></app-input-wrapper>
 
 -    <button (click)="handleSaveClick(gameForm)">Save</button>
@@ -182,15 +183,15 @@ Vamos ahora a arreglar el problema que teníamos con el _dateRelease_, si te acu
 - Vamos a crear un mapper, esta función se encarga de convertir de un modelo a otro, en este caso de un modelo de api a un modelo de vista.
 - A la hora de grabar convertiremos de modelo de vista a modelo de api.
 
-
 Ahora mismo lo que nos pasa es que:
 
 - El valor inicial esta en blanco.
 - El valor que se muestra por consola es un texto, no es un date.
 
-Es hora de trabajar con viewmodels y mapeadores:
-  - Un viewModel es una entidad que cumple exactamente con lo que espera la vista, así es muy fácil poder desarrollar este componente.
-  - Un mapper es una funció que se encarga de convertir de modelo de api a modelo de vista y viceversa.
+Es hora de que nos pongamos a trabajar con viewmodels y mapeadores:
+
+- Un viewModel es una entidad que cumple exactamente con lo que espera la vista, así es muy fácil poder desarrollar este componente.
+- Un mapper es una función que se encarga de convertir de modelo de api a modelo de vista y viceversa.
 
 De esta manera tenemos piezas que hacen una cosa y sólo una cosa, que son fáciles de testear por separado y que hacen que el resto de componentes sean más fáciles de desarrollar.
 
@@ -206,7 +207,7 @@ export interface GameVm {
 }
 ```
 
-- Vamos a crear un mapper en ambos sentidos (en este caso, como no tiene estado, vamos usar vanilla JavaScript, otra opción sería crearlo como un servicio y registrarlo en el módulo):
+- Vamos a crear un mapper en ambos sentidos (en este caso, como este mapper no tiene estado, vamos usar vanilla JavaScript, otra opción sería crearlo como un servicio y registrarlo en el módulo):
 
 _./src/app/games/game-edit/game.mapper.ts_
 
@@ -248,7 +249,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
       this.id = params['id'];
     });
 
-+    // De este mapper podríamos haber pasado pero así nos valdría también para editar un juego
++    // Establecemos valores iniciales, podríamos usar algo así para el edit también
 +    const gameVm = mapGameToVm(new Game('', new Date().toISOString().substring(0, 10), ''));
 
     // Sólo vamos a cubrir la creación
@@ -262,6 +263,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     });
   }
 ```
+
+Y en el save lo aplicamos en el otro sentido
 
 ```diff
   handleSaveClick() {
