@@ -361,7 +361,7 @@ Vamos a partir por añadir las siguientes validaciones a nuestro formulario:
 
 Para ello podemos usar la directiva _required_ y _pattern_.
 
-_./pages/game-edit/game-edit.component.ts_
+_./pages/game-edit/game-edit.component.html_
 
 ```diff
 <div>
