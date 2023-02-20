@@ -50,8 +50,7 @@ Ahora nos vamos a ir al punto de entrada de la aplicación el _app.component.ts_
 
 Vamos a diseccionar el fichero (no copiar este código):
 
-El componente que vamos a crear va a heredar de _Component_, ese componente
-base lo importamos de la librería de Angular:
+El componente que vamos a crear va ha utilizar el decorador _Component_, este decorador lo importamos de la librería base de Angular. El trabajo de este decorador es añadir propiedas que Angular usará para trabajar con esta clase.  
 
 ```ts
 import { Component } from "@angular/core";
