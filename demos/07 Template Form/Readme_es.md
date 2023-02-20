@@ -390,7 +390,7 @@ ng serve
 
 Vamos ahora a por el campo de la URL, además de validar que el campo esté informado, vamos a asegurarnos de que la URL está bien formada, para ello vamos a usar la directiva _pattern_, que nos permite validar el contenido de un campo contra una expresión regular que hayamos definido.
 
-_./pages/game-edit/game-edit.component.ts_
+_./pages/game-edit/game-edit.component.html_
 
 ```diff
   <label for="imageurl">Picture Url</label>
