@@ -497,7 +497,7 @@ _./pages/game-edit/game-edit.component.html_
     required
     #name="ngModel"
   />
-  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
++  <app-field-error-display [fieldNgModel]="name"></app-field-error-display>
 ```
 
 Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole datos podemos ver que se nos va cambiando la etiqueta de _true_ a _false_ conforme se muestran / eliminan los datos.
