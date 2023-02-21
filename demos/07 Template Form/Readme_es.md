@@ -12,7 +12,7 @@ Esta forma es la más fácil de generar un form, pero también la menos óptima,
 npm install
 ```
 
-- En los template forms para enlazar elementos con datis utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente, de esta manera:
+- En los template forms para enlazar elementos con datos utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente, de esta manera:
 
 - Si un valor del modelo cambia, se actualiza el input.
 - Si un valor del input cambia se actualiza el modelo.
@@ -376,7 +376,7 @@ _./pages/game-edit/game-edit.component.html_
 
 ¿Qué estamos haciendo aquí?
 
-- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, ésta es estándar de HTML5 pero angular la interpreta, Angular también nos provee de otras directivas de validación como _minlength_, _maxlength_, _email_, _url_, _pattern_, e incluso podemos crear nuestras propias validaciones, además de esto, tenemos que crear una variable en el html (fijate el _#name_ en el tag input) que referencia al _ngModel_, estos nos servirá para poder referenciarlo en el HTML que muestra los resultados de la validación.
+- En el input añadimos la validación _required_ que nos obliga a rellenar el campo, ésta es estándar de HTML5 pero angular la interpreta, HTML5 también nos provee de otros atributos de validación como _minlength_, _maxlength_, _email_, _pattern_, además de esto, tenemos que crear una variable de template (fijate el _#name_ en el tag input) que referencia al _ngModel_, estos nos servirá para poder referenciarlo en el HTML que muestra los resultados de la validación.
 
 - Segundo comprobamos si el campo tiene errores, y si el usuario ha pasado por él o si ha modificado algo, para ello usamos la variable _name_ que tiene el _ngModel_, si la que hemos creado con _#name_, (fijate en los flag _dirty_ o _touched_), es decir mientras no haya pasado por el campo o no haya pulsado en el botón de guardar no mostramos el mensaje de error, así evitamos el patrón odioso de mostrar errores cuando todavía no he podido ni rellenar el formulario.
 
@@ -445,7 +445,7 @@ _./pages/game-edit/game-edit.component.html_
   </div>
 ```
 
-Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parecer fácil, podemos probar a hacer lo siguiente:
 
 Creamos una carpeta common y creamos nuestro widget para mostrar errores:
 
@@ -481,7 +481,7 @@ _./common/field-error-display/field-error-display.component.html_
 
 ```diff
 <p>field-error-display works!</p>
-<span>{{ fieldNgModel?.invalid }}</span>
++<span>{{ fieldNgModel?.invalid }}</span>
 ```
 
 Vamos a instanciarlo:
