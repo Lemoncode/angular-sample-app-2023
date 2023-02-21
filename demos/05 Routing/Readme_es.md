@@ -232,6 +232,8 @@ Más adelante deberíamos plantear una refactorización de más calado:
 - Mover los modelos y servicios relacionados al módulo de Angular pertinente.
 - Actualizar el `routing` para que se alinee con los módulos de Angular en la solución. 
 
+> Visitar este [enlace](https://angular.io/guide/styleguide#feature-modules) para más información acerca de los módulos de Angular. 
+
 Vamos ahora a definir una página para editar y crear un juego.
 
 - Debajo de pages vamos a crear una página de edición de juegos, vamos a crearlo
