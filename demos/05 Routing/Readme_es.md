@@ -54,7 +54,7 @@ import { SellerListComponent } from './seller-list/seller-list.component';
 export class AppModule { }
 ```
 
-Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usaremos el componente _router-outlet_, este componente lo instanciaremos en el _app_ que pasa a ser el componente donde definimos el layout de la aplicación y mostramos la páginas de la ruta actual.
+Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usaremos la directiva _router-outlet_, esta directiva la declaramos en el template de _app_ que pasa a ser el componente donde definimos el layout de la aplicación y mostramos la páginas de la ruta actual.
 
 Antes de hacer esto tenemos que pasar todo el contenido de _app_ a _game-list_.
 
@@ -226,10 +226,13 @@ Vamos a crear una subcarpeta components y dentro de ella metemos _card_game_:
 
 Si todo va bien, VSCode habrá hecho las actualizaciones de imports pertinentes, si no hay que arreglar los imports.
 
-Más adelante podríamos plantear una refactorización de más calado:
+Más adelante deberíamos plantear una refactorización de más calado:
 
-- Podríamos mover los modelos y servicios locales a esa página a su carpeta.
-- Podríamos plantear crear un módulo por página.
+- Deberíamos crear módulos de Angular por cada área de negocio de la aplicación.
+- Mover los modelos y servicios relacionados al módulo de Angular pertinente.
+- Actualizar el `routing` para que se alinee con los módulos de Angular en la solución. 
+
+> Visitar este [enlace](https://angular.io/guide/styleguide#feature-modules) para más información acerca de los módulos de Angular. 
 
 Vamos ahora a definir una página para editar y crear un juego.
 
@@ -308,7 +311,7 @@ naveguemos a la página de edición, aquí tenemos dos desafíos:
 - Por un lado navegar por código a la página de edición.
 - Por otro lado, pasarle el id del juego a la página de edición.
 
-Para ellos nos vamos al componente _gamecard_ y en el HTML añadimos un evento click sobre la imagen del juego:
+Para ello nos vamos al componente _gamecard_ y en el HTML añadimos un evento click sobre la imagen del juego:
 
 _./src/app/pages/game-list/components/card-game/card-game.component.html_
 
@@ -382,7 +385,7 @@ export class GameEditComponent {
 }
 ```
 
-Y ahora para leerlo, tenemos que suscribirnos al evento _params_ del _ActivatedRoute_:
+Y ahora para leerlo, tenemos que suscribirnos al `observable` _params_ del _ActivatedRoute_:
 
 ```diff
 constructor(private route: ActivatedRoute) {
