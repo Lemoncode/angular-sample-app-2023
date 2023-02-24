@@ -114,7 +114,9 @@ _./src/app/services/game-api.service.ts_
 import { Injectable } from '@angular/core';
 import { Game } from '../model/game';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GameApiService {
 -  getAll(): Game[] {
 +  getAll(): Promise<Game[]> {
@@ -140,12 +142,12 @@ export class GameApiService {
 
 - Previamente (al crear el componente) hemos registrado con el decorador provided in root (el cli de angular ha hecho esto por nosotros)
 
-- Ahora que queremos utilizar este servicio en el componente: directamente en el constructor lo pedimos (cuando lo pedimos así el servicio es un singleton para toda la aplicación) existen formas de configurarlo de una manera diferente (por ejemplo que se cree una instancia nueva cada vez que se invoque en el constructor), más información sobre esto:
+- Ahora que queremos utilizar este servicio en el componente: directamente en el constructor lo pedimos, al utilizar `@Injectable({ provideIn: 'root' })` en la definición del servicio, es un singleton para toda la aplicación. Existen formas de configurarlo de una manera diferente (por ejemplo que se cree una instancia nueva cada vez que se invoque en el constructor), más información sobre esto:
 
 - [Providing dependencies in modules](https://angular.io/guide/providers)
 - [Angular Singleton services](https://angular.io/guide/singleton-services)
 
-> Aquí angular usa Inyección de dependencias: es un patrón de diseño que consiste en que un objeto no crea sus dependencias, sino que las recibe de fuera. En Angular, esto se consigue a través de los servicios, que son clases que se inyectan en los componentes.
+> Aquí angular usa Inyección de dependencias: es un patrón de diseño que consiste en que un objeto no crea sus dependencias, sino que las recibe de fuera. En Angular, esto se consigue a través de los servicios, que por defecto son clases que se inyectan en los componentes.
 
 _./src/app/app.component.ts_
 
@@ -172,7 +174,7 @@ export class AppComponent {
 +  constructor(private gameApiService: GameApiService) {
 ```
 
-- Un tema importante es que por defecto sólo se crear una instancia por cada servicio para toda la aplicación, si quieres que se cree una instancia por cada componente, debes indicarlo en el decorador @Component, en la entrada _providers_.
+- Un tema importante es que por defecto sólo se crea una instancia por cada servicio para toda la aplicación (recordad que hemos usado `Injectable({ provideIn: 'root' })`), si quieres que se cree una instancia por cada componente, debes indicarlo en el decorador @Component, en la entrada _providers_.
 
 ** NO PEGAR ESTE CODIGO **
 ```diff
