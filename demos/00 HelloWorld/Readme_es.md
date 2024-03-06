@@ -49,9 +49,9 @@ ng new game-catalog
 
 Esto nos va a realizar una serie de preguntas:
 
-- ¿Desea agregar Angular _routing_? (y/n): Angular te puede generar una aplicación SPA con varias páginas y utilizar su propio enrutador, lo normal cuando arranques un proyecto es que sí quieras enrutador, si eliges _y_ te genera todo lo necesario, si le das a _n_ más adelante puedes añadirlo pero tendrás que trabajarlo un poco (en este ejemplo partimos de que no lo tenemos), elegimos N.
-
 - ¿Desea usar CSS? (y/n): Angular te permite usar CSS, SASS, LESS, etc. En este caso vamos a usar CSS, en un proyecto de más envergadura lo normal es elegir SASS ya que te permite usar variables, mixins, etc., te es más fácil por ejemplo mantener la imagen corporativa de tu empresa.
+
+- ¿Desea activar la renderización del lado del servidor (SSR) y la generación de sitios estáticos (SSG/Prerendering)? (y/n): Angular te puede generar una aplicación SSR, esto antes podías tenerlo instalando Angular Universal, pero ahora lo incorpora directamente si elegimos Y. Pero nosotros elegimos N, porque vamos a crear una SPA(Single Page Aplication).
 
 Con esto ya nos crea el proyecto.
 
@@ -100,7 +100,8 @@ Dentro de la carpeta _app_, iremos añadiendo el código que necesitemos, aquí 
 - `app.component.css`: es el fichero de estilos del componente principal de la aplicación.
 - `app.component.spec.ts`: es el fichero de pruebas unitarias del componente principal de la aplicación.
 - `app.component.ts`: es el fichero de código del componente principal de la aplicación.
-- `app.module.ts`: es el fichero de configuración del módulo principal de la aplicación.
+- `app.config.ts`: es el fichero de configuración del módulo principal de la aplicación, donde configurarás tus dependencias externas, como el router de Angular, llamando a provideRouter(routes) en el array providers.
+- `app.routes.ts`: es el fichero de donde guardaremos nuestras rutas.
 
 Para finalizar nos queda la carpeta _assets_, aquí iremos añadiendo los ficheros estáticos que necesitemos, como por ejemplo, imágenes, etc.
 
