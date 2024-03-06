@@ -40,8 +40,10 @@ _./src/app/app.component.ts_
 ```diff
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'game-catalog';
@@ -83,8 +85,25 @@ _[object Object],[object Object],[object Object]_
 - Vamos a iterar por la lista de juegos y asignar un componente por cada uno, para ello usamos la directiva _\*ngFor_ en nuestro HTML:
   - Las directivas son atributos que se añaden a un elemento HTML y que modifican su comportamiento (es decir le enseñan trucos nuevos a un elemento de HTML, mientras que los componentes son elementos HTML que tienen su propio comportamiento)
   - _ngFor_ es una directiva estructural, es decir que modifica la estructura del DOM (en este caso añade elementos).
+  - Para usarla, la añadiremos en el import, esto es debido a la versión 17, en versiones anteriores podías usarla en el template del HTML sin importarla en el app.component.ts.
 
 Veámoslo en acción:
+_./src/app/app.component.ts_
+
+```diff
++ import { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+- imports: [RouterOutlet],
++ imports: [RouterOutlet, NgFor],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+```
 
 _./src/app/app.component.html_
 
@@ -105,6 +124,30 @@ _./src/app/app.component.html_
 - Dentro del contenedor padre tenemos 3 elementos hijos, que se van a repetir por cada elemento de la lista de juegos (la imagen y los dos párrafos).
 - En cada elemento hijo usamos la variable _game_ para acceder a las propiedades del elemento actual.
 - El elemento hijo se repite tantas veces como elementos haya en la lista de juegos.
+
+En Angular 17, se ha añadido otra forma de hacer un bucle for sin usar la directiva NgFor. De la siguiente manera:
+
+_./src/app/app.component.html_
+
+```diff
+<h1>My application</h1>
+<h2>{{ title + "(" + title.length + ")" }})</h2>
+- <div *ngFor="let game of games">
+-   <img src="{{game.imageUrl}}"  style="max-width: 240px"/>
+-   <p>{{game.name}}</p>
+-   <p>{{game.getYearsFromRelease()}}</p>
+- </div>
++@for (game of games; track game.name){
++ <div>
++   <img src="{{game.imageUrl}}"  style="max-width: 240px"/>
++   <p>{{game.name}}</p>
++   <p>{{game.getYearsFromRelease()}}</p>
++ </div>
+}
+
+```
+
+Algo nuevo es la necesidad de una track en el bucle, que determina la clave utilizada para asociar los elementos del array con las vistas en el DOM.
 
 Bueno, ya tenemos esto andando en modo básico.
 
@@ -139,9 +182,9 @@ En la ruta _app/card-game_ se han creado los siguientes ficheros:
 - _card-game.component.css_ : Los estilos del componente.
 - _card-game.component.spec.ts_: El fichero de pruebas del componente.
 
-Y en el fichero _app.module.ts_ se ha registrado el componente.
+En versiones anteriores veríamos que en el fichero _app.module.ts_ se ha registrado el componente.
 
-** Ojo este snippet es solo para referencia **
+** Ojo este snippet es solo para referencia, para ver como era en versiones anteriores **
 
 _./src/app/app.module.ts_
 
@@ -159,6 +202,26 @@ import { AppComponent } from './app.component';
   ],
   providers: [],
   bootstrap: [AppComponent]
+})
+```
+
+Pero, en la versión actual, ese archivo no existe. Por lo que para poder usar el componente, tenemos que importarlo donde queramos usarlo. En este caso, lo vamos a importar en el imports de nuestro app.component.ts.
+
+_./src/app/app.component.ts_
+
+```diff
+mport { NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
++ import { CardGameComponent } from './card-game/card-game.component';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+- imports:[RouterOutlet, NgFor],
++ imports: [RouterOutlet, NgFor, CardGameComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
 ```
 
@@ -269,7 +332,7 @@ En el componente principal lo instanciamos y usamos esa propiedad:
 </div>
 ```
 
-Ahora viene otro punto de magia este binding cuando lo vamos a usar lo envolvemos entre _corchetes_ y le ponemos el nombre de la propiedad que queremos pasarle, en este caso _game_ ¿Esto por qué? Angular tiene un sistema de property binding, podemos envolver la propiedad entre corchetes o entre paréntesis ¿Qué diferencia hay?
+Ahora viene otro punto de magia, este binding cuando lo vamos a usar lo envolvemos entre _corchetes_ y le ponemos el nombre de la propiedad que queremos pasarle, en este caso _game_. ¿Esto por qué? Angular tiene un sistema de property binding, podemos envolver la propiedad entre corchetes o entre paréntesis ¿Qué diferencia hay?
 
 - Si la envolvemos entre corchetes:
   - Es un binding en una dirección, desde la fuente de datos (el objeto) al destino (el componente).
@@ -279,12 +342,12 @@ Ahora viene otro punto de magia este binding cuando lo vamos a usar lo envolvemo
   - Esto lo podemos usar para leer datos de un _input.value_, o engancharnos a un evento, por ejemplo un botón _(click)="onSave()"_.
 - ¿Y si usamos las dos? [()]
   - A esto lo llamamos _banana in a box_ y es un binding en dos direcciones, es decir, si cambia el valor en el componente, se actualiza el objeto y viceversa.
-  - Se puede usar en los casos en los que queremos que el valor de un input se actualice en el objeto y tmabién en el sentido contrario, del objeto al input, y esto lo enlazaríamos a la propiedad value.
+  - Se puede usar en los casos en los que queremos que el valor de un input se actualice en el objeto y también en el sentido contrario, del objeto al input, y esto lo enlazaríamos a la propiedad value.
   - El binding two way genera mucha discusión y controversia, en escenarios sencillos puede ser una solución más que válida, en otros a veces te introduce errores que son muy complicado de poder depurar.
 
 > Más información: https://stackoverflow.com/questions/35944749/what-is-the-difference-between-parentheses-brackets-and-asterisks-in-angular2
 
-Para finalizar estilar el componente card.
+Para finalizar vamos a estilar el componente card.
 
 Añadimos un poco de CSS para:
 
