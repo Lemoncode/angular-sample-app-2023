@@ -26,7 +26,7 @@ export class Game {
   dateRelease: Date;
   imageUrl?: string;
 
-  constructor(name: string, dateRelease: string = "", imageUrl?: string) {
+  constructor(name: string, dateRelease: string = '', imageUrl?: string) {
     this.name = name;
     this.dateRelease = new Date(dateRelease);
     this.imageUrl = imageUrl;
@@ -50,28 +50,32 @@ Ahora nos vamos a ir al punto de entrada de la aplicación el _app.component.ts_
 
 Vamos a diseccionar el fichero (no copiar este código):
 
-El componente que vamos a crear va ha utilizar el decorador _Component_, este decorador lo importamos de la librería base de Angular. El trabajo de este decorador es añadir propiedas que Angular usará para trabajar con esta clase.  
+El componente que vamos a crear va ha utilizar el decorador _Component_, este decorador lo importamos de la librería base de Angular. El trabajo de este decorador es añadir propiedas que Angular usará para trabajar con esta clase.
 
 ```ts
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 ```
 
 El componente lo definimos como una clase, pero le ponemos justo encima un decorador (@Component), en este decorador le indicamos unos parámetros de configuración:
 
 - Como se va a llamar el componente, en este caso `app-root`, esto es lo que utilizaremos en el HTML para referenciarlo.
-- La ruta del fichero HTML que contiene la plantilla de este componente, es decir un componente tiene este fichero y otro de HTML donde definimos el interfaz de usuarios.
+- En Angular 17 tenemos el parámetro standalone, se establece en true por defecto al crear un componente. Esto garantiza que el componente no dependa directamente de ningún módulo, lo que simplifica su implementación y lo hace más flexible para su reutilización o traslado dentro del proyecto o a otros proyectos. Además, al ser independiente, el componente se encarga de declarar sus propias importaciones necesarias, facilitando así su mantenimiento y modularidad.
+- Como novedad también tenemos el parámetro imports, algo nuevo de Angular 17 y que va en relación con lo anterior. Aquí añadiremos las dependencias que necesitemos, directivas, pipes, o componentes. Más adelante veremos estos conceptos.
+- La ruta del fichero HTML que contiene la plantilla de este componente, es decir, un componente tiene este fichero y otro de HTML donde definimos el interfaz de usuarios.
 - La ruta del fichero CSS que contiene los estilos de este componente, si en Angular tenemos un sitio para definir estilos globales, y después un css por componente para definir estilos locales (así evitamos el infierno de tener que mantener un fichero global enorme).
 
 Dentro de _AppComponent_ tenemos por defecto definido una propiedad _title_ un string.
 
 ```ts
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = "game-catalog";
+  title = 'game-catalog';
 }
 ```
 
@@ -199,7 +203,7 @@ export class AppComponent {
 +    game: Game = new Game("");
 ```
 
-> _ngOnInit_ está en el ciclo de vida de Angular, y se invoca cuando se inicializa un componente, es decir cuando se crea el componente y se inyectan las dependencias (se invoca justo después de que el constructor se haya llamado), angular provee de otro punto de entrada llamado _ngOnDestroy_ que se llama para limpiar recursos.
+> _ngOnInit_ está en el ciclo de vida de Angular, y se invoca cuando se inicializa un componente, es decir, cuando se crea el componente y se inyectan las dependencias (se invoca justo después de que el constructor se haya llamado), angular provee de otro punto de entrada llamado _ngOnDestroy_ que se llama para limpiar recursos.
 
 Para comprobar que esto se ejecuta en el orden que hemos comentado, vamos a añadir dos _console.log_ en el constructor y en el _ngOnInit_:
 
@@ -260,7 +264,7 @@ _./src/styles.css_
 + }
 ```
 
-Y ahora vamos a poner las etiquetas _name_ y _years_ en negrita, pero esta vez sólo queremos que ese estilo se aplique en este componente, para ello vamos a crear un fichero _app.component.css_:
+Y ahora vamos a poner las etiquetas _name_ y _years_ en negrita, pero esta vez sólo queremos que ese estilo se aplique en este componente, para ello vamos a añadir estilos en el fichero _app.component.css_:
 
 _./src/app/app.component.css_
 
