@@ -1,6 +1,6 @@
 # Routing
 
-Hasta ahora hemos estado apilando componentes directamente en el fichero app, pero una aplicación real suele estar dividida en páginas, para ello Angular nos ofrece el concepto de routing, que nos permite definir componentes que se van a mostrar en función de la url y también nos ofrece servicios de navegación entre páginas.
+Hasta ahora hemos estado apilando componentes directamente en el fichero app, pero una aplicación real suele estar dividida en páginas. Para ello, Angular, nos ofrece el concepto de routing, que nos permite definir componentes que se van a mostrar en función de la url y también nos ofrece servicios de navegación entre páginas.
 
 En este ejemplo vamos crear una página de listado de juegos (moveremos todo lo que hay en app a esa página) y añadiremos otra página que me permita añadir un juego.
 
@@ -18,43 +18,21 @@ npm install
 ng generate component pages/game-list
 ```
 
-- Si te acuerdas, cuando creamos el proyecto, le indicamos al cli de Angular que no queríamos Routing, de esta manera, podemos aprender como añadir esta funcionalidad a un proyecto existente, vamos indicarle a la aplicación...:
-  - Que vamos a utilizar el modulo _@angular/router_
-  - Definir las rutas de nuestra aplicación.
-  - Asociarlas al router.
+- Si te acuerdas, cuando creamos el proyecto, borramos todo el html que venía por defecto, incluso un tag que era `<router-outlet></router-outlet>`. Ahora vamos a rescatarlo y a usarlo en nuestro app.component.html.
+- Pero primero vamos a definir las rutas de nuestra aplicación. Vamos a ir al archivo app.routes.ts que está en la raiz. Y allí haremos que nuestro componente CardGame se cargue al entrar en la apliciacion, usando el siguiente código:
 
 _./src/app/app.module.ts_
 
 ```diff
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-+ import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
++import { CardGameComponent } from './card-game.component';
 
-import { AppComponent } from './app.component';
-import { CardGameComponent } from './card-game/card-game.component';
-import { SellerListComponent } from './seller-list/seller-list.component';
+-export const routes: Routes = [];
++export const routes: Routes = [{ path: '', component: CardGameComponent }];
 
-+const appRoutes: Routes = [
-+  { path: '', component: CardGameComponent },
-+ ];
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    CardGameComponent,
-    SellerListComponent
-  ],
-  imports: [
-    BrowserModule,
-+  RouterModule.forRoot(appRoutes)
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
 ```
 
-Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usaremos la directiva _router-outlet_, esta directiva la declaramos en el template de _app_ que pasa a ser el componente donde definimos el layout de la aplicación y mostramos la páginas de la ruta actual.
+Ahora tenemos que decirle donde va a pintar Angular las ventanas, para ello usaremos la directiva _router-outlet_. Esta directiva la declaramos en el template de _app_ que pasa a ser el componente donde definimos el layout de la aplicación y mostramos la páginas de la ruta actual. Como puedes ver en los imports del `app.component.ts` aparece el `RouterOulet`, que lo estamos importando de `@angular/router`, así podremos usar el tag router-oulet en el `app.component.html`.
 
 Antes de hacer esto tenemos que pasar todo el contenido de _app_ a _game-list_.
 
@@ -63,7 +41,6 @@ Antes de hacer esto tenemos que pasar todo el contenido de _app_ a _game-list_.
 _./src/app/pages/game-list/game-list.component.ts_
 
 ```diff
-import { Component } from '@angular/core';
 + import { Game } from '../../model/game.model';
 + import { Seller } from '../../model/seller.model';
 + import { GameApiService } from '../../services/game-api.service';
@@ -71,8 +48,11 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
+  standalone: true,
+  imports: [NgFor, CardGameComponent, SellerListComponent, NgIf],
   styleUrls: ['./game-list.component.css']
 })
+
 export class GameListComponent {
 +  games: Game[];
 +  showSellerList: boolean;
@@ -106,15 +86,19 @@ _./src/app/app.component.ts_
 
 ```diff
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 - import { Game } from './model/game.model';
 - import { Seller } from './model/seller.model';
 - import { GameApiService } from './services/game-api.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrl: './app.component.css',
 })
+
 export class AppComponent {
   title = 'game-catalog';
 -  games: Game[];
@@ -191,9 +175,9 @@ _./src/app/app.component.html_
 _./src/app/app.module.ts_
 
 ```diff
-import { SellerListComponent } from './seller-list/seller-list.component';
-import { GameListComponent } from './pages/game-list/game-list.component';
-import { GameEditComponent } from './pages/game-edit/game-edit.component';
+-import { CardGameComponent } from './card-game.component';
++import { GameListComponent } from './pages/game-list/game-list.component';
+
 
 const appRoutes: Routes = [
 -  { path: '', component: CardGameComponent },
@@ -218,6 +202,31 @@ _./src/app/app.component.html_
 ng-serve
 ```
 
+> En la versión anterior, el router de Angular funcionaba diferente. Teníamos un archivo
+> app.module.ts dónde configurábamos las dependencias de Angular. Te muestro como quedaba el router en la versión anterior:
+
+** NO PEGAR ESTE CODIGO **
+
+```ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { CardGameComponent } from './card-game/card-game.component';
+import { SellerListComponent } from './seller-list/seller-list.component';
+
+const appRoutes: Routes = [{ path: '', component: CardGameComponent }];
+
+@NgModule({
+  declarations: [AppComponent, CardGameComponent, SellerListComponent],
+  imports: [BrowserModule, RouterModule.forRoot(appRoutes)],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+
 Antes de seguir, vamos a hacer un pequeño refactor para que todo lo que hay dentro de la página de _game-list_ quede dentro de esa carpeta:
 
 Vamos a crear una subcarpeta components y dentro de ella metemos _card_game_:
@@ -230,9 +239,9 @@ Más adelante deberíamos plantear una refactorización de más calado:
 
 - Deberíamos crear módulos de Angular por cada área de negocio de la aplicación.
 - Mover los modelos y servicios relacionados al módulo de Angular pertinente.
-- Actualizar el `routing` para que se alinee con los módulos de Angular en la solución. 
+- Actualizar el `routing` para que se alinee con los módulos de Angular en la solución.
 
-> Visitar este [enlace](https://angular.io/guide/styleguide#feature-modules) para más información acerca de los módulos de Angular. 
+> Visitar este [enlace](https://angular.io/guide/styleguide#feature-modules) para más información acerca de los módulos de Angular.
 
 Vamos ahora a definir una página para editar y crear un juego.
 
@@ -252,7 +261,7 @@ import { GameListComponent } from './pages/game-list/game-list.component';
 
 const appRoutes: Routes = [
   { path: '', component: GameListComponent },
-+  { path: 'edit', component: GameEditComponent },
++ { path: 'edit', component: GameEditComponent },
 ];
 ```
 
@@ -261,12 +270,28 @@ _http://localhost:4200/edit_
 
 - Si te fijas en el propio app podríamos definir el layout de la aplicación (las página maestras), vamos a aprovechar y crear un header que tenga un enlace a la funcionalidad de crear un nuevo juego.
 
-En este header metemos dos enlaces (uno a la página de list y otro a la de crear juego), fíjate que al elemento estándar _anchor_ de html le informamos con una directiva para que realize la navegación(navegación SPA) a la página de edit.
+En este header metemos dos enlaces (uno a la página de list y otro a la de crear juego), fíjate que al elemento estándar _anchor_ de html le informamos con una directiva para que realize la navegación (navegación SPA) a la página de edit. Importamos la directiva RouterLink en app.component.ts y luego la usamos en el app.component.html.
+
+_./src/app/app.component.ts_
+
+```diff
+- import { RouterOutlet } from '@angular/router';
++ import { RouterLink, RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+- imports: [RouterOutlet],
++ imports: [RouterOutlet, RouterLink],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
+})
+```
 
 _./src/app/app.component.html_
 
 ```diff
--<h1>My application</h1>
+- <h1>My application</h1>
 - <h2>{{ title + "(" + title.length + ")" }})</h2>
 + <header>
 +   <nav>
@@ -372,31 +397,46 @@ _./src/app/pages/game-edit/game-edit.component.ts_
 
 ```diff
 import { Component } from '@angular/core';
-+ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-edit',
+  standalone: true,
+  imports: [],
   templateUrl: './game-edit.component.html',
   styleUrls: ['./game-edit.component.css']
 })
 export class GameEditComponent {
-+ id : string;
-+ constructor(private route: ActivatedRoute) {}
++ @Input('id') id: string | undefined;
 }
 ```
 
-Y ahora para leerlo, tenemos que suscribirnos al `observable` _params_ del _ActivatedRoute_:
+En versione anteriores de Angular para acceder al id, teniamos que craear una variable donde almacenar este id y teníamos que suscribirnos al `observable` _params_ del _ActivatedRoute_:
+
+** NO PEGAR ESTE CODIGO **
 
 ```diff
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-game-edit',
+  standalone: true,
+  imports: [],
+  templateUrl: './game-edit.component.html',
+  styleUrl: './game-edit.component.css',
+})
+export class GameEditComponent {
+id: string;
+
 constructor(private route: ActivatedRoute) {
-+   this.id = '';
-+   this.route.params.subscribe(params => {
-+     this.id = params['id'];
-+   });
-}
+   this.id = '';
+   this.route.params.subscribe(params => {
+     this.id = params['id'];
+    });
+}}
 ```
 
-> Aquí estamos usando observables, más adelante aprendemremos a usarlos.
+> Aquí estábamos usando observables, más adelante aprendemremos a usarlos.
 
 Vamos a mostrar esta entrada en el HTML:
 
@@ -419,4 +459,3 @@ También puedes apuntarte a nuestro Bootcamp de Back End [Bootcamp Backend](http
 
 Y si tienes ganas de meterte una zambullida en el mundo _devops_
 apúntate nuestro [Bootcamp devops online Lemoncode](https://lemoncode.net/bootcamp-devops#bootcamp-devops/inicio)
-
