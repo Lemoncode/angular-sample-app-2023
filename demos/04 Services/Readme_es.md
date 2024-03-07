@@ -1,13 +1,13 @@
 # Servicios
 
-Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de _concerns_ debemos de extraerlo, para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, realizar unos cálculos, etc.
+Hasta ahora hemos ido colocando todo el código en los ficheros de componentes, pero en una aplicación real, un componente debe de centrarse en cubrir UI, el resto de _concerns_ debemos de extraerlo. Para ello Angular nos ofrece los servicios: una clase que se encarga de realizar una tarea concreta, por ejemplo, obtener datos de un servidor, realizar unos cálculos, etc.
 
-En este ejemplo vamos a encapsular la carga de datos inicial (que de momento es mock) en un servicio, así:
+En este ejemplo, vamos a encapsular la carga de datos inicial (que de momento es mock) en un servicio, así:
 
 - Por un lado nuestro componente se centrará en mostrar la información.
 - Por otro lado nuestro servicio se centrará en obtener la información.
-- Es más fácil poder a futuro pasar de mock a fuente de datos real, ya que esta funcionalidad está encapsulada en un servicio.
-- Y también es más fácil poder realizar pruebas unitarias ya que la funcionalidad la hemos encapsulado en un servicio, no haría falta montar el componente para probar sólo el acceso a una API.
+- Es más fácil poder a futuro, pasar de mock a fuente de datos real, ya que esta funcionalidad está encapsulada en un servicio.
+- Y también es más fácil poder realizar pruebas unitarias. Debido a que la funcionalidad la hemos encapsulado en un servicio, no haría falta montar el componente para probar sólo el acceso a una API.
 
 # Paso a paso
 
@@ -28,8 +28,7 @@ Este comando:
 - Me va a generar los ficheros necesarios para crear un servicio.
 - Me va a añadir un decorador al servicio que permitirá a angular detectarlo y levantar un singleton del mismo cuando haga falta.
 
-- Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos, en este caso los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de
-  aquí:
+- Nos creamos un nuevo método en el servicio, que será el encargado de obtener los datos. En este caso, los datos serán mock, pero en un futuro podrían ser datos reales, podemos partir de aquí:
 
 _./src/app/services/game-api.service.ts_
 
@@ -106,7 +105,7 @@ export class GameApiService {
 }
 ```
 
-- Pero lo ideal es poner una firma de método que nos permita obtener datos de forma asíncrona, en Angular es muy normal utilizar observables y RxJs, pero de momento nos vamos a quedar con promesas (después migraremos el ejemplo y veremos qué ventajas nos aporta RxJs), así que nuestro método quedaría de esta forma:
+- Pero lo ideal es poner una firma de método que nos permita obtener datos de forma asíncrona. En Angular es muy normal utilizar observables y RxJs, pero de momento nos vamos a quedar con promesas (después migraremos el ejemplo y veremos qué ventajas nos aporta RxJs). Así que nuestro método quedaría de esta forma:
 
 _./src/app/services/game-api.service.ts_
 
@@ -177,6 +176,7 @@ export class AppComponent {
 - Un tema importante es que por defecto sólo se crea una instancia por cada servicio para toda la aplicación (recordad que hemos usado `Injectable({ provideIn: 'root' })`), si quieres que se cree una instancia por cada componente, debes indicarlo en el decorador @Component, en la entrada _providers_.
 
 ** NO PEGAR ESTE CODIGO **
+
 ```diff
 @Component({
 selector: 'app-root',
@@ -186,7 +186,6 @@ styleUrls: ['./app.component.css'],
 + providers: [GameApiService],
   })
 ```
-
 
 Y sustituimos el código mock por la llamada al servicio (esta vez sabiendo que el método me devuelve una promesa):
 
@@ -271,9 +270,9 @@ _./src/app.component.ts_
     this.sellers = sellers;
     this.showSellerList = true;
   }
-````
+```
 
-Fíjate que _games_ sale en rojo, esto es porque aunque lo inicialicemos en el init, para TypeScript esto es un problema tenemos que inicializarla a un valor seguro en el constructor.
+Fíjate que _games_ sale en rojo, esto es porque aunque lo inicialicemos en el init, para TypeScript esto es un problema, tenemos que inicializarla a un valor seguro en el constructor.
 
 _./src/app.component.ts_
 
@@ -286,10 +285,10 @@ _./src/app.component.ts_
 
 Como hemos tocado muchos conceptos nuevos vamos a hacer un pequeño resumen:
 
-- Queremos extraer lógica que no sea de presentación de nuestro componente, para ello creamos un servicio (usamos el CLI para ello y así nos lo registra automáticamente en el módulo de aplicación)
+- Queremos extraer lógica que no sea de presentación de nuestro componente, para ello creamos un servicio (usamos el CLI para ello y así nos lo registra automáticamente en el módulo de aplicación).
 - En ese servicio encapsulamos en un método la carga de la lista de gamecard, ya que estamos lo hacemos asíncrono, así cuando queramos sustituir los datos mock por una llamada a una API real sólo tenemos que tocar la implementación del servicio y no impactará en el componente.
 - Para usar el servicio en el componente que queramos utilizamos la inyección de dependencia de Angular, así obtenemos una instancia del servicio y podemos usarlo en el componente.
-- A tener en cuenta aunque usemos un servicio en varios componentes, por defecto se creará una sola instancia.
+- Un dato a tener en cuenta es que aunque usemos un servicio en varios componentes, por defecto se creará una sola instancia.
 
 # ¿Te apuntas a nuestro máster?
 
