@@ -1,8 +1,8 @@
 # Aliases
 
-Si te fijas hemos estado trabajando con rutas relativas en los imports, en cuanto un proyecto empieza a crecer esto puede ser un problema, ya que si movemos un fichero de lugar, tendremos que actualizar todas las rutas relativas que apuntan a ese fichero (aquí VS Code te ayuda a veces), pero lo que es peor es que acertar con un path relativo puede ser complicado.
+Si te fijas hemos estado trabajando con rutas relativas en los imports, en cuanto un proyecto empieza a crecer, esto puede ser un problema. Ya que si movemos un fichero de lugar, tendremos que actualizar todas las rutas relativas que apuntan a ese fichero (aquí VS Code te ayuda a veces), pero lo que es peor es que acertar con un path relativo puede ser complicado.
 
-Vamos a ver como definir alias a nivel de carpeta raíz para que podamos importar de forma más sencilla.
+Vamos a ver cómo definir alias a nivel de carpeta raíz para que podamos importar de forma más sencilla.
 
 # Paso a paso
 
@@ -15,19 +15,17 @@ npm install
 - En el _tsconfig.json_ vamos a definir aliases para las carpetas que justo cuelguen de _src/app_.
 
 ```diff
-    "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
--    ],
-     "baseUrl": "./",
-+    "paths": {
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
++   "paths": {
 +      "@/*": ["./src/app/*"]
 +    },
-  },
+  },}
 ```
 
-Con esto le estamos diciendo a TypeScript que cuando vea un import que empiece por _@_ lo que tiene que hacer es buscar en la carpeta _src/app_ y concatene lo que este contenido en el caracter asterisco.
+Con esto le estamos diciendo a TypeScript que cuando vea un import, que empiece por _@_, lo que tiene que hacer es buscar en la carpeta _src/app_ y concatenar lo que este contenido en el carácter asterisco.
 
 Ahora podemos cambiar los path relativos por _@/_, por ejemplo:
 
