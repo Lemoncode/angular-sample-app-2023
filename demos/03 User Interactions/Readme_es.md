@@ -2,7 +2,7 @@
 
 Bueno ya sabemos cómo mostrar datos, hasta incluso podemos mostrar una lista de elementos.
 
-Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir que éste muestra una lista de vendedores disponibles para un juego: al pulsar sobre un juego se mostrará un modal con la lista de los vendedores que tiene.
+Vamos ahora a empezar a interactuar con el usuario, para ello vamos a permitir que éste muestre una lista de vendedores disponibles para un juego: al pulsar sobre un juego se mostrará un modal con la lista de los vendedores que tiene.
 
 # Paso a paso
 
@@ -28,7 +28,7 @@ export interface Seller {
 }
 ```
 
-> Hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' al interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo que estándar seguir (no existe bala de plata, ambas aproximaciones tienen sus pros y contras, lo importante es ser consistente).
+> Hemos creado un interfaz para el modelo de seller porque sólo va a almacenar datos y cero implementación, en estos casos hay desarrolladores que le añaden el prefijo 'I' a la interfaz para distinguirlo de la clase, si tienes dudas consulta con tu equipo de desarrollo que estándar seguir (no existe bala de plata, ambas aproximaciones tienen sus pros y contras, lo importante es ser consistente).
 
 - Vamos a actualizar la entidad game para que tenga una lista de vendedores por cada juego.
 
@@ -130,8 +130,7 @@ _./src/app/app.component.ts_
 
 - Ahora vamos a crear un componente que muestre un modal y la lista de sellers.
 
-> De momento lo vamos a crear todo en uno, más adelante aprenderamos a
-> dividir esto en dos componentes, un modal, que pueda consumir la lista de sellers u otro componente.
+> De momento lo vamos a crear todo en uno, más adelante aprenderemos a dividir esto en dos componentes, un modal, que pueda consumir la lista de sellers u otro componente y el componente lista de sellers.
 
 > Lo normal cuando trabajamos con angular es que elijamos una librería de componentes y es esa librería la que nos va a proporcionar los componentes avanzados de UI.
 
@@ -215,7 +214,21 @@ _./src/app/seller-list.component.html_
 </div>
 ```
 
-Y vamos a instanciarlo en el app.component.html
+Y vamos a importarlo app.component.ts e instanciarlo en el app.component.html
+
+_./src/app/app.component.ts_
+
+```diff
++import { SellerListComponent } from './seller-list/seller-list.component';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+- imports: [RouterOutlet, NgFor, CardGameComponent],
++ imports: [RouterOutlet, NgFor, CardGameComponent, SellerListComponent],
+```
+
+_./src/app/app.component.html_
 
 ```diff
 <h1>My application</h1>
@@ -227,11 +240,24 @@ Y vamos a instanciarlo en el app.component.html
 + <app-seller-list></app-seller-list>
 ```
 
-Vamos a controlar el estado del modal con una variable booleana, en este caso por dar una solución simple lo gestionaremos desde el componente padre, esto nos servirá para aprender cómo funciona la directiva _ngIf_, en un proyecto real usarías un componente modal de una librería que ya traería encapsulada esta implementación.
+Vamos a controlar el estado del modal con una variable booleana, en este caso por dar una solución simple lo gestionaremos desde el componente padre, esto nos servirá para aprender cómo funciona la directiva _ngIf_, en un proyecto real usarías un componente modal de una librería que ya traería encapsulada esta implementación. Para usar la directiva primero tenemos que importarla en el app.componnet.ts.
 
 _./src/app/app.component.ts_
 
 ```diff
+-import { NgFor } from '@angular/common';
++import { NgFor, NgIf } from '@angular/common';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+-  imports: [RouterOutlet, NgFor, CardGameComponent, SellerListComponent],
++  imports: [RouterOutlet, NgFor, CardGameComponent, SellerListComponent, NIf],
+  templateUrl: './app.component.html',
+    templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
+})
+
 export class AppComponent {
   title = 'game-catalog';
   games: Game[];
@@ -255,7 +281,22 @@ _./src/app/app.component.html_
 
 Si te fijas ya no aparece el modal, ¿Por qué? Porque el valor de _showSellerList_ es _false_.
 
-Vamos a añadir la siguiente funcionalidad: si pinchas en el título del juego, se muestra el diálogo modal, para ello vamos seguir estos pasos:
+Hemos usado la directiva ngIf pero también podríamos haber usado @if en el app.component.html, de la siguiente forma:
+
+_./src/app/app.component.html_
+
+```diff
+<div *ngFor="let game of games">
+  <app-card-game [game]="game"></app-card-game>
+</div>
+
+- <app-seller-list *ngIf="showSellerList"></app-seller-list>
++ @if(showSellerList){<app-seller-list></app-seller-list>}
+```
+
+De esta forma no necesitamos importar una directiva, nosotros usaremos la versión con la directiva ngIf, pero las podrías usar indiferentemente.
+
+Ahora vamos a añadir la siguiente funcionalidad: si pinchas en el título del juego, se muestra el diálogo modal, para ello vamos seguir estos pasos:
 
 - En card game vamos a exponer un evento click.
 - En el componente padre vamos a escuchar ese evento y cambiar el valor de _showSellerList_ a _true_ cuando se ejecute.
@@ -342,7 +383,7 @@ _./src/app/app.component.html_
 
 Vamos a probarlo...
 
-¡Ey! pinchamos en el título y se muestra el diálogo modal (ojo si hacemos scroll más abajo veremos que no se muestra el modal, tenemos que hacer scroll, actualizaremos esto más adelante).
+¡Ey! pinchamos en el título y se muestra el diálogo modal (ojo si hacemos scroll más abajo veremos que no se muestra el modal, tenemos que subir para verlo, actualizaremos esto más adelante).
 
 Vamos ahora añadir la funcionalidad para cerrar el modal, en este caso si pinchamos en el bóton de aspa emitiremos un evento desde el componente hijo y lo recogeremos en el componente padre.
 
@@ -498,7 +539,7 @@ A nivel de estilado:
 
 - Para crear una lista vamos a usar el estándar CSS-Grid.
 - Vamos a definir 4 columnas, le vamos a dar un tamaño fijo a todas las columnas menos a la columna nombre y ahí le diremos que tome todo el espacio disponibles (será la única que tenga definido el valor FR), si más adelante quisiéramos dejar esto más fino podríamos usar mediaqueries.
--  También definimos una clase para la cabecera de la columna con un color de fondo.
+- También definimos una clase para la cabecera de la columna con un color de fondo.
 
 _./src/app/seller-list/seller-list.component.css_
 
