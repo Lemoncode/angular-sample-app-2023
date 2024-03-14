@@ -1,6 +1,6 @@
 # Template Form
 
-Otro punto básico cuando queremos desarrollar una aplicación web es la creación de formularios, en este ejemplo vamos a ver como armar un formulario con un template.
+Otro punto básico cuando queremos desarrollar una aplicación web es la creación de formularios, en este ejemplo vamos a ver cómo armar un formulario con un template.
 
 Esta forma es la más fácil de generar un form, pero también la menos óptima, en escenarios complejos puede ser buena idea utilizar Reactive Forms (esto lo veremos más adelante)
 
@@ -12,15 +12,16 @@ Esta forma es la más fácil de generar un form, pero también la menos óptima,
 npm install
 ```
 
-- En los template forms para enlazar elementos con datis utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente, de esta manera:
+- En los template forms para enlazar elementos con datos utilizamos la directiva _ngModel_ y el doble binding, también conocido como _banana in a box_ _[()]_ si te fijas es la combinación de los bindings que vimos anteriormente. De esta manera:
 
 - Si un valor del modelo cambia, se actualiza el input.
 - Si un valor del input cambia se actualiza el modelo.
 
 Vamos a empezar a usar esto, en nuestra página de edición de un juego, cubriendo el caso de inserción de un nuevo juego.
 
-Antes de usar _ngModel_ tenemos que importarnos el _FormsModule_ en el módulo principal de la aplicación.
+En la versión anterior, antes de usar _ngModel_ tenemos que importarnos el _FormsModule_ en el módulo principal de la aplicación. De la siguiente manera:
 
+** NO COPIAR ESTE CÓDIGO **
 _./src/app/app.module.ts_
 
 ```diff
@@ -49,7 +50,22 @@ import { RouterModule, Routes } from '@angular/router';
 })
 ```
 
-En el game-edit component, vamos a añadir una variable miembro que almacene un juego en blanco.
+En la versión actual, tenemos que importar _FormsModule_ en el game-edit component.
+
+_./src/app/pages/game-edit/game-edit.component.ts_
+
+```diff
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-game-edit',
+  standalone: true,
+- imports: [],
++ imports: [FormsModule],
+
+```
+
+En el mismo archivo, vamos a añadir una variable game que almacene un juego en blanco.
 
 _./src/app/pages/game-edit/game-edit.component.ts_
 
@@ -60,19 +76,17 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-edit',
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './game-edit.component.html',
   styleUrls: ['./game-edit.component.css'],
 })
 export class GameEditComponent {
-  id: string;
+  @Input('id') id: string | undefined;
 + game: Game;
 
-  constructor(private route: ActivatedRoute) {
-    this.id = '';
-+   this.game = new Game("");
-    this.route.params.subscribe((params) => {
-      this.id = params['id'];
-    });
+  constructor() {
+    this.game = new Game("");
   }
 }
 ```
@@ -105,12 +119,8 @@ Con los datos enlazados, nos queda añadir un botón de guardado y un handler pa
 _./src/app/pages/game-edit/game-edit.component.ts_
 
 ```diff
-  constructor(private route: ActivatedRoute) {
-    this.id = '';
-    this.game = new Game('');
-    this.route.params.subscribe((params) => {
-      this.id = params['id'];
-    });
+  constructor() {
+  this.game = new Game('');
   }
 
 +  handleSaveClick() {
@@ -142,73 +152,73 @@ Ya que queremos trabajar con un array en memoria, pasamos a realizar un pequeño
 
 Primero la lista de juegos la vamos a poner en una variable en un fichero aparte:
 
-_./services/game-api.mock.ts_
+_./src/app/services/game-api.mock.ts_
 
 ```ts
-import { Game } from "../model/game.model";
+import { Game } from '../model/game.model';
 
 export const gameMockCollection = [
   new Game(
-    "Super Mario Bros",
-    "13 September 1985",
-    "https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp",
+    'Super Mario Bros',
+    '13 September 1985',
+    'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/super-mario.webp',
     [
       {
         id: 1,
-        name: "Old shop",
+        name: 'Old shop',
         price: 95,
         amount: 2,
-        isAvailable: true,
+        isAvailable: true
       },
       {
         id: 2,
-        name: "New shop",
+        name: 'New shop',
         price: 115,
         amount: 1,
-        isAvailable: true,
+        isAvailable: true
       },
       {
         id: 3,
-        name: "Regular shop",
+        name: 'Regular shop',
         price: 135,
         amount: 0,
-        isAvailable: false,
-      },
+        isAvailable: false
+      }
     ]
   ),
   new Game(
-    "Legend of Zelda",
-    "21 February 1986",
-    "https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/legend-zelda.webp",
+    'Legend of Zelda',
+    '21 February 1986',
+    'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/legend-zelda.webp',
     [
       {
         id: 3,
-        name: "Old shop",
+        name: 'Old shop',
         price: 125,
         amount: 0,
-        isAvailable: false,
+        isAvailable: false
       },
       {
         id: 4,
-        name: "New shop",
+        name: 'New shop',
         price: 145,
         amount: 1,
-        isAvailable: true,
-      },
+        isAvailable: true
+      }
     ]
   ),
   new Game(
-    "Sonic",
-    "26 June 1981",
-    "https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/sonic-frontiers.webp",
+    'Sonic',
+    '26 June 1981',
+    'https://raw.githubusercontent.com/Lemoncode/angular-sample-app/master/media/sonic-frontiers.webp',
     []
-  ),
+  )
 ];
 ```
 
 Pasamos a usar esta varialbe en el servicio, y para simular un insert hacemos un _push_ en el array:
 
-_./services/game-api.service.ts_
+_.src/app/services/game-api.service.ts_
 
 ```diff
 import { Injectable } from '@angular/core';
@@ -310,14 +320,9 @@ export class GameEditComponent {
   id: string;
   game: Game;
 
--  constructor(private route: ActivatedRoute) {
-+  constructor(private route: ActivatedRoute, private gameApi: GameApiService) {
-
-    this.id = '';
+-  constructor() {
++  constructor(private gameApi: GameApiService) {
     this.game = new Game('');
-    this.route.params.subscribe((params) => {
-      this.id = params['id'];
-    });
   }
 
   handleSaveClick() {
@@ -359,7 +364,19 @@ Vamos a partir por añadir las siguientes validaciones a nuestro formulario:
 - El campo nombre es obligatorio.
 - El campo Picture URL es obligatorio y debe ser una URL válida.
 
-Para ello podemos usar la directiva _required_ y _pattern_.
+Para ello podemos usar la directiva _required_ y _pattern_. Pero primero importamos Ngif en el game-edit.component.ts porque lo vamos a necesitar en el templete.
+
+_./pages/game-edit/game-edit.component.ts_
+
+```diff
++import { NgIf } from '@angular/common';
+
+@Component({
+  selector: 'app-game-edit',
+  standalone: true,
+- imports: [FormsModule],
++ imports: [FormsModule, NgIf],
+```
 
 _./pages/game-edit/game-edit.component.html_
 
@@ -410,7 +427,7 @@ _./pages/game-edit/game-edit.component.html_
 </div>
 ```
 
-No está de mas, darle un poco de estilado al mensaje de error para que aparezca vea en color rojo y en una fuente un poco más pequeña que lo habitual.
+No está de mas, darle un poco de estilado al mensaje de error, para que aparezca en color rojo y en una fuente un poco más pequeña que lo habitual.
 
 _./pages/game-edit/game-edit.component.css_
 
@@ -445,9 +462,9 @@ _./pages/game-edit/game-edit.component.html_
   </div>
 ```
 
-Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parece fácil podemos probar a hacer lo siguiente:
+Vale, esto no está mal, pero si te fijas estamos llenando el html de código, vamos a crear un componente que nos ayude a mostrar los errores, esto de primeras podría parecer fácil. Podemos probar a hacer lo siguiente:
 
-Creamos una carpeta common y creamos nuestro widget para mostrar errores:
+Creamos una carpeta common y creamos nuestro componente para mostrar errores:
 
 ```bash
 ng g c common/field-error-display
@@ -455,16 +472,18 @@ ng g c common/field-error-display
 
 Vamos a aceptar como parametro de entrada el NgModel, de momento jugamos sólo con la propiedad _invalid_.
 
-_./common/field-error-display/field-error-display.component.ts_
+_./src/app/common/field-error-display/field-error-display.component.ts_
 
 ```ts
-import { Component, Input } from "@angular/core";
-import { AbstractControlDirective } from "@angular/forms";
+import { Component, Input } from '@angular/core';
+import { AbstractControlDirective } from '@angular/forms';
 
 @Component({
-  selector: "app-field-error-display",
-  templateUrl: "./field-error-display.component.html",
-  styleUrls: ["./field-error-display.component.css"],
+  selector: 'app-field-error-display',
+  standalone: true,
+  imports: [],
+  templateUrl: './field-error-display.component.html',
+  styleUrls: ['./field-error-display.component.css']
 })
 export class FieldErrorDisplayComponent {
   @Input() fieldNgModel: AbstractControlDirective | null;
@@ -477,14 +496,29 @@ export class FieldErrorDisplayComponent {
 
 Aquí aceptamos el ngModel como parametro.
 
-_./common/field-error-display/field-error-display.component.html_
+_./src/app/common/field-error-display/field-error-display.component.html_
 
 ```diff
 <p>field-error-display works!</p>
 <span>{{ fieldNgModel?.invalid }}</span>
 ```
 
-Vamos a instanciarlo:
+Vamos a instanciarlo en game-edit:
+
+_./src/app/pages/game-edit/game-edit.component.ts_
+
+```diff
++ import { FieldErrorDisplayComponent } from '@/common/field-error-display/field-error-display.component';
+
+@Component({
+  selector: 'app-game-edit',
+  standalone: true,
+- imports: [FormsModule, NgIf],
++ imports: [FormsModule, NgIf, FieldErrorDisplayComponent],
+  templateUrl: './game-edit.component.html',
+  styleUrl: './game-edit.component.css',
+})
+```
 
 _./pages/game-edit/game-edit.component.html_
 
@@ -504,7 +538,7 @@ Si ahora ejecutamos y jugamos con el control de _name_ vaciandolo y poniendole d
 
 Así que vamos a implementar el resto de comportamiento.
 
-_./common/field-error-display/field-error-display.component.css_
+_..src/app/common/field-error-display/field-error-display.component.css_
 
 ```css
 .errors > div {
@@ -513,7 +547,22 @@ _./common/field-error-display/field-error-display.component.css_
 }
 ```
 
-_./common/field-error-display/field-error-display.component.html_
+_.src/app/common/field-error-display/field-error-display.component.ts_
+
+```diff
++ import { NgIf } from '@angular/common';
+
+@Component({
+  selector: 'app-field-error-display',
+  standalone: true,
+- imports: [],
++ imports: [NgIf],
+  templateUrl: './field-error-display.component.html',
+  styleUrl: './field-error-display.component.css',
+})
+```
+
+_.src/app/common/field-error-display/field-error-display.component.html_
 
 ```diff
 -  <p>field-error-display works!</p>
@@ -530,7 +579,7 @@ _./common/field-error-display/field-error-display.component.html_
 
 Vamos a sustituir esto en el código:
 
-_./pages/game-edit/game-edit.component.html_
+_.scr/app/pages/game-edit/game-edit.component.html_
 
 ```diff
 <div>
@@ -575,7 +624,7 @@ Y oye ¿Genial? NO, si te pones a mirar caso arista verás que para que estuvier
 
 - Primero, tenemos que meter todos lo validadores en ese componente o un array (no te olvides de añadirlos...) si no, no se mostraría el mensaje de error, otra opción es informar esas validaciones en un array, pero entonces tendríamos que definirlas dos veces, en el componente y en la validación.
 
-- Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que is un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información), otra opción sería iterar por las propiedades de _errors_ (como si fuera un array), pero aquí el orden de validación no lo conocemos.
+- Segundo, lo normal es que cuando una validación falla, cortocircuitemos el resto (lo normal es que sólo queramos mostrar un mensaje de error, es una tontería que si un campo no está informado, encima le digamos no es un email bien formado, emborrachamos al usuario de información), otra opción sería iterar por las propiedades de _errors_ (como si fuera un array), pero aquí el orden de validación no lo conocemos.
 
 - Tercero para las validaciones de tipo patrón, no vale con decir Patrón no valido, si no "NIF no valido", o "Email no valido"
 
@@ -585,7 +634,7 @@ Para terminar de jugar con este ejemplo, vamos a ver como podríamos hacer un _o
 
 Vamos a crear un interface que nos permita hacer tracking de los mensajes de error y sobreescribirlos por componente.
 
-_./common/field-error-display/field-error-display.component.ts_
+_.src/app/common/field-error-display/field-error-display.component.ts_
 
 ```diff
 + type ValidatorsId = "required" | "pattern";
@@ -624,11 +673,25 @@ export class FieldErrorDisplayComponent {
 
 ```
 
-Y en el _ngOnInit_ sobreescribimos los mensajes de error, y añadimos un helper para exponer esos mensajes en el html:
+Y en el _ngOnInit_ sobreescribimos los mensajes de error, importamos NgFor para iterar sobre los mensajes, y añadimos un helper para exponer esos mensajes en el html:
 
 _./common/field-error-display/field-error-display.component.ts_
 
 ```diff
+- import { NgIf } from '@angular/common';
++ import { NgIf, NgFor } from '@angular/common';
+
+ @Component({
+  selector: 'app-field-error-display',
+  standalone: true,
+- imports: [NgIf],
++ imports: [NgIf, NgFor],
+  templateUrl: './field-error-display.component.html',
+  styleUrl: './field-error-display.component.css',
+})
+
+export class FieldErrorDisplayComponent {
+
   constructor() {
     this.fieldNgModel = null;
   }
@@ -641,7 +704,7 @@ _./common/field-error-display/field-error-display.component.ts_
 +  }
 +  getErrorMessage = (errorId :string ) => {
 +    return this.fieldErrorObject[errorId];
-+  }
++  }}
 ```
 
 Y en el html, vamos a iterar por las propiedades de _errors_:
@@ -814,12 +877,12 @@ Mueve el ng-template al archivo de plantilla del nuevo componente (form-error-me
 En el archivo de clase del nuevo componente (form-error-messages.component.ts), agrega una entrada de @Input() para que el control del formulario se pase al componente.
 
 ```ts
-import { Component, Input } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
+import { Component, Input } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
-  selector: "app-form-error-messages",
-  templateUrl: "./form-error-messages.component.html",
+  selector: 'app-form-error-messages',
+  templateUrl: './form-error-messages.component.html'
 })
 export class FormErrorMessagesComponent {
   @Input() control: AbstractControl;
